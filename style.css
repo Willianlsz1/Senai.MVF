@@ -31,6 +31,23 @@
     10. Utilitários (classes auxiliares extraídas de inline)
     11. Responsivo Mobile (≤900px) e Desktop médio (901–1300px)
 ════════════════════════════════════════════════════════════════ */
+/* Esconde todas as telas por padrão */
+.screen {
+    display: none;
+    padding: 20px;
+}
+
+/* Mostra apenas a tela que tiver a classe 'active' */
+.screen.active {
+    display: block;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 
 /* ── 1. VARIÁVEIS E RESET ─────────────────────────────────────── */
 *{box-sizing:border-box;margin:0;padding:0}
