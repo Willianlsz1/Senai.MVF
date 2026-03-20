@@ -69,63 +69,142 @@
      ══════════════════════════════════════════ -->
 <div class="module-grid" id="modgrid">
 
-  <article class="module-card" data-m="pressao" onclick="openMod('pressao')" role="button" tabindex="0">
-    <div class="module-card__icon">🔴</div>
-    <div class="module-card__name">Pressão</div>
-    <p class="module-card__desc">Tipos, unidades, Bourdon, diafragma, transmissores e calibração.</p>
+  <!-- ── PRESSÃO ── -->
+  <article class="module-card" data-m="pressao"
+           onclick="openMod('pressao')" role="button" tabindex="0"
+           aria-label="Abrir módulo de Pressão">
+    <div class="module-card__header">
+      <div class="module-card__icon-wrap" aria-hidden="true">
+        <!-- Gauge / pressure icon -->
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 12 L7.5 7.5"/><path d="M12 7v1m4.24 1.76-.71.71M17 12h-1M7 12H6"/></svg>
+      </div>
+      <div class="module-card__name">Pressão</div>
+      <span class="module-card__status module-card__status--new" id="status-pressao">Novo</span>
+    </div>
+
+    <p class="module-card__desc">
+      Tipos, unidades, instrumentos mecânicos, transmissores eletrônicos e calibração industrial.
+    </p>
+
     <div class="module-card__tags">
       <span class="module-card__tag">Bourdon</span>
       <span class="module-card__tag">Diafragma</span>
       <span class="module-card__tag">ΔP</span>
       <span class="module-card__tag">Bernoulli</span>
+      <span class="module-card__tag">4–20 mA</span>
     </div>
-    <div class="module-card__progress">
+
+    <div class="module-card__progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
       <div class="module-card__progress-fill" id="prog-pressao"></div>
+    </div>
+
+    <div class="module-card__cta">
+      <span id="cta-pressao">Iniciar módulo</span>
+      <span class="module-card__cta-arrow" aria-hidden="true">→</span>
     </div>
   </article>
 
-  <article class="module-card" data-m="nivel" onclick="openMod('nivel')" role="button" tabindex="0">
-    <div class="module-card__icon">🔵</div>
-    <div class="module-card__name">Nível</div>
-    <p class="module-card__desc">Medição direta e indireta, boia, ultrassom, radar e pressão diferencial.</p>
+  <!-- ── NÍVEL ── -->
+  <article class="module-card" data-m="nivel"
+           onclick="openMod('nivel')" role="button" tabindex="0"
+           aria-label="Abrir módulo de Nível">
+    <div class="module-card__header">
+      <div class="module-card__icon-wrap" aria-hidden="true">
+        <!-- Tank / level icon -->
+        <svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M5 15h14"/><path d="M8 19h8"/></svg>
+      </div>
+      <div class="module-card__name">Nível</div>
+      <span class="module-card__status module-card__status--new" id="status-nivel">Novo</span>
+    </div>
+
+    <p class="module-card__desc">
+      Medição direta e indireta, boia, ultrassom, radar FMCW, TDR e pressão diferencial em vasos pressurizados.
+    </p>
+
     <div class="module-card__tags">
       <span class="module-card__tag">Hidrostático</span>
       <span class="module-card__tag">Ultrassom</span>
       <span class="module-card__tag">Radar</span>
       <span class="module-card__tag">Capacitivo</span>
+      <span class="module-card__tag">TDR</span>
     </div>
-    <div class="module-card__progress">
+
+    <div class="module-card__progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
       <div class="module-card__progress-fill" id="prog-nivel"></div>
+    </div>
+
+    <div class="module-card__cta">
+      <span id="cta-nivel">Iniciar módulo</span>
+      <span class="module-card__cta-arrow" aria-hidden="true">→</span>
     </div>
   </article>
 
-  <article class="module-card" data-m="vazao" onclick="openMod('vazao')" role="button" tabindex="0">
-    <div class="module-card__icon">🟢</div>
-    <div class="module-card__name">Vazão</div>
-    <p class="module-card__desc">Reynolds, Bernoulli, continuidade, deprimogênios, eletromagnético e Coriolis.</p>
+  <!-- ── VAZÃO ── -->
+  <article class="module-card" data-m="vazao"
+           onclick="openMod('vazao')" role="button" tabindex="0"
+           aria-label="Abrir módulo de Vazão">
+    <div class="module-card__header">
+      <div class="module-card__icon-wrap" aria-hidden="true">
+        <!-- Flow / waves icon -->
+        <svg viewBox="0 0 24 24"><path d="M4 12 Q8 8 12 12 Q16 16 20 12"/><path d="M4 17 Q8 13 12 17 Q16 21 20 17"/><path d="M4 7 Q8 3 12 7 Q16 11 20 7"/></svg>
+      </div>
+      <div class="module-card__name">Vazão</div>
+      <span class="module-card__status module-card__status--new" id="status-vazao">Novo</span>
+    </div>
+
+    <p class="module-card__desc">
+      Reynolds, Bernoulli, equação da continuidade, medidores deprimogênios, eletromagnético e Coriolis.
+    </p>
+
     <div class="module-card__tags">
       <span class="module-card__tag">Reynolds</span>
       <span class="module-card__tag">Orifício</span>
       <span class="module-card__tag">Mag-Flow</span>
       <span class="module-card__tag">Coriolis</span>
+      <span class="module-card__tag">ISO 5167</span>
     </div>
-    <div class="module-card__progress">
+
+    <div class="module-card__progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
       <div class="module-card__progress-fill" id="prog-vazao"></div>
+    </div>
+
+    <div class="module-card__cta">
+      <span id="cta-vazao">Iniciar módulo</span>
+      <span class="module-card__cta-arrow" aria-hidden="true">→</span>
     </div>
   </article>
 
-  <article class="module-card" data-m="temperatura" onclick="openMod('temperatura')" role="button" tabindex="0">
-    <div class="module-card__icon">🟡</div>
-    <div class="module-card__name">Temperatura</div>
-    <p class="module-card__desc">Dilatação, pressão de vapor, PT100, termopar e conversão de escalas.</p>
+  <!-- ── TEMPERATURA ── -->
+  <article class="module-card" data-m="temperatura"
+           onclick="openMod('temperatura')" role="button" tabindex="0"
+           aria-label="Abrir módulo de Temperatura">
+    <div class="module-card__header">
+      <div class="module-card__icon-wrap" aria-hidden="true">
+        <!-- Thermometer icon -->
+        <svg viewBox="0 0 24 24"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>
+      </div>
+      <div class="module-card__name">Temperatura</div>
+      <span class="module-card__status module-card__status--new" id="status-temperatura">Novo</span>
+    </div>
+
+    <p class="module-card__desc">
+      Dilatação, pressão de vapor, PT100 (IEC 60751), termopares e conversão entre escalas industriais.
+    </p>
+
     <div class="module-card__tags">
       <span class="module-card__tag">PT100</span>
       <span class="module-card__tag">Termopar K</span>
       <span class="module-card__tag">Seebeck</span>
-      <span class="module-card__tag">°C/K/°F</span>
+      <span class="module-card__tag">°C / K / °F</span>
     </div>
-    <div class="module-card__progress">
+
+    <div class="module-card__progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
       <div class="module-card__progress-fill" id="prog-temperatura"></div>
+    </div>
+
+    <div class="module-card__cta">
+      <span id="cta-temperatura">Iniciar módulo</span>
+      <span class="module-card__cta-arrow" aria-hidden="true">→</span>
     </div>
   </article>
 
