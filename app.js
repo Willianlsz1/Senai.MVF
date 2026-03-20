@@ -1198,8 +1198,619 @@ function hideEl(id) {
 }
 
 /* ─────────────────────────────────────────
-   12. DOM REFS & INIT
+   12. PLAYGROUND ENGINE
+   Variable Playground: sliders → live SVG → color-coded formula
+   Each playground is defined as a config object, rendered
+   generically by renderPlayground().
    ───────────────────────────────────────── */
+
+/**
+ * Color palette for physical quantities.
+ * Every variable gets a unique, consistent color across
+ * formula text, slider thumb, SVG, and result chip.
+ */
+const VAR_COLORS = {
+  P:   '#FF5A1F',   // pressure  → orange (module accent)
+  F:   '#f97316',   // force     → amber-orange
+  A:   '#94a3b8',   // area      → slate
+  rho: '#22d3ee',   // density   → cyan
+  g:   '#6278a0',   // gravity   → muted (constant, dimmed)
+  h:   '#a78bfa',   // height    → violet
+  Re:  '#fb923c',   // Reynolds  → orange
+  v:   '#10ecca',   // velocity  → teal (vazao accent)
+  D:   '#fde047',   // diameter  → yellow (temperatura accent)
+  mu:  '#c084fc',   // viscosity → purple
+  Q:   '#10ecca',   // flow rate → teal
+  T:   '#fde047',   // temperature → yellow
+  R:   '#4ade80',   // resistance  → green
+  S:   '#f472b6',   // Seebeck coeff → pink
+  Tq:  '#FF5A1F',   // hot junction → orange
+  Tf:  '#22d3ee',   // cold junction → cyan
+};
+
+/**
+ * Playground config per module.
+ * Each config has:
+ *   title, subtitle, formula (HTML with color spans),
+ *   vars: [{ id, label, min, max, step, default, unit, color }],
+ *   compute(vals): returns { result, unit, detail }
+ *   svgFn(vals, result): returns SVG string
+ *   accordions: [{ title, config }] — sub-playgrounds
+ */
+const PLAYGROUNDS = {
+
+  /* ── PRESSÃO ────────────────────────── */
+  pressao: [
+    {
+      id:       'pg_pfa',
+      title:    'P = F / A',
+      subtitle: 'Arraste os sliders e veja a pressão mudar em tempo real',
+      formulaHtml: `
+        <span style="color:${VAR_COLORS.P}">P</span>
+        <span class="pg-eq-sym">=</span>
+        <span class="pg-fraction">
+          <span style="color:${VAR_COLORS.F}">F</span>
+          <span style="color:${VAR_COLORS.A}">A</span>
+        </span>`,
+      vars: [
+        { id:'F', label:'Força F', min:10,   max:5000,  step:10,   def:500,  unit:'N',   color: VAR_COLORS.F },
+        { id:'A', label:'Área A',  min:0.01, max:2,     step:0.01, def:0.25, unit:'m²',  color: VAR_COLORS.A },
+      ],
+      compute(v) {
+        const P = v.F / v.A;
+        return {
+          result: P.toFixed(1),
+          unit: 'Pa',
+          detail: `${v.F} N ÷ ${v.A} m² = ${P.toFixed(1)} Pa = ${(P/1000).toFixed(3)} kPa = ${(P/1e5).toFixed(5)} bar`,
+        };
+      },
+      svgFn(v, r) {
+        const maxP = 5000 / 0.01;
+        const fillPct = Math.min(parseFloat(r.result) / maxP, 1);
+        const barH = Math.round(fillPct * 90);
+        const areaW = Math.round(40 + v.A * 140);
+        return `
+          <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg" class="pg-svg">
+            <defs>
+              <linearGradient id="pgPFAgrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="${VAR_COLORS.P}" stop-opacity=".9"/>
+                <stop offset="100%" stop-color="${VAR_COLORS.P}" stop-opacity=".3"/>
+              </linearGradient>
+            </defs>
+            <!-- Surface plate -->
+            <rect x="${160-areaW/2}" y="120" width="${areaW}" height="18" rx="3"
+                  fill="${VAR_COLORS.A}" fill-opacity=".15" stroke="${VAR_COLORS.A}" stroke-width="1.2"/>
+            <text x="160" y="133" text-anchor="middle" fill="${VAR_COLORS.A}"
+                  font-size="10" font-family="IBM Plex Mono">A = ${v.A} m²</text>
+            <!-- Force arrow -->
+            <line x1="160" y1="${120-barH}" x2="160" y2="120"
+                  stroke="${VAR_COLORS.F}" stroke-width="2.5" marker-end="url(#arrowF)"/>
+            <defs>
+              <marker id="arrowF" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+                <path d="M0,0 L8,4 L0,8 Z" fill="${VAR_COLORS.F}"/>
+              </marker>
+            </defs>
+            <text x="174" y="${120-barH+14}" fill="${VAR_COLORS.F}"
+                  font-size="10" font-family="IBM Plex Mono">F=${v.F}N</text>
+            <!-- Pressure badge -->
+            <rect x="220" y="30" width="88" height="36" rx="6"
+                  fill="${VAR_COLORS.P}" fill-opacity=".12" stroke="${VAR_COLORS.P}" stroke-width="1"/>
+            <text x="264" y="46" text-anchor="middle" fill="${VAR_COLORS.P}"
+                  font-size="9" font-family="IBM Plex Mono">PRESSÃO</text>
+            <text x="264" y="60" text-anchor="middle" fill="${VAR_COLORS.P}"
+                  font-size="13" font-weight="600" font-family="IBM Plex Mono">${parseFloat(r.result)>999?(parseFloat(r.result)/1000).toFixed(1)+' kPa':r.result+' Pa'}</text>
+          </svg>`;
+      },
+    },
+    {
+      id:       'pg_stevin',
+      title:    'P = ρ · g · h',
+      subtitle: 'Lei de Stevin — pressão hidrostática no fundo do tanque',
+      formulaHtml: `
+        <span style="color:${VAR_COLORS.P}">P</span>
+        <span class="pg-eq-sym">=</span>
+        <span style="color:${VAR_COLORS.rho}">ρ</span>
+        <span class="pg-eq-sym">·</span>
+        <span style="color:${VAR_COLORS.g}">g</span>
+        <span class="pg-eq-sym">·</span>
+        <span style="color:${VAR_COLORS.h}">h</span>`,
+      vars: [
+        { id:'rho', label:'Densidade ρ', min:700,  max:13600, step:50,  def:1000, unit:'kg/m³', color: VAR_COLORS.rho },
+        { id:'h',   label:'Altura h',    min:0.1,  max:20,    step:0.1, def:5,    unit:'m',     color: VAR_COLORS.h   },
+      ],
+      compute(v) {
+        const P = v.rho * 9.81 * v.h;
+        return {
+          result: (P/1000).toFixed(2),
+          unit: 'kPa',
+          detail: `${v.rho} × 9,81 × ${v.h} = ${P.toFixed(0)} Pa = ${(P/1000).toFixed(2)} kPa = ${(P/1e5).toFixed(4)} bar`,
+        };
+      },
+      svgFn(v, r) {
+        const maxH = 20;
+        const tankH = 110, tankW = 80, tankX = 100, tankY = 20;
+        const fluidH = Math.round((v.h / maxH) * tankH);
+        const fluidY = tankY + tankH - fluidH;
+        const alpha = Math.min(0.15 + v.rho / 13600 * 0.55, 0.7);
+        return `
+          <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg" class="pg-svg">
+            <!-- Tank outline -->
+            <rect x="${tankX}" y="${tankY}" width="${tankW}" height="${tankH}" rx="3"
+                  fill="none" stroke="#4a5a7a" stroke-width="1.5"/>
+            <!-- Fluid -->
+            <rect x="${tankX+1}" y="${fluidY}" width="${tankW-2}" height="${fluidH}" rx="2"
+                  fill="${VAR_COLORS.rho}" fill-opacity="${alpha}"/>
+            <!-- Level arrow -->
+            <line x1="${tankX+tankW+8}" y1="${fluidY}" x2="${tankX+tankW+8}" y2="${tankY+tankH}"
+                  stroke="${VAR_COLORS.h}" stroke-width="1.5" stroke-dasharray="3,2"/>
+            <text x="${tankX+tankW+16}" y="${fluidY + fluidH/2 + 4}" fill="${VAR_COLORS.h}"
+                  font-size="11" font-family="IBM Plex Mono">h=${v.h}m</text>
+            <!-- rho label -->
+            <text x="${tankX+tankW/2}" y="${fluidY + fluidH/2 + 4}" text-anchor="middle"
+                  fill="${VAR_COLORS.rho}" font-size="10" font-family="IBM Plex Mono">ρ=${v.rho}</text>
+            <!-- Pressure result at bottom -->
+            <rect x="${tankX}" y="${tankY+tankH+4}" width="${tankW}" height="20" rx="3"
+                  fill="${VAR_COLORS.P}" fill-opacity=".15" stroke="${VAR_COLORS.P}" stroke-width="1"/>
+            <text x="${tankX+tankW/2}" y="${tankY+tankH+17}" text-anchor="middle"
+                  fill="${VAR_COLORS.P}" font-size="10" font-family="IBM Plex Mono">${r.result} kPa</text>
+          </svg>`;
+      },
+    },
+  ],
+
+  /* ── NÍVEL ──────────────────────────── */
+  nivel: [
+    {
+      id:       'pg_nivel_h',
+      title:    'h = P / (ρ · g)',
+      subtitle: 'Quanto de fluido existe no tanque dado a pressão no fundo?',
+      formulaHtml: `
+        <span style="color:${VAR_COLORS.h}">h</span>
+        <span class="pg-eq-sym">=</span>
+        <span class="pg-fraction">
+          <span style="color:${VAR_COLORS.P}">P</span>
+          <span><span style="color:${VAR_COLORS.rho}">ρ</span> · <span style="color:${VAR_COLORS.g}">g</span></span>
+        </span>`,
+      vars: [
+        { id:'P',   label:'Pressão P',   min:1,   max:200,   step:1,  def:49,   unit:'kPa',   color: VAR_COLORS.P   },
+        { id:'rho', label:'Densidade ρ', min:700, max:13600, step:50, def:1000, unit:'kg/m³',  color: VAR_COLORS.rho },
+      ],
+      compute(v) {
+        const h = (v.P * 1000) / (v.rho * 9.81);
+        return { result: h.toFixed(2), unit: 'm', detail: `${v.P} kPa ÷ (${v.rho} × 9.81) = ${h.toFixed(2)} m = ${(h*100).toFixed(1)} cm` };
+      },
+      svgFn(v, r) {
+        const maxH = 200000 / (700 * 9.81);
+        const h    = parseFloat(r.result);
+        const tankH = 100, tankW = 70, tankX = 110, tankY = 20;
+        const fluidH = Math.min(Math.round((h / maxH) * tankH), tankH);
+        return `
+          <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg" class="pg-svg">
+            <rect x="${tankX}" y="${tankY}" width="${tankW}" height="${tankH}" rx="3" fill="none" stroke="#4a5a7a" stroke-width="1.5"/>
+            <rect x="${tankX+1}" y="${tankY+tankH-fluidH}" width="${tankW-2}" height="${fluidH}" rx="2"
+                  fill="${VAR_COLORS.rho}" fill-opacity=".25"/>
+            <!-- h arrow -->
+            <line x1="${tankX-12}" y1="${tankY+tankH-fluidH}" x2="${tankX-12}" y2="${tankY+tankH}"
+                  stroke="${VAR_COLORS.h}" stroke-width="2"/>
+            <text x="${tankX-22}" y="${tankY+tankH-fluidH/2+4}" text-anchor="middle"
+                  fill="${VAR_COLORS.h}" font-size="11" font-family="IBM Plex Mono"
+                  writing-mode="vertical-lr" transform="rotate(180, ${tankX-22}, ${tankY+tankH-fluidH/2})">${r.result}m</text>
+            <!-- P badge at bottom -->
+            <rect x="${tankX}" y="${tankY+tankH+4}" width="${tankW}" height="20" rx="3"
+                  fill="${VAR_COLORS.P}" fill-opacity=".12" stroke="${VAR_COLORS.P}" stroke-width="1"/>
+            <text x="${tankX+tankW/2}" y="${tankY+tankH+17}" text-anchor="middle"
+                  fill="${VAR_COLORS.P}" font-size="10" font-family="IBM Plex Mono">P=${v.P}kPa</text>
+            <!-- % fill indicator -->
+            <text x="${tankX+tankW+12}" y="${tankY+40}" fill="${VAR_COLORS.h}"
+                  font-size="14" font-family="IBM Plex Mono" font-weight="600">${Math.min((h/maxH*100),100).toFixed(0)}%</text>
+            <text x="${tankX+tankW+12}" y="${tankY+54}" fill="#6278a0"
+                  font-size="9" font-family="IBM Plex Mono">do max</text>
+          </svg>`;
+      },
+    },
+  ],
+
+  /* ── VAZÃO ──────────────────────────── */
+  vazao: [
+    {
+      id:       'pg_reynolds',
+      title:    'Re = ρ · v · D / μ',
+      subtitle: 'Determine o regime de escoamento variando as condições',
+      formulaHtml: `
+        <span style="color:${VAR_COLORS.Re}">Re</span>
+        <span class="pg-eq-sym">=</span>
+        <span class="pg-fraction">
+          <span><span style="color:${VAR_COLORS.rho}">ρ</span> · <span style="color:${VAR_COLORS.v}">v</span> · <span style="color:${VAR_COLORS.D}">D</span></span>
+          <span style="color:${VAR_COLORS.mu}">μ</span>
+        </span>`,
+      vars: [
+        { id:'v',   label:'Velocidade v', min:0.01, max:10,    step:0.05, def:1,      unit:'m/s',  color: VAR_COLORS.v   },
+        { id:'D',   label:'Diâmetro D',   min:0.01, max:0.5,   step:0.01, def:0.1,    unit:'m',    color: VAR_COLORS.D   },
+        { id:'rho', label:'Densidade ρ',  min:1,    max:1200,  step:10,   def:1000,   unit:'kg/m³',color: VAR_COLORS.rho },
+        { id:'mu',  label:'Viscosidade μ',min:0.0001,max:0.1,  step:0.0001,def:0.001, unit:'Pa·s', color: VAR_COLORS.mu  },
+      ],
+      compute(v) {
+        const Re = (v.rho * v.v * v.D) / v.mu;
+        const regime = Re < 2300 ? '🟢 LAMINAR' : Re < 4000 ? '🟡 TRANSIÇÃO' : '🔴 TURBULENTO';
+        return {
+          result: Re.toFixed(0),
+          unit: '',
+          detail: `Re = ${Re.toFixed(0)}  →  ${regime}\n(ρ×v×D)/μ = (${v.rho}×${v.v}×${v.D})/${v.mu}`,
+        };
+      },
+      svgFn(v, r) {
+        const Re   = parseFloat(r.result);
+        const color = Re < 2300 ? VAR_COLORS.Q : Re < 4000 ? VAR_COLORS.T : VAR_COLORS.Tq;
+        const label = Re < 2300 ? 'LAMINAR' : Re < 4000 ? 'TRANSIÇÃO' : 'TURBULENTO';
+        // Draw pipe cross-section with flow lines
+        const lines = Re < 2300 ? 5 : Re < 4000 ? 8 : 14;
+        let flowLines = '';
+        for (let i = 0; i < lines; i++) {
+          const y  = 55 + i * (50 / (lines - 1));
+          const amp = Re < 2300 ? 0 : Math.min((Re - 2300) / 3000 * 16, 16);
+          const freq = Re < 2300 ? 1 : 1 + i * 0.3;
+          const pts = [];
+          for (let x = 30; x <= 240; x += 6) {
+            const wave = amp * Math.sin(((x - 30) / 210) * Math.PI * 2 * freq + i);
+            pts.push(`${x},${y + wave}`);
+          }
+          flowLines += `<polyline points="${pts.join(' ')}" fill="none"
+            stroke="${color}" stroke-width="${Re < 2300 ? 1.2 : 0.8}" stroke-opacity="${0.4 + (i%3)*0.15}"/>`;
+        }
+        return `
+          <svg viewBox="0 0 280 160" xmlns="http://www.w3.org/2000/svg" class="pg-svg">
+            <!-- Pipe -->
+            <rect x="30" y="50" width="210" height="60" rx="3" fill="none" stroke="#4a5a7a" stroke-width="1.5"/>
+            <rect x="30" y="50" width="210" height="60" fill="${color}" fill-opacity=".04"/>
+            ${flowLines}
+            <!-- Re badge -->
+            <rect x="245" y="55" width="30" height="50" rx="4" fill="${color}" fill-opacity=".12"
+                  stroke="${color}" stroke-width="1"/>
+            <text x="260" y="74" text-anchor="middle" fill="${color}" font-size="8" font-family="IBM Plex Mono">Re</text>
+            <text x="260" y="90" text-anchor="middle" fill="${color}" font-size="${Re>9999?7:9}" font-family="IBM Plex Mono" font-weight="600">${Re.toFixed(0)}</text>
+            <!-- Regime label -->
+            <text x="135" y="130" text-anchor="middle" fill="${color}" font-size="11"
+                  font-family="IBM Plex Mono" font-weight="600">${label}</text>
+            <text x="135" y="143" text-anchor="middle" fill="#6278a0" font-size="9" font-family="IBM Plex Mono">v=${v.v}m/s · D=${v.D*1000}mm</text>
+          </svg>`;
+      },
+    },
+    {
+      id:       'pg_continuidade',
+      title:    'A₁·v₁ = A₂·v₂',
+      subtitle: 'Equação da Continuidade — quando o tubo afunila, o fluido acelera',
+      formulaHtml: `
+        <span style="color:${VAR_COLORS.A}">A₁</span><span class="pg-eq-sym">·</span><span style="color:${VAR_COLORS.v}">v₁</span>
+        <span class="pg-eq-sym">=</span>
+        <span style="color:${VAR_COLORS.A}">A₂</span><span class="pg-eq-sym">·</span><span style="color:${VAR_COLORS.v}">v₂</span>`,
+      vars: [
+        { id:'D1', label:'Diâmetro D₁', min:20,  max:300, step:5,  def:100, unit:'mm', color: VAR_COLORS.A },
+        { id:'v1', label:'Velocidade v₁',min:0.1,max:10,  step:0.1,def:1,   unit:'m/s',color: VAR_COLORS.v },
+        { id:'D2', label:'Diâmetro D₂', min:5,   max:290, step:5,  def:50,  unit:'mm', color: VAR_COLORS.D },
+      ],
+      compute(v) {
+        const D2 = Math.min(v.D2, v.D1 - 5);
+        const v2 = v.v1 * (v.D1 / D2) ** 2;
+        const Q  = Math.PI / 4 * (v.D1 / 1000) ** 2 * v.v1;
+        return {
+          result: v2.toFixed(2),
+          unit: 'm/s',
+          detail: `v₂ = v₁×(D₁/D₂)² = ${v.v1}×(${v.D1}/${D2})² = ${v2.toFixed(2)} m/s\nQ = ${(Q*3600).toFixed(2)} m³/h`,
+        };
+      },
+      svgFn(v, r) {
+        const D2    = Math.min(v.D2, v.D1 - 5);
+        const v2    = parseFloat(r.result);
+        const s1    = Math.min(v.D1 / 3, 50);
+        const s2    = Math.min(D2 / 3, 40);
+        const mid   = 150;
+        return `
+          <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg" class="pg-svg">
+            <!-- Section 1 -->
+            <rect x="20" y="${80-s1}" width="80" height="${s1*2}" rx="2"
+                  fill="${VAR_COLORS.v}" fill-opacity=".1" stroke="${VAR_COLORS.A}" stroke-width="1.2"/>
+            <!-- Transition -->
+            <polygon points="100,${80-s1} ${mid},${80-s2} ${mid},${80+s2} 100,${80+s1}"
+                     fill="${VAR_COLORS.v}" fill-opacity=".06" stroke="#4a5a7a" stroke-width="1"/>
+            <!-- Section 2 -->
+            <rect x="${mid}" y="${80-s2}" width="80" height="${s2*2}" rx="2"
+                  fill="${VAR_COLORS.v}" fill-opacity=".15" stroke="${VAR_COLORS.D}" stroke-width="1.2"/>
+            <!-- v1 arrow -->
+            <line x1="30" y1="80" x2="85" y2="80" stroke="${VAR_COLORS.v}" stroke-width="2"
+                  marker-end="url(#arr1)"/>
+            <defs><marker id="arr1" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="4" markerHeight="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 Z" fill="${VAR_COLORS.v}"/>
+            </marker></defs>
+            <text x="57" y="72" text-anchor="middle" fill="${VAR_COLORS.v}" font-size="10" font-family="IBM Plex Mono">v₁=${v.v1}</text>
+            <!-- v2 arrow (longer = faster) -->
+            <line x1="${mid+5}" y1="80" x2="${mid+65}" y2="80" stroke="${VAR_COLORS.D}" stroke-width="2.5"
+                  marker-end="url(#arr2)"/>
+            <defs><marker id="arr2" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="4" markerHeight="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 Z" fill="${VAR_COLORS.D}"/>
+            </marker></defs>
+            <text x="${mid+37}" y="72" text-anchor="middle" fill="${VAR_COLORS.D}" font-size="10" font-family="IBM Plex Mono">v₂=${v2.toFixed(1)}</text>
+            <!-- D labels -->
+            <text x="60" y="${80+s1+14}" text-anchor="middle" fill="${VAR_COLORS.A}" font-size="9" font-family="IBM Plex Mono">D₁=${v.D1}mm</text>
+            <text x="${mid+40}" y="${80+s2+14}" text-anchor="middle" fill="${VAR_COLORS.D}" font-size="9" font-family="IBM Plex Mono">D₂=${D2}mm</text>
+          </svg>`;
+      },
+    },
+  ],
+
+  /* ── TEMPERATURA ────────────────────── */
+  temperatura: [
+    {
+      id:       'pg_pt100',
+      title:    'R(T) = 100 · (1 + α·T)',
+      subtitle: 'Como a resistência da PT100 varia com a temperatura?',
+      formulaHtml: `
+        <span style="color:${VAR_COLORS.R}">R</span>
+        <span class="pg-eq-sym">=</span>
+        <span style="color:${VAR_COLORS.R}">100</span>
+        <span class="pg-eq-sym">·</span>
+        (<span style="color:${VAR_COLORS.g}">1</span>
+        <span class="pg-eq-sym">+</span>
+        <span style="color:${VAR_COLORS.mu}">α</span>
+        <span class="pg-eq-sym">·</span>
+        <span style="color:${VAR_COLORS.T}">T</span>)`,
+      vars: [
+        { id:'T', label:'Temperatura T', min:-200, max:850, step:5, def:25, unit:'°C', color: VAR_COLORS.T },
+      ],
+      compute(v) {
+        const R = v.T >= 0
+          ? 100 * (1 + 3.9083e-3 * v.T - 5.775e-7 * v.T * v.T)
+          : 100 * (1 + 3.9083e-3 * v.T - 5.775e-7 * v.T * v.T - 4.183e-12 * v.T * v.T * v.T * (v.T - 100));
+        return {
+          result: R.toFixed(2),
+          unit: 'Ω',
+          detail: `R(${v.T}°C) = ${R.toFixed(2)} Ω\nΔR desde 0°C = ${(R-100).toFixed(2)} Ω\nSensibilidade ≈ ${v.T!==0?((R-100)/v.T).toFixed(4):'0.3908'} Ω/°C`,
+        };
+      },
+      svgFn(v, r) {
+        // Draw a mini R vs T chart + thermometer
+        const points = [];
+        for (let t = -200; t <= 850; t += 25) {
+          const R = t >= 0
+            ? 100*(1 + 3.9083e-3*t - 5.775e-7*t*t)
+            : 100*(1 + 3.9083e-3*t - 5.775e-7*t*t - 4.183e-12*t*t*t*(t-100));
+          const px = 30 + ((t + 200) / 1050) * 160;
+          const py = 130 - ((R - 18) / (380 - 18)) * 100;
+          points.push(`${px},${Math.max(30, Math.min(130, py))}`);
+        }
+        const curT = v.T;
+        const curR = parseFloat(r.result);
+        const cx  = 30 + ((curT + 200) / 1050) * 160;
+        const cy  = 130 - ((curR - 18) / 362) * 100;
+
+        return `
+          <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg" class="pg-svg">
+            <!-- Axes -->
+            <line x1="30" y1="130" x2="200" y2="130" stroke="#4a5a7a" stroke-width="1"/>
+            <line x1="30" y1="30"  x2="30"  y2="130" stroke="#4a5a7a" stroke-width="1"/>
+            <text x="115" y="148" text-anchor="middle" fill="#6278a0" font-size="8" font-family="IBM Plex Mono">Temperatura (°C)</text>
+            <text x="14" y="80" fill="#6278a0" font-size="8" font-family="IBM Plex Mono"
+                  writing-mode="vertical-lr" transform="rotate(180,14,80)">R (Ω)</text>
+            <!-- Curve -->
+            <polyline points="${points.join(' ')}" fill="none"
+                      stroke="${VAR_COLORS.R}" stroke-width="2" stroke-linecap="round"/>
+            <!-- Current point -->
+            <circle cx="${cx}" cy="${Math.max(32,Math.min(128,cy))}" r="5"
+                    fill="${VAR_COLORS.T}" stroke="#080d18" stroke-width="1.5"/>
+            <line x1="${cx}" y1="130" x2="${cx}" y2="${Math.max(32,Math.min(128,cy))}"
+                  stroke="${VAR_COLORS.T}" stroke-width="1" stroke-dasharray="3,2"/>
+            <!-- Thermometer widget -->
+            <rect x="225" y="30" width="70" height="110" rx="8"
+                  fill="rgba(253,224,71,.06)" stroke="${VAR_COLORS.T}" stroke-width="1"/>
+            <text x="260" y="50" text-anchor="middle" fill="${VAR_COLORS.T}" font-size="9" font-family="IBM Plex Mono">T</text>
+            <text x="260" y="66" text-anchor="middle" fill="${VAR_COLORS.T}" font-size="16" font-weight="700" font-family="IBM Plex Mono">${v.T}°</text>
+            <text x="260" y="84" text-anchor="middle" fill="#6278a0" font-size="8" font-family="IBM Plex Mono">Celsius</text>
+            <line x1="240" y1="95" x2="280" y2="95" stroke="#4a5a7a" stroke-width="1"/>
+            <text x="260" y="108" text-anchor="middle" fill="${VAR_COLORS.R}" font-size="9" font-family="IBM Plex Mono">R(T)</text>
+            <text x="260" y="126" text-anchor="middle" fill="${VAR_COLORS.R}" font-size="14" font-weight="700" font-family="IBM Plex Mono">${r.result}Ω</text>
+          </svg>`;
+      },
+    },
+    {
+      id:       'pg_seebeck',
+      title:    'V = S · (T_q − T_f)',
+      subtitle: 'Efeito Seebeck — FEM gerada pelo termopar em função das temperaturas',
+      formulaHtml: `
+        <span style="color:${VAR_COLORS.v}">V</span>
+        <span class="pg-eq-sym">=</span>
+        <span style="color:${VAR_COLORS.S}">S</span>
+        <span class="pg-eq-sym">·</span>
+        (<span style="color:${VAR_COLORS.Tq}">T_q</span>
+        <span class="pg-eq-sym">−</span>
+        <span style="color:${VAR_COLORS.Tf}">T_f</span>)`,
+      vars: [
+        { id:'Tq', label:'Junção quente T_q', min:0,    max:1372, step:10, def:400, unit:'°C', color: VAR_COLORS.Tq },
+        { id:'Tf', label:'Junção fria T_f',   min:-20,  max:80,   step:1,  def:25,  unit:'°C', color: VAR_COLORS.Tf },
+        { id:'S',  label:'Coef. Seebeck S',   min:10,   max:52,   step:1,  def:41,  unit:'μV/°C', color: VAR_COLORS.S },
+      ],
+      compute(v) {
+        const V = v.S * (v.Tq - v.Tf) / 1000;
+        const tipos = { 10:'Tipo S', 40:'Tipo T', 41:'Tipo K', 51:'Tipo J', 52:'Tipo E' };
+        const tipo = tipos[v.S] || `S=${v.S}μV/°C`;
+        return {
+          result: V.toFixed(2),
+          unit: 'mV',
+          detail: `${v.S}μV/°C × (${v.Tq} − ${v.Tf}) = ${(v.S*(v.Tq-v.Tf)).toFixed(0)} μV = ${V.toFixed(2)} mV\nTermopar: ${tipo} | ΔT = ${v.Tq-v.Tf}°C`,
+        };
+      },
+      svgFn(v, r) {
+        const deltaT  = v.Tq - v.Tf;
+        const hotPct  = Math.min(v.Tq / 1372, 1);
+        const coldPct = Math.max(0, (v.Tf + 20) / 100);
+        const V       = parseFloat(r.result);
+        const barH    = Math.min(Math.abs(V) / 60 * 70, 70);
+        return `
+          <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg" class="pg-svg">
+            <!-- Hot junction -->
+            <circle cx="60" cy="80" r="20" fill="${VAR_COLORS.Tq}" fill-opacity="${0.15 + hotPct*0.5}"
+                    stroke="${VAR_COLORS.Tq}" stroke-width="1.5"/>
+            <text x="60" y="76" text-anchor="middle" fill="${VAR_COLORS.Tq}" font-size="9" font-family="IBM Plex Mono">T_q</text>
+            <text x="60" y="88" text-anchor="middle" fill="${VAR_COLORS.Tq}" font-size="11" font-family="IBM Plex Mono" font-weight="600">${v.Tq}°C</text>
+            <!-- Wire -->
+            <path d="M80,80 Q160,40 240,80" fill="none" stroke="${VAR_COLORS.S}" stroke-width="1.5" stroke-dasharray="5,3"/>
+            <path d="M80,80 Q160,120 240,80" fill="none" stroke="${VAR_COLORS.S}" stroke-width="1.5" stroke-dasharray="5,3"/>
+            <!-- Cold junction -->
+            <circle cx="240" cy="80" r="20" fill="${VAR_COLORS.Tf}" fill-opacity="${0.1 + coldPct*0.3}"
+                    stroke="${VAR_COLORS.Tf}" stroke-width="1.5"/>
+            <text x="240" y="76" text-anchor="middle" fill="${VAR_COLORS.Tf}" font-size="9" font-family="IBM Plex Mono">T_f</text>
+            <text x="240" y="88" text-anchor="middle" fill="${VAR_COLORS.Tf}" font-size="11" font-family="IBM Plex Mono" font-weight="600">${v.Tf}°C</text>
+            <!-- ΔT label on wire -->
+            <text x="160" y="68" text-anchor="middle" fill="${VAR_COLORS.S}" font-size="9" font-family="IBM Plex Mono">ΔT=${deltaT}°C</text>
+            <!-- FEM result bar -->
+            <rect x="130" y="${110-barH}" width="60" height="${barH}" rx="3"
+                  fill="${VAR_COLORS.v}" fill-opacity=".2" stroke="${VAR_COLORS.v}" stroke-width="1"/>
+            <text x="160" y="125" text-anchor="middle" fill="${VAR_COLORS.v}" font-size="9" font-family="IBM Plex Mono">FEM</text>
+            <text x="160" y="140" text-anchor="middle" fill="${VAR_COLORS.v}" font-size="13" font-weight="700" font-family="IBM Plex Mono">${r.result}mV</text>
+          </svg>`;
+      },
+    },
+  ],
+};
+
+/**
+ * Render a single playground block (one formula config)
+ * @param {object} cfg - playground config
+ * @param {string} mod - module slug (for scoped IDs)
+ * @returns {string} HTML string
+ */
+function renderPlaygroundBlock(cfg, mod) {
+  const sliders = cfg.vars.map(variable => `
+    <div class="pg-var">
+      <div class="pg-var__header">
+        <label class="pg-var__label" for="${mod}-${cfg.id}-${variable.id}"
+               style="color:${variable.color}">
+          <span class="pg-var__sym">${variable.id.replace('rho','ρ').replace('mu','μ')}</span>
+          — ${variable.label}
+        </label>
+        <span class="pg-var__val" id="lbl-${mod}-${cfg.id}-${variable.id}"
+              style="color:${variable.color}">${variable.def} ${variable.unit}</span>
+      </div>
+      <div class="pg-slider-wrap">
+        <span class="pg-slider-edge" style="color:${variable.color}">${variable.min}</span>
+        <input class="pg-slider" type="range"
+               id="${mod}-${cfg.id}-${variable.id}"
+               min="${variable.min}" max="${variable.max}" step="${variable.step}" value="${variable.def}"
+               style="--thumb:${variable.color}"
+               oninput="updatePlayground('${mod}','${cfg.id}')">
+        <span class="pg-slider-edge" style="color:${variable.color}">${variable.max}</span>
+      </div>
+    </div>
+  `).join('');
+
+  // Build initial values and compute initial result
+  const initVals = Object.fromEntries(cfg.vars.map(vr => [vr.id, vr.def]));
+  const initResult = cfg.compute(initVals);
+
+  return `
+    <div class="pg-block" data-pgid="${cfg.id}" data-mod="${mod}">
+      <div class="pg-block__header">
+        <div class="pg-block__title">${cfg.title}</div>
+        <div class="pg-block__subtitle">${cfg.subtitle}</div>
+      </div>
+
+      <div class="pg-layout">
+        <!-- Left: formula island + sliders -->
+        <div class="pg-left">
+          <div class="pg-formula-island">
+            <div class="pg-formula-label">Fórmula</div>
+            <div class="pg-formula-eq" id="formula-${mod}-${cfg.id}">${cfg.formulaHtml}</div>
+            <div class="pg-result-chip" id="result-${mod}-${cfg.id}">
+              <span class="pg-result-chip__label">Resultado</span>
+              <span class="pg-result-chip__val">${initResult.result}</span>
+              <span class="pg-result-chip__unit">${initResult.unit}</span>
+            </div>
+          </div>
+          <div class="pg-sliders" id="sliders-${mod}-${cfg.id}">
+            ${sliders}
+          </div>
+          <div class="pg-detail" id="detail-${mod}-${cfg.id}">${initResult.detail}</div>
+        </div>
+
+        <!-- Right: dynamic SVG diagram -->
+        <div class="pg-right">
+          <div class="pg-svg-wrap" id="svg-${mod}-${cfg.id}">
+            ${cfg.svgFn(initVals, initResult)}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/**
+ * Render all playground blocks for a module into its container.
+ * Called lazily on first tab activation.
+ * @param {string} mod
+ */
+function initPlayground(mod) {
+  const container = document.getElementById(`pg-${mod}`);
+  if (!container || container.dataset.initialized) return;
+  container.dataset.initialized = '1';
+
+  const configs = PLAYGROUNDS[mod] || [];
+  container.innerHTML = configs
+    .map(cfg => renderPlaygroundBlock(cfg, mod))
+    .join('<div class="pg-divider"></div>');
+}
+
+/**
+ * Update a playground when a slider moves.
+ * Reads all slider values → computes → updates formula, SVG, result chip, detail.
+ * @param {string} mod
+ * @param {string} pgId
+ */
+function updatePlayground(mod, pgId) {
+  const cfg = (PLAYGROUNDS[mod] || []).find(c => c.id === pgId);
+  if (!cfg) return;
+
+  // Read current slider values
+  const vals = {};
+  cfg.vars.forEach(vr => {
+    const el = document.getElementById(`${mod}-${pgId}-${vr.id}`);
+    if (!el) return;
+    vals[vr.id] = parseFloat(el.value);
+    // Update label
+    const lbl = document.getElementById(`lbl-${mod}-${pgId}-${vr.id}`);
+    if (lbl) lbl.textContent = `${vals[vr.id]} ${vr.unit}`;
+  });
+
+  const result = cfg.compute(vals);
+
+  // Update result chip
+  const chip = document.getElementById(`result-${mod}-${pgId}`);
+  if (chip) {
+    const valEl  = chip.querySelector('.pg-result-chip__val');
+    const unitEl = chip.querySelector('.pg-result-chip__unit');
+    if (valEl)  { valEl.textContent = result.result; valEl.classList.add('pg-flash'); setTimeout(() => valEl.classList.remove('pg-flash'), 300); }
+    if (unitEl) unitEl.textContent = result.unit;
+  }
+
+  // Update detail
+  const det = document.getElementById(`detail-${mod}-${pgId}`);
+  if (det) det.textContent = result.detail;
+
+  // Update SVG
+  const svgWrap = document.getElementById(`svg-${mod}-${pgId}`);
+  if (svgWrap) svgWrap.innerHTML = cfg.svgFn(vals, result);
+
+  // Pulse the formula island
+  const island = document.getElementById(`formula-${mod}-${pgId}`)?.closest('.pg-formula-island');
+  if (island) { island.classList.add('pg-pulse'); setTimeout(() => island.classList.remove('pg-pulse'), 400); }
+}
+
+/* ─────────────────────────────────────────
+   Extend switchTab to lazy-init playground
+   ───────────────────────────────────────── */
+const _origSwitchTab = switchTab;
+// Override switchTab to hook playground init
+function switchTab(mod, tabId) {
+  _origSwitchTab(mod, tabId);
+  if (tabId === 'playground') initPlayground(mod);
+}
 
 /** Cached DOM references */
 const DOM = {
