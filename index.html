@@ -110,116 +110,198 @@
   <div class="h1">Fórmulas Visuais</div>
   <div class="sub">Cada equação com diagrama, variáveis coloridas e explicação detalhada</div>
 
-  <!-- PRESSÃO -->
-  <div class="sec">Pressão</div>
+ <!-- ════════════════════════════════════════════════════
+     § PRESSÃO - A BASE DA FORÇA INDUSTRIAL
+     Princípios: Pascal, Stevin e Elasticidade
+════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-pressao">
+    <div class="h1">Pressão (P)</div>
+    <div class="sub">Variável de Processo · Grandeza: Força / Área</div>
 
-  <!-- P = F/A -->
-  <div class="fcard">
-    <div class="fcard-title">Pressão — Definição Fundamental</div>
-    <div class="fcard-top">
-      <div class="fcard-left">
-        <div class="fcard-formula">
-          <span style="color:var(--p)">P</span> = <span style="color:var(--y)">F</span> / <span style="color:var(--g)">A</span>
+    <div class="blk">
+        <h3>Teoria Profunda: O Triângulo da Pressão</h3>
+        <p>A pressão industrial não é apenas um número; é a manifestação da energia cinética de um fluido contra as paredes de um sistema. Baseamos sua medição em três pilares:</p>
+        <div class="grid g3">
+            <div class="hl hl-p">
+                <div class="hl-hdr">Lei de Pascal</div>
+                <p>A pressão aplicada a um fluido confinado é transmitida integralmente a todos os pontos. É a base da <strong>Hidráulica Industrial</strong>.</p>
+            </div>
+            <div class="hl hl-g">
+                <div class="hl-hdr">Lei de Stevin</div>
+                <p>A pressão aumenta com a profundidade. Essencial para entender a <strong>Pressão Hidrostática</strong> em reservatórios.</p>
+            </div>
+            <div class="hl hl-y">
+                <div class="hl-hdr">Elasticidade</div>
+                <p>A deformação de metais (Bourdon/Diafragma) permite converter força mecânica em <strong>Sinal Analógico</strong>.</p>
+            </div>
         </div>
-        <div class="fcard-desc">A pressão é a força aplicada perpendicularmente dividida pela área sobre a qual ela age. Quanto menor a área, maior a pressão para a mesma força.</div>
-        <table class="vleg">
-          <tr><td class="vsym" style="color:var(--p)">P</td><td class="vname">Pressão</td><td class="vunit">Pa (Pascal)</td><td class="vdesc">O resultado — quanto de força por área</td></tr>
-          <tr><td class="vsym" style="color:var(--y)">F</td><td class="vname">Força</td><td class="vunit">N (Newton)</td><td class="vdesc">A força aplicada sobre a superfície</td></tr>
-          <tr><td class="vsym" style="color:var(--g)">A</td><td class="vname">Área</td><td class="vunit">m²</td><td class="vdesc">A área da superfície que recebe a força</td></tr>
-        </table>
-        <div class="fdiv"></div>
-        <div style="font-size:12px;color:var(--t3)">Exemplo: força de 100 N sobre área de 0,01 m² → P = 100 / 0,01 = <strong style="color:var(--p)">10.000 Pa = 0,1 bar</strong></div>
-      </div>
-      <div class="fcard-right">
-        <div class="fdiag">
-          <svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
-            <!-- Base surface -->
-            <rect x="20" y="110" width="120" height="12" rx="3" fill="#1e2535" stroke="#3a4555" stroke-width="1"/>
-            <text x="80" y="138" text-anchor="middle" fill="#6a7585" font-size="10" font-family="IBM Plex Mono">Superfície</text>
-            <!-- Area indicator -->
-            <rect x="35" y="98" width="90" height="12" rx="2" fill="rgba(0,255,157,0.1)" stroke="#00ff9d" stroke-width="1" stroke-dasharray="4,2"/>
-            <text x="80" y="107" text-anchor="middle" fill="#00ff9d" font-size="9" font-family="IBM Plex Mono">A (área)</text>
-            <!-- Force arrows -->
-            <line x1="50" y1="30" x2="50" y2="95" stroke="#ffc040" stroke-width="2" marker-end="url(#arrowY)"/>
-            <line x1="80" y1="20" x2="80" y2="95" stroke="#ffc040" stroke-width="2.5" marker-end="url(#arrowY)"/>
-            <line x1="110" y1="30" x2="110" y2="95" stroke="#ffc040" stroke-width="2" marker-end="url(#arrowY)"/>
-            <text x="80" y="16" text-anchor="middle" fill="#ffc040" font-size="11" font-weight="bold" font-family="IBM Plex Mono">F</text>
-            <!-- P label -->
-            <text x="130" y="60" fill="#00d4ff" font-size="18" font-weight="bold" font-family="IBM Plex Mono">P</text>
-            <defs>
-              <marker id="arrowY" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
-                <path d="M0,0 L8,4 L0,8 Z" fill="#ffc040"/>
-              </marker>
-            </defs>
-          </svg>
-        </div>
-      </div>
     </div>
-    <div class="fapps">
-      <span class="fapp">Pneumática industrial</span>
-      <span class="fapp">Hidráulica</span>
-      <span class="fapp">Vasos de pressão</span>
-      <span class="fapp">Caldeiras</span>
-    </div>
-  </div>
 
-  <!-- Stevin -->
-  <div class="fcard">
-    <div class="fcard-title">Stevin — Pressão Hidrostática</div>
-    <div class="fcard-top">
-      <div class="fcard-left">
-        <div class="fcard-formula">
-          <span style="color:var(--p)">ΔP</span> = <span style="color:var(--g)">ρ</span> × <span style="color:var(--or)">g</span> × <span style="color:var(--pu)">h</span>
+    <div class="blk">
+        <h3>Fórmulas e Unidades</h3>
+        <div class="alert ai">
+            \[ P = \frac{F}{A} \quad \text{e} \quad \Delta P = \rho \cdot g \cdot h \]
         </div>
-        <div class="fcard-desc">A diferença de pressão entre dois pontos de um mesmo líquido depende apenas da diferença de altura entre eles, não da forma do recipiente.</div>
-        <table class="vleg">
-          <tr><td class="vsym" style="color:var(--p)">ΔP</td><td class="vname">Diferença de pressão</td><td class="vunit">Pa ou bar</td><td class="vdesc">Pressão no ponto A menos pressão no ponto B</td></tr>
-          <tr><td class="vsym" style="color:var(--g)">ρ</td><td class="vname">Massa específica</td><td class="vunit">kg/m³</td><td class="vdesc">Água = 1000 · Óleo ≈ 850 · Mercúrio = 13.600</td></tr>
-          <tr><td class="vsym" style="color:var(--or)">g</td><td class="vname">Gravidade</td><td class="vunit">m/s²</td><td class="vdesc">Aceleração gravitacional ≈ 9,81 m/s²</td></tr>
-          <tr><td class="vsym" style="color:var(--pu)">h</td><td class="vname">Altura da coluna</td><td class="vunit">m</td><td class="vdesc">Diferença de profundidade entre os dois pontos</td></tr>
+        <table class="tbl">
+            <thead><tr><th>Símbolo</th><th>Significado</th><th>Unidade SI</th><th>Conversão Comum</th></tr></thead>
+            <tbody>
+                <tr><td>\(P\)</td><td>Pressão</td><td>Pascal (Pa)</td><td>1 bar = 100.000 Pa</td></tr>
+                <tr><td>\(\rho\)</td><td>Massa Específica</td><td>kg/m³</td><td>Água ≈ 1000 kg/m³</td></tr>
+                <tr><td>\(g\)</td><td>Gravidade</td><td>m/s²</td><td>9,80665 m/s²</td></tr>
+                <tr><td>\(h\)</td><td>Altura da Coluna</td><td>Metros (m)</td><td>10 mca ≈ 1 bar</td></tr>
+            </tbody>
         </table>
-        <div class="fdiv"></div>
-        <div style="font-size:12px;color:var(--t3)">Exemplo: água (ρ=1000) com h=5 m → ΔP = 1000 × 9,81 × 5 = <strong style="color:var(--p)">49.050 Pa ≈ 0,49 bar</strong></div>
-      </div>
-      <div class="fcard-right">
-        <div class="fdiag">
-          <svg viewBox="0 0 160 175" xmlns="http://www.w3.org/2000/svg">
-            <!-- Tank walls -->
-            <rect x="25" y="10" width="90" height="130" rx="4" fill="rgba(0,212,255,0.04)" stroke="#2a3545" stroke-width="1.5"/>
-            <!-- Water fill -->
-            <rect x="26" y="30" width="88" height="109" fill="rgba(0,100,180,0.15)"/>
-            <!-- Water surface -->
-            <line x1="26" y1="30" x2="114" y2="30" stroke="rgba(0,212,255,0.4)" stroke-width="1.5"/>
-            <!-- Point A -->
-            <circle cx="70" cy="60" r="4" fill="var(--g)"/>
-            <text x="80" y="64" fill="#00ff9d" font-size="10" font-family="IBM Plex Mono" font-weight="bold">A</text>
-            <!-- Point B -->
-            <circle cx="70" cy="125" r="4" fill="var(--r)"/>
-            <text x="80" y="129" fill="#ff5566" font-size="10" font-family="IBM Plex Mono" font-weight="bold">B</text>
-            <!-- h arrow -->
-            <line x1="118" y1="60" x2="118" y2="125" stroke="var(--pu)" stroke-width="1.5" marker-start="url(#arrowUp)" marker-end="url(#arrowDown)"/>
-            <text x="128" y="97" fill="var(--pu)" font-size="12" font-weight="bold" font-family="IBM Plex Mono">h</text>
-            <!-- Pressure at B indicator -->
-            <rect x="30" y="132" width="82" height="5" rx="2" fill="rgba(0,212,255,0.15)"/>
-            <text x="71" y="150" text-anchor="middle" fill="var(--p)" font-size="9" font-family="IBM Plex Mono">P↑ com profundidade</text>
-            <defs>
-              <marker id="arrowUp" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
-                <path d="M4,0 L8,8 L0,8 Z" fill="var(--pu)"/>
-              </marker>
-              <marker id="arrowDown" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
-                <path d="M0,0 L8,0 L4,8 Z" fill="var(--pu)"/>
-              </marker>
-            </defs>
-          </svg>
+    </div>
+
+    <div class="blk">
+        <h3>Relação com a Automação</h3>
+        <p>Na instrumentação moderna, o <strong>Transmissor de Pressão Inteligente</strong> utiliza sensores piezoresistivos ou capacitivos.</p>
+        <ul>
+            <li><strong>Sinal 4-20mA:</strong> 4mA representa o LRV (0%) e 20mA o URV (100%).</li>
+            <li><strong>Protocolo HART:</strong> Superpõe sinal digital para diagnóstico (ex: temperatura do sensor, falha de linha).</li>
+            <li><strong>Tipos:</strong> Manométrica (ref. atmosfera), Absoluta (ref. vácuo) e Diferencial (ΔP).</li>
+        </ul>
+    </div>
+
+    <div class="blk">
+        <h3>Cenário Real: Proteção de Caldeira</h3>
+        <p>Em uma caldeira, o <strong>Pressostato</strong> atua como última linha de defesa. Se a pressão ultrapassar o Set Point de segurança, ele corta o combustível (MV) instantaneamente via intertravamento (Safety Loop).</p>
+    </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     § NÍVEL - VOLUMETRIA E SEGURANÇA
+     Princípios: Arquimedes e Radar FMCW
+════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-nivel">
+    <div class="h1">Nível (L)</div>
+    <div class="sub">Variável de Processo · Grandeza: Altura / Interface</div>
+
+    <div class="blk">
+        <h3>Teoria Profunda: Medição Direta vs. Indireta</h3>
+        <p>O nível pode ser medido pelo contato direto com a superfície ou inferido por propriedades físicas:</p>
+        <div class="grid g2">
+            <div class="hl hl-g">
+                <div class="hl-hdr">Princípio de Arquimedes</div>
+                <p>Todo corpo imerso sofre um empuxo igual ao peso do fluido deslocado. Usado em <strong>Boias e Deslocadores</strong>.</p>
+            </div>
+            <div class="hl hl-p">
+                <div class="hl-hdr">Pressão Hidrostática</div>
+                <p>O método mais comum: medir a pressão no fundo do tanque e converter para altura usando a densidade.</p>
+            </div>
         </div>
-      </div>
     </div>
-    <div class="fapps">
-      <span class="fapp">Medição de nível por pressão</span>
-      <span class="fapp">Caixas d'água</span>
-      <span class="fapp">Tanques industriais</span>
+
+    <div class="blk">
+        <h3>Fórmulas Detalhadas</h3>
+        <div class="alert ag">
+            \[ h = \frac{P_{medida}}{\rho \cdot g} \quad \text{e} \quad V = A_{base} \cdot h \]
+        </div>
+        <p>Para tanques pressurizados, usamos a <strong>Pressão Diferencial (ΔP)</strong> para anular a pressão do topo:</p>
+        <div class="alert ai">\[ \Delta P = P_{fundo} - P_{topo} \]</div>
     </div>
-  </div>
+
+    <div class="blk">
+        <h3>Tecnologias de Ponta</h3>
+        <ul>
+            <li><strong>Radar FMCW:</strong> Emite micro-ondas e mede a variação de frequência. Imune a vapores e variações de densidade.</li>
+            <li><strong>Ultrassônico:</strong> Mede o tempo de eco. Ideal para sólidos e líquidos limpos, mas sofre com espuma.</li>
+            <li><strong>Capacitivo:</strong> O fluido atua como dielétrico entre o sensor e a parede do tanque.</li>
+        </ul>
+    </div>
+
+    <div class="blk">
+        <h3>Cenário Real: O Efeito Swell</h3>
+        <p>Em caldeiras, quando a pressão cai bruscamente, bolhas de vapor se formam na água, fazendo o nível "subir" falsamente (Swell). O instrumentista deve configurar o <strong>Controle de 3 Elementos</strong> (Nível + Vazão de Água + Vazão de Vapor) para evitar erros.</p>
+    </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     § VAZÃO - DINÂMICA DE FLUIDOS
+     Princípios: Bernoulli e Reynolds
+════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-vazao">
+    <div class="h1">Vazão (F)</div>
+    <div class="sub">Variável de Processo · Grandeza: Volume ou Massa / Tempo</div>
+
+    <div class="blk">
+        <h3>Teoria Profunda: A Equação de Bernoulli</h3>
+        <p>A vazão é a variável mais complexa. A maioria dos medidores (Placa de Orifício, Venturi) baseia-se na conversão de energia potencial em cinética:</p>
+        <div class="alert ay">
+            \[ \frac{P_1}{\rho} + \frac{v_1^2}{2} + g z_1 = \frac{P_2}{\rho} + \frac{v_2^2}{2} + g z_2 \]
+        </div>
+        <p><strong>Número de Reynolds (Re):</strong> Define se o fluxo é Laminar (Re < 2300) ou Turbulento (Re > 4000). A maioria dos medidores industriais exige fluxo turbulento para precisão.</p>
+    </div>
+
+    <div class="blk">
+        <h3>Vazão Mássica vs. Volumétrica</h3>
+        <div class="grid g2">
+            <div style="background:var(--bg4); padding:15px; border-radius:8px">
+                <strong style="color:var(--y)">Volumétrica (Qv):</strong> \( Qv = A \cdot v \)
+                <p>Unidades: m³/h, L/min. Muda com a temperatura (expansão térmica).</p>
+            </div>
+            <div style="background:var(--bg4); padding:15px; border-radius:8px">
+                <strong style="color:var(--or)">Mássica (Qm):</strong> \( Qm = \rho \cdot Qv \)
+                <p>Unidades: kg/h, t/h. É a medição real de "matéria". Medidor <strong>Coriolis</strong> é o padrão ouro.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="blk">
+        <h3>Instrumentação e Sinais</h3>
+        <ul>
+            <li><strong>Placa de Orifício:</strong> Gera um ΔP. O sinal de vazão é proporcional à <strong>raiz quadrada</strong> do ΔP. O transmissor deve ter "Extração de Raiz Quadrada" habilitada.</li>
+            <li><strong>Eletromagnético:</strong> Baseado na Lei de Faraday. Só funciona com líquidos condutores (água, polpas).</li>
+            <li><strong>Vórtex:</strong> Mede a frequência de redemoinhos. Excelente para vapor saturado.</li>
+        </ul>
+    </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     § TEMPERATURA - ENERGIA TÉRMICA
+     Princípios: Seebeck e Variação de Resistência
+════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-temperatura">
+    <div class="h1">Temperatura (T)</div>
+    <div class="sub">Variável de Processo · Grandeza: Agitação Molecular</div>
+
+    <div class="blk">
+        <h3>Teoria Profunda: Termopares e RTDs</h3>
+        <div class="grid g2">
+            <div class="hl hl-pu">
+                <div class="hl-hdr">Efeito Seebeck (Termopares)</div>
+                <p>A união de dois metais diferentes gera uma milivoltagem (mV) proporcional à diferença de temperatura entre as juntas.</p>
+            </div>
+            <div class="hl hl-p">
+                <div class="hl-hdr">Termorresistência (PT100)</div>
+                <p>A resistência elétrica da platina aumenta linearmente com a temperatura. \( R_0 = 100 \Omega \) a \( 0^\circ C \).</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="blk">
+        <h3>Fórmulas de Conversão</h3>
+        <div class="alert ai">
+            \[ T(K) = T(^\circ C) + 273,15 \quad ; \quad T(^\circ F) = 1,8 \cdot T(^\circ C) + 32 \]
+        </div>
+        <p>Para o PT100 (Equação de Callendar-Van Dusen simplificada):</p>
+        <div class="alert ag">\[ R_t = R_0 (1 + \alpha \cdot t) \quad \text{onde } \alpha = 0,00385 \]</div>
+    </div>
+
+    <div class="blk">
+        <h3>Automação: 2, 3 ou 4 fios?</h3>
+        <p>No PT100, a resistência dos cabos pode gerar erro. Por isso usamos:</p>
+        <ul>
+            <li><strong>3 Fios:</strong> O padrão industrial. O terceiro fio compensa a resistência do cabo no transmissor.</li>
+            <li><strong>Transmissores de Cabeçote:</strong> Convertem o sinal de mV ou Ohms para 4-20mA o mais próximo possível do sensor para evitar ruídos.</li>
+        </ul>
+    </div>
+
+    <div class="blk">
+        <h3>Cenário Real: Pasteurização</h3>
+        <p>No laticínio, o leite deve ser mantido a 72°C por 15s. Um erro de 1°C pode comprometer a segurança alimentar. Usa-se PT100 Classe A pela alta precisão e estabilidade.</p>
+    </div>
+</div>
 
   <!-- VAZÃO -->
   <div class="sec">Vazão</div>
