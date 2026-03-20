@@ -982,3 +982,301 @@ svg.diagram {
   .fv-card__eq { font-size: 16px; }
   .topbar__label { display: none; }
 }
+
+/* ─────────────────────────────────────────
+   19. COMPONENT — PLAYGROUND
+   Variable Playground: glassmorphism island,
+   color-coded sliders, live SVG panel
+   ───────────────────────────────────────── */
+
+/* Outer block wrapper */
+.pg-block {
+  margin-bottom: 32px;
+}
+
+.pg-block__header {
+  margin-bottom: 20px;
+}
+
+.pg-block__title {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.pg-block__subtitle {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* Two-column layout: formula+sliders | SVG */
+.pg-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 680px) {
+  .pg-layout { grid-template-columns: 1fr; }
+}
+
+/* ── Formula Island (glassmorphism) ── */
+.pg-formula-island {
+  background: rgba(15, 25, 41, 0.7);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--r);
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.04) inset,
+    0 8px 32px rgba(0,0,0,0.4);
+  transition: box-shadow 0.3s;
+}
+
+.pg-formula-island.pg-pulse {
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.08) inset,
+    0 0 24px rgba(255,255,255,0.06),
+    0 8px 32px rgba(0,0,0,0.4);
+}
+
+.pg-formula-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted2);
+  margin-bottom: 14px;
+}
+
+/* Formula equation display */
+.pg-formula-eq {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 600;
+  min-height: 48px;
+  flex-wrap: wrap;
+}
+
+.pg-eq-sym {
+  color: var(--muted);
+  font-weight: 400;
+  font-size: 18px;
+}
+
+/* Fraction rendering (P over ρg) */
+.pg-fraction {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.pg-fraction > span:first-child {
+  border-bottom: 1px solid var(--border2);
+  padding: 0 8px 3px;
+  line-height: 1.2;
+}
+
+.pg-fraction > span:last-child {
+  padding: 3px 8px 0;
+  line-height: 1.2;
+  font-size: 16px;
+}
+
+/* Result chip */
+.pg-result-chip {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: 16px;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--r-sm);
+}
+
+.pg-result-chip__label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted2);
+  margin-right: 4px;
+}
+
+.pg-result-chip__val {
+  font-family: var(--font-mono);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text);
+  transition: color 0.2s;
+}
+
+/* Flash animation when value updates */
+.pg-result-chip__val.pg-flash {
+  animation: flashPulse 0.3s ease;
+}
+
+@keyframes flashPulse {
+  0%   { opacity: 1; }
+  40%  { opacity: 0.4; transform: scale(1.05); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.pg-result-chip__unit {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--muted);
+}
+
+/* ── Sliders ── */
+.pg-sliders {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pg-var {}
+
+.pg-var__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.pg-var__label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.pg-var__sym {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.pg-var__val {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  min-width: 80px;
+  text-align: right;
+  transition: color 0.15s;
+}
+
+.pg-slider-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pg-slider-edge {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--muted2);
+  min-width: 30px;
+  text-align: center;
+}
+
+/* Custom range slider with per-variable thumb color */
+.pg-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  flex: 1;
+  height: 3px;
+  background: var(--border2);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.pg-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--thumb, var(--text));
+  border: 2px solid var(--bg);
+  box-shadow: 0 0 8px var(--thumb, rgba(255,255,255,0.3));
+  cursor: grab;
+  transition: transform 0.1s, box-shadow 0.15s;
+}
+
+.pg-slider::-webkit-slider-thumb:active {
+  transform: scale(1.25);
+  cursor: grabbing;
+}
+
+.pg-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--thumb, var(--text));
+  border: 2px solid var(--bg);
+  cursor: grab;
+}
+
+/* Detail text */
+.pg-detail {
+  margin-top: 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted2);
+  line-height: 1.7;
+  white-space: pre-line;
+  padding: 8px 12px;
+  background: rgba(0,0,0,0.2);
+  border-radius: var(--r-sm);
+  border-left: 2px solid var(--border2);
+}
+
+/* ── SVG panel ── */
+.pg-right {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pg-svg-wrap {
+  background: rgba(15,25,41,0.6);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 12px;
+  min-height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+svg.pg-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+/* Divider between playground blocks */
+.pg-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border2), transparent);
+  margin: 28px 0;
+}
