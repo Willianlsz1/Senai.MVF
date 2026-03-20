@@ -452,4 +452,40 @@ html,body{
 /* Desktop médio (901–1300px): mostra setas de scroll do nav */
 @media(min-width:901px) and (max-width:1300px){
   .nav-arrow{display:flex;align-items:center}
+
+   /* Estilo Enciclopédia SENAI */
+.blk h3 {
+    color: var(--p);
+    border-left: 4px solid var(--p);
+    padding-left: 10px;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.hl-hdr {
+    font-weight: 700;
+    font-family: 'IBM Plex Mono', monospace;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+.alert {
+    border-radius: 8px;
+    padding: 15px;
+    font-family: 'IBM Plex Mono', monospace;
+    text-align: center;
+    font-size: 1.1rem;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Cores SENAI */
+:root {
+    --p: #00d4ff; /* Azul SENAI */
+    --g: #00ff9d; /* Verde Sucesso */
+    --y: #ffc040; /* Amarelo Alerta */
+    --r: #ff5566; /* Vermelho Perigo */
+    --pu: #c084ff; /* Roxo Teoria */
+}
 }
