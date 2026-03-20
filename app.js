@@ -418,4 +418,35 @@ function exLoadBern(rho,v1,z1,p1,v2,z2){
   document.getElementById('b-rho').value=rho;document.getElementById('b-v1').value=v1;document.getElementById('b-p1').value=p1;
   document.getElementById('b-z1').value=z1;document.getElementById('b-v2').value=v2;document.getElementById('b-z2').value=z2;
   bernCalc();
+
+   
 }
+/* ── § ATUALIZAÇÃO DO MOTOR DE CÁLCULO ────────────────────────── */
+
+// Função para garantir renderização MathJax após troca de tela
+function S(id) {
+  PAGES.forEach(p => {
+    const s = document.getElementById('screen-' + p); if (s) s.classList.remove('active');
+    const n = document.getElementById('nav-' + p); if (n) n.classList.remove('active');
+  });
+  
+  const target = document.getElementById('screen-' + id);
+  if (target) {
+    target.classList.add('active');
+    // Força o MathJax a processar a nova tela visível
+    if (window.MathJax) {
+      MathJax.typesetPromise([target]).catch((err) => console.log(err.message));
+    }
+  }
+  window.scrollTo(0, 0);
+}
+
+// Calculadora de Erro de Malha 4-20mA (Adicione ao objeto C)
+const C_Extra = {
+    calcLoop(ma) {
+        const lrv = 0; // Exemplo
+        const urv = 100; // Exemplo
+        const pv = ((ma - 4) / 16) * (urv - lrv) + lrv;
+        return pv.toFixed(2);
+    }
+};
