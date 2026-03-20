@@ -25,6 +25,24 @@
      § 7. Calculadora        — 9 fórmulas interativas
 ════════════════════════════════════════════════════════════════ */
 
+function mostrarTela(idDaTela) {
+    // 1. Esconde todas as telas
+    document.querySelectorAll('.screen').forEach(tela => {
+        tela.classList.remove('active');
+    });
+
+    // 2. Mostra a tela desejada
+    const telaDestino = document.getElementById(idDaTela);
+    if (telaDestino) {
+        telaDestino.classList.add('active');
+        window.scrollTo(0, 0); // Volta ao topo
+    }
+}
+
+// Para testar agora mesmo: force a tela de pressão a aparecer
+mostrarTela('screen-pressao');
+
+
 /* ── § 1. NAVEGAÇÃO ──────────────────────────────────────────── */
 
 const PAGES = [
