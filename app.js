@@ -32,8 +32,8 @@ const MODULE_ACCENT = {
 /** All module slugs */
 const MODULES = Object.keys(MODULE_ACCENT);
 
-/** Tab identifiers per module */
-const MODULE_TABS = ['teoria', 'formulas', 'calc', 'instrumentos', 'flashcards', 'quiz'];
+/** Tab identifiers per module (order matches DOM nav button order) */
+const MODULE_TABS = ['teoria', 'formulas', 'playground', 'calc', 'instrumentos', 'flashcards', 'quiz'];
 
 /**
  * Flashcard dataset
@@ -395,9 +395,18 @@ const QUIZ_DATA = {
 /* ─────────────────────────────────────────
    2. STATE
    ───────────────────────────────────────── */
+
+/**
+ * Module status enum
+ * 'new'    → never opened
+ * 'active' → opened but quiz not finished
+ * 'done'   → quiz completed with ≥60% score
+ */
+const STATUS = { NEW: 'new', ACTIVE: 'active', DONE: 'done' };
+
 const State = {
   currentModule: null,
-  totalScore: 0,
+  totalScore:    0,
 
   /** Quiz state per module */
   quiz: Object.fromEntries(
@@ -409,8 +418,11 @@ const State = {
     MODULES.map(m => [m, { idx: 0, flipped: false }])
   ),
 
-  /** Quiz progress % per module (for progress bar in cards) */
+  /** Progress 0-100 per module */
   progress: Object.fromEntries(MODULES.map(m => [m, 0])),
+
+  /** Status per module */
+  status: Object.fromEntries(MODULES.map(m => [m, STATUS.NEW])),
 };
 
 /* ─────────────────────────────────────────
@@ -418,15 +430,23 @@ const State = {
    ───────────────────────────────────────── */
 
 /**
- * Open a module content view
+ * Open a module content view.
+ * Also transitions status from 'new' → 'active'
+ * and refreshes the card's visual state.
  * @param {string} mod - module slug
  */
 function openMod(mod) {
   State.currentModule = mod;
 
-  DOM.home.style.display      = 'none';
-  DOM.modGrid.style.display   = 'none';
-  DOM.content.style.display   = 'block';
+  // Promote from new → active on first visit
+  if (State.status[mod] === STATUS.NEW) {
+    State.status[mod] = STATUS.ACTIVE;
+    refreshCardState(mod);
+  }
+
+  DOM.home.style.display    = 'none';
+  DOM.modGrid.style.display = 'none';
+  DOM.content.style.display = 'block';
 
   document.querySelectorAll('.mod-content').forEach(el => (el.style.display = 'none'));
   document.getElementById(`mod-${mod}`).style.display = 'block';
@@ -444,6 +464,61 @@ function goHome() {
   DOM.modGrid.style.display   = 'grid';
   State.currentModule         = null;
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/**
+ * Update a module card's visual state (status badge, CTA label,
+ * CSS class, progress bar, aria-valuenow).
+ * Called whenever status or progress changes.
+ * @param {string} mod
+ */
+function refreshCardState(mod) {
+  const card        = document.querySelector(`.module-card[data-m="${mod}"]`);
+  const statusEl    = document.getElementById(`status-${mod}`);
+  const ctaEl       = document.getElementById(`cta-${mod}`);
+  const progressBar = document.getElementById(`prog-${mod}`);
+  const progressWrap = progressBar?.parentElement;
+  const pct          = State.progress[mod];
+  const status       = State.status[mod];
+
+  if (!card) return;
+
+  // — CSS class state —
+  card.classList.remove('is-active', 'is-done');
+  if (status === STATUS.ACTIVE) card.classList.add('is-active');
+  if (status === STATUS.DONE)   card.classList.add('is-done');
+
+  // — Status badge —
+  if (statusEl) {
+    const labels = {
+      [STATUS.NEW]:    { text: 'Novo',        cls: 'module-card__status--new' },
+      [STATUS.ACTIVE]: { text: 'Em progresso', cls: 'module-card__status--active' },
+      [STATUS.DONE]:   { text: 'Concluído',    cls: 'module-card__status--done' },
+    };
+    const { text, cls } = labels[status];
+    statusEl.textContent = text;
+    statusEl.className   = `module-card__status ${cls}`;
+  }
+
+  // — CTA label —
+  if (ctaEl) {
+    const ctaLabels = {
+      [STATUS.NEW]:    'Iniciar módulo',
+      [STATUS.ACTIVE]: `Continuar — ${pct}% completo`,
+      [STATUS.DONE]:   'Revisar módulo',
+    };
+    ctaEl.textContent = ctaLabels[status];
+  }
+
+  // — Progress bar —
+  if (progressBar) {
+    progressBar.style.width = `${pct}%`;
+  }
+
+  // — ARIA —
+  if (progressWrap) {
+    progressWrap.setAttribute('aria-valuenow', pct);
+  }
 }
 
 /* ─────────────────────────────────────────
@@ -660,6 +735,10 @@ function renderQuizResult(mod) {
   const pct       = Math.round((st.correct / total) * 100);
   const accent    = MODULE_ACCENT[mod];
 
+  // Finalise progress + status when result is rendered
+  State.quiz[mod].done = true;
+  updateModuleProgress(mod);
+
   const message =
     pct >= 80 ? '🎉 Excelente! Domínio completo do módulo!' :
     pct >= 60 ? '👍 Bom resultado! Revise os pontos errados.' :
@@ -686,12 +765,27 @@ function addScore(points) {
   DOM.scoreDisplay.textContent = `${State.totalScore} pts`;
 }
 
+/**
+ * Update progress percentage and status for a module,
+ * then refresh the card's visual state.
+ * Status → 'done' when quiz score ≥ 60%.
+ * @param {string} mod
+ */
 function updateModuleProgress(mod) {
-  const total = QUIZ_DATA[mod].length;
-  const pct   = Math.round((State.quiz[mod].correct / total) * 100);
+  const total   = QUIZ_DATA[mod].length;
+  const correct = State.quiz[mod].correct;
+  const pct     = Math.round((correct / total) * 100);
+
   State.progress[mod] = pct;
-  const bar = document.getElementById(`prog-${mod}`);
-  if (bar) bar.style.width = `${pct}%`;
+
+  // Promote to done when a full quiz pass scores ≥ 60%
+  if (State.quiz[mod].done && pct >= 60 && State.status[mod] !== STATUS.DONE) {
+    State.status[mod] = STATUS.DONE;
+  } else if (State.status[mod] === STATUS.NEW) {
+    State.status[mod] = STATUS.ACTIVE;
+  }
+
+  refreshCardState(mod);
 }
 
 /* ─────────────────────────────────────────
