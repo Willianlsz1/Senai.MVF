@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SENAI · MVFI — Medição de Variáveis Físicas Industriais</title>
+  <meta name="description" content="Plataforma interativa de estudos em instrumentação industrial: Pressão, Nível, Vazão e Temperatura. Calculadoras, fórmulas visuais e quizzes baseados em normas SENAI, ISA e ABNT.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     TOPBAR
+     ══════════════════════════════════════════ -->
+<header class="topbar">
+  <div class="topbar__logo">
+    <div class="topbar__logo-sq">S</div>
+    SENAI · MVFI
+  </div>
+  <div class="topbar__divider"></div>
+  <span class="topbar__label">Instrumentação Industrial</span>
+  <div class="topbar__score">🏆 <span id="score-display">0 pts</span></div>
+</header>
+
+<!-- ══════════════════════════════════════════
+     HOME — HERO
+     ══════════════════════════════════════════ -->
+<section class="hero" id="home">
+  <div class="hero__pill">📘 Plataforma de Estudos v2.0</div>
+
+  <h1 class="hero__title">
+    Medição de <em>Variáveis</em><br>Físicas Industriais
+  </h1>
+
+  <p class="hero__subtitle">
+    Aprenda com teoria didática, fórmulas visuais e calculadoras interativas
+    baseadas em fontes confiáveis — SENAI, ABNT, ISA e literatura técnica de referência.
+  </p>
+
+  <div class="hero__stats">
+    <div class="hero__stat">
+      <div class="hero__stat-number">4</div>
+      <div class="hero__stat-label">módulos</div>
+    </div>
+    <div class="hero__stat">
+      <div class="hero__stat-number">20+</div>
+      <div class="hero__stat-label">calculadoras</div>
+    </div>
+    <div class="hero__stat">
+      <div class="hero__stat-number">32</div>
+      <div class="hero__stat-label">flashcards</div>
+    </div>
+    <div class="hero__stat">
+      <div class="hero__stat-number">27</div>
+      <div class="hero__stat-label">questões quiz</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     HOME — MODULE GRID
+     ══════════════════════════════════════════ -->
+<div class="module-grid" id="modgrid">
+
+  <article class="module-card" data-m="pressao" onclick="openMod('pressao')" role="button" tabindex="0">
+    <div class="module-card__icon">🔴</div>
+    <div class="module-card__name">Pressão</div>
+    <p class="module-card__desc">Tipos, unidades, Bourdon, diafragma, transmissores e calibração.</p>
+    <div class="module-card__tags">
+      <span class="module-card__tag">Bourdon</span>
+      <span class="module-card__tag">Diafragma</span>
+      <span class="module-card__tag">ΔP</span>
+      <span class="module-card__tag">Bernoulli</span>
+    </div>
+    <div class="module-card__progress">
+      <div class="module-card__progress-fill" id="prog-pressao"></div>
+    </div>
+  </article>
+
+  <article class="module-card" data-m="nivel" onclick="openMod('nivel')" role="button" tabindex="0">
+    <div class="module-card__icon">🔵</div>
+    <div class="module-card__name">Nível</div>
+    <p class="module-card__desc">Medição direta e indireta, boia, ultrassom, radar e pressão diferencial.</p>
+    <div class="module-card__tags">
+      <span class="module-card__tag">Hidrostático</span>
+      <span class="module-card__tag">Ultrassom</span>
+      <span class="module-card__tag">Radar</span>
+      <span class="module-card__tag">Capacitivo</span>
+    </div>
+    <div class="module-card__progress">
+      <div class="module-card__progress-fill" id="prog-nivel"></div>
+    </div>
+  </article>
+
+  <article class="module-card" data-m="vazao" onclick="openMod('vazao')" role="button" tabindex="0">
+    <div class="module-card__icon">🟢</div>
+    <div class="module-card__name">Vazão</div>
+    <p class="module-card__desc">Reynolds, Bernoulli, continuidade, deprimogênios, eletromagnético e Coriolis.</p>
+    <div class="module-card__tags">
+      <span class="module-card__tag">Reynolds</span>
+      <span class="module-card__tag">Orifício</span>
+      <span class="module-card__tag">Mag-Flow</span>
+      <span class="module-card__tag">Coriolis</span>
+    </div>
+    <div class="module-card__progress">
+      <div class="module-card__progress-fill" id="prog-vazao"></div>
+    </div>
+  </article>
+
+  <article class="module-card" data-m="temperatura" onclick="openMod('temperatura')" role="button" tabindex="0">
+    <div class="module-card__icon">🟡</div>
+    <div class="module-card__name">Temperatura</div>
+    <p class="module-card__desc">Dilatação, pressão de vapor, PT100, termopar e conversão de escalas.</p>
+    <div class="module-card__tags">
+      <span class="module-card__tag">PT100</span>
+      <span class="module-card__tag">Termopar K</span>
+      <span class="module-card__tag">Seebeck</span>
+      <span class="module-card__tag">°C/K/°F</span>
+    </div>
+    <div class="module-card__progress">
+      <div class="module-card__progress-fill" id="prog-temperatura"></div>
+    </div>
+  </article>
+
+</div><!-- /module-grid -->
+
+<!-- ══════════════════════════════════════════
+     CONTENT — MODULE VIEWS
+     ══════════════════════════════════════════ -->
+<main id="content">
+  <button class="back-btn" onclick="goHome()">← Voltar aos módulos</button>
+
+  <!-- ─────────────────────────────────────
+       MODULE: PRESSÃO
+       ───────────────────────────────────── -->
+  <section id="mod-pressao" class="mod-content" style="display:none">
+
+    <div class="section-header" style="--ac:var(--pressao)">
+      <div class="section-header__icon">🔴</div>
+      <div>
+        <div class="section-header__title">Pressão</div>
+        <div class="section-header__sub">Fonte: SENAI-SP · ISA-S51.1 · ABNT NBR 14050</div>
+      </div>
+    </div>
+
+    <nav class="tab-bar" id="tabs-pressao">
+      <button class="tab-btn active"  onclick="switchTab('pressao','teoria')">📖 Teoria</button>
+      <button class="tab-btn"         onclick="switchTab('pressao','formulas')">📐 Fórmulas</button>
+      <button class="tab-btn"         onclick="switchTab('pressao','calc')">🧮 Calculadoras</button>
+      <button class="tab-btn"         onclick="switchTab('pressao','instrumentos')">🔧 Instrumentos</button>
+      <button class="tab-btn"         onclick="switchTab('pressao','flashcards')">🃏 Flashcards</button>
+      <button class="tab-btn"         onclick="switchTab('pressao','quiz')">✅ Quiz</button>
+    </nav>
+
+    <!-- TAB: Teoria -->
+    <div id="pressao-teoria" class="tab-panel active">
+      <div class="tile-row" style="--ac:var(--pressao)">
+        <div class="tile"><div class="tile__value">P = F/A</div><div class="tile__label">definição fundamental</div></div>
+        <div class="tile"><div class="tile__value">101,325 kPa</div><div class="tile__label">pressão atmosférica (1 atm)</div></div>
+        <div class="tile"><div class="tile__value">5 tipos</div><div class="tile__label">referências de pressão</div></div>
+        <div class="tile"><div class="tile__value">4–20 mA</div><div class="tile__label">sinal padrão industrial</div></div>
+      </div>
+
+      <div class="card" style="--ac:var(--pressao)">
+        <h3>📌 Definição de Pressão</h3>
+        <p>Pressão é a <span class="hl">força normal aplicada por unidade de área</span> sobre uma superfície.
+           Grandeza escalar derivada, com unidade SI o Pascal (Pa = N/m²).</p>
+        <p>Nas indústrias química, petroquímica, alimentícia e de utilidades, a pressão afeta diretamente
+           <strong>qualidade do produto, segurança operacional e eficiência energética</strong>.</p>
+        <div class="divider"></div>
+        <p><strong>Aplicações:</strong> caldeiras e vasos de pressão · medição indireta de nível, vazão e
+           densidade · proteção de compressores e bombas · controle de reatores químicos.</p>
+      </div>
+
+      <div class="card" style="--ac:var(--pressao)">
+        <h3>📊 Os 5 Tipos de Pressão Industrial</h3>
+        <div class="igrid">
+          <div class="icard">
+            <div class="icard__icon">🌍</div>
+            <div class="icard__name">Atmosférica (P_atm)</div>
+            <div class="icard__desc">Exercida pela coluna de ar da atmosfera. Nível do mar: 101,325 kPa ≈ 14,696 psi. Varia com altitude e clima.</div>
+          </div>
+          <div class="icard">
+            <div class="icard__icon">📈</div>
+            <div class="icard__name">Manométrica (P_man)</div>
+            <div class="icard__desc">Diferença entre a pressão do fluido e a atmosférica. Lida em manômetros comuns (pneu, caldeira). Pode ser positiva ou negativa.</div>
+          </div>
+          <div class="icard">
+            <div class="icard__icon">🔢</div>
+            <div class="icard__name">Absoluta (P_abs)</div>
+            <div class="icard__desc">Medida a partir do vácuo perfeito. P_abs = P_atm + P_man. Sempre ≥ 0. Indicada com sufixo "a" (ex: kPa-a).</div>
+          </div>
+          <div class="icard">
+            <div class="icard__icon">⬇️</div>
+            <div class="icard__name">Vácuo (P_vac)</div>
+            <div class="icard__desc">P_man negativa. P_vac = P_atm − P_abs. Usado em evaporadores, embalagem a vácuo e condensadores.</div>
+          </div>
+          <div class="icard">
+            <div class="icard__icon">↔️</div>
+            <div class="icard__name">Diferencial (ΔP)</div>
+            <div class="icard__desc">Diferença entre dois pontos P₁ e P₂. Base para medição de vazão (orifício, venturi) e nível em vasos fechados.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="--ac:var(--pressao)">
+        <h3>⚖️ Lei de Stevin e Pressão Hidrostática</h3>
+        <p><strong>Simon Stevin (1548–1620)</strong>: em fluido estático homogêneo, a pressão depende apenas da profundidade.</p>
+        <ul>
+          <li>Pressão <strong>proporcional à profundidade</strong> — cresce linearmente</li>
+          <li>Pressão <strong>independente da forma do recipiente</strong> — paradoxo hidrostático</li>
+          <li>A pressão age igualmente em todas as direções (isotrópica)</li>
+        </ul>
+        <div class="divider"></div>
+        <p><strong>Exemplo:</strong> Titanic (3.800 m) — P = 1025 × 9,81 × 3800 ≈ <span class="hl">38,2 MPa ≈ 377 atm</span>.</p>
+      </div>
+    </div>
+
+    <!-- TAB: Fórmulas Visuais -->
+    <div id="pressao-formulas" class="tab-panel">
+
+      <div class="fv-card" style="--ac:var(--pressao)">
+        <div class="fv-card__name">① Pressão Fundamental</div>
+        <div class="fv-card__context">Relação entre força normal e área. Base de todo o conceito de pressão.</div>
+        <div class="fv-card__eq">P = F / A</div>
+        <svg class="diagram" viewBox="0 0 320 140" xmlns="http://www.w3.org/2000/svg">
+          <rect x="60" y="70" width="200" height="50" rx="4" fill="#1d2a42" stroke="#E84E0F" stroke-width="1.5"/>
+          <rect x="100" y="20" width="120" height="50" rx="4" fill="#162035" stroke="#4a5a7a" stroke-width="1"/>
+          <line x1="160" y1="70" x2="160" y2="20" stroke="#E84E0F" stroke-width="2" stroke-dasharray="4,3"/>
+          <text x="160" y="50" text-anchor="middle" fill="#E84E0F" font-size="11" font-family="IBM Plex Mono">F = 100 N</text>
+          <text x="160" y="110" text-anchor="middle" fill="#7a90b8" font-size="11" font-family="IBM Plex Mono">A = 0,5 m²</text>
+          <text x="270" y="100" text-anchor="middle" fill="#E84E0F" font-size="12" font-weight="600" font-family="IBM Plex Mono">P = 200 Pa</text>
+          <text x="20" y="100" text-anchor="middle" fill="#7a90b8" font-size="9" font-family="IBM Plex Sans">Superfície</text>
+        </svg>
+        <div class="fv-card__vars">
+          <div class="fv-card__var"><span>P</span> <em>= Pressão (Pa = N/m²)</em></div>
+          <div class="fv-card__var"><span>F</span> <em>= Força normal (N)</em></div>
+          <div class="fv-card__var"><span>A</span> <em>= Área da superfície (m²)</em></div>
+        </div>
+        <div class="fv-card__source">📚 Ref: Halliday & Resnick — Fundamentos de Física Vol. 2 | SENAI-SP Apostila MVFI</div>
+      </div>
+
+      <div class="fv-card" style="--ac:var(--pressao)">
+        <div class="fv-card__name">② Lei de Stevin — Pressão Hidrostática</div>
+        <div class="fv-card__context">Em fluido incompressível estático, a pressão aumenta linearmente com a profundidade.</div>
+        <div class="fv-card__eq">P = ρ · g · h</div>
+        <svg class="diagram" viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg">
+          <rect x="80" y="10" width="160" height="160" rx="4" fill="none" stroke="#4a5a7a" stroke-width="1.5"/>
+          <rect x="81" y="60" width="158" height="109" fill="rgba(0,180,216,0.15)"/>
+          <line x1="80" y1="60" x2="240" y2="60" stroke="#00b4d8" stroke-width="1.5" stroke-dasharray="5,3"/>
+          <line x1="250" y1="10" x2="250" y2="60" stroke="#7a90b8" stroke-width="1.5"/>
+          <line x1="250" y1="170" x2="250" y2="60" stroke="#E84E0F" stroke-width="1.5"/>
+          <text x="268" y="38" fill="#7a90b8" font-size="10" font-family="IBM Plex Mono">P_atm</text>
+          <text x="268" y="120" fill="#E84E0F" font-size="12" font-family="IBM Plex Mono">h</text>
+          <text x="160" y="125" text-anchor="middle" fill="#00b4d8" font-size="11" font-family="IBM Plex Mono">fluido ρ</text>
+          <text x="160" y="155" text-anchor="middle" fill="#E84E0F" font-size="11" font-family="IBM Plex Mono">P = ρgh</text>
+        </svg>
+        <div class="fv-card__vars">
+          <div class="fv-card__var"><span>ρ</span> <em>= Densidade do fluido (kg/m³)</em></div>
+          <div class="fv-card__var"><span>g</span> <em>= 9,81 m/s²</em></div>
+          <div class="fv-card__var"><span>h</span> <em>= Profundidade (m)</em></div>
+        </div>
+        <div class="fv-card__source">📚 Ref: Fox & McDonald — Introdução à Mecânica dos Fluidos | SENAI-SP MVFI Cap.1</div>
+      </div>
+
+      <div class="fv-card" style="--ac:var(--pressao)">
+        <div class="fv-card__name">③ Pressão Absoluta</div>
+        <div class="fv-card__eq">P_abs = P_atm + P_man</div>
+        <div class="fv-card__vars">
+          <div class="fv-card__var"><span>P_abs</span> <em>= Pressão absoluta — sempre ≥ 0</em></div>
+          <div class="fv-card__var"><span>P_atm</span> <em>≈ 101.325 Pa ao nível do mar</em></div>
+          <div class="fv-card__var"><span>P_man</span> <em>= Leitura do manômetro (positiva ou negativa)</em></div>
+        </div>
+        <div class="fv-card__source">📚 Ref: ISA-S51.1 Process Instrumentation Terminology | ABNT NBR 14050</div>
+      </div>
+
+      <div class="fv-card" style="--ac:var(--pressao)">
+        <div class="fv-card__name">④ Tabela de Conversão de Unidades</div>
+        <div class="fv-card__eq" style="font-size:14px;text-align:left;line-height:2.1">
+          1 bar     = 100 kPa = 14,504 psi = 1,0197 kgf/cm²<br>
+          1 atm     = 101,325 kPa = 760 mmHg = 10,332 mca<br>
+          1 psi     = 6,8948 kPa = 0,0689 bar = 703,07 mmca<br>
+          1 kgf/cm² = 98,067 kPa = 0,9807 bar = 10 mca
+        </div>
+        <div class="fv-card__source">📚 Ref: INMETRO — Vocabulário Internacional de Metrologia (VIM 3ª ed.)</div>
+      </div>
+    </div>
+
+    <!-- TAB: Calculadoras -->
+    <div id="pressao-calc" class="tab-panel">
+
+      <div class="calc-wrap" style="--ac:var(--pressao)">
+        <div class="calc-wrap__title">🧮 Calculadora P = F / A</div>
+        <div class="calc-wrap__subtitle">Insira Força e Área para calcular a Pressão</div>
+        <div class="calc-grid">
+          <div class="calc-field">
+            <label>Força F (N)</label>
+            <input type="number" id="cp_F" placeholder="ex: 500">
+          </div>
+          <div class="calc-field">
+            <label>Área A (m²)</label>
+            <input type="number" id="cp_A" placeholder="ex: 0.05">
+          </div>
+          <div class="calc-field">
+            <label>Pressão P (resultado)</label>
+            <input type="text" id="cp_P" placeholder="calculado" readonly style="opacity:.6">
+          </div>
+        </div>
+        <button class="calc-btn" onclick="calcPressaoFA()">Calcular →</button>
+        <div class="calc-error" id="err_pressao_fa">⚠️ Informe Força e Área (A ≠ 0).</div>
+        <div class="calc-result" id="res_pressao_fa">
+          <div class="calc-result__label">PRESSÃO CALCULADA</div>
+          <div><span class="calc-result__value"></span> <span class="calc-result__unit"></span></div>
+          <div class="calc-result__detail"></div>
+        </div>
+      </div>
+
+      <div class="calc-wrap" style="--ac:var(--pressao)">
+        <div class="calc-wrap__title">🧮 Pressão Hidrostática — P = ρ·g·h (Lei de Stevin)</div>
+        <div class="calc-wrap__subtitle">Pressão na base de uma coluna de fluido</div>
+        <div class="calc-grid">
+          <div class="calc-field">
+            <label>Fluido</label>
+            <select id="cs_fluido" onchange="setFluidDens()">
+              <option value="1000">Água (1000 kg/m³)</option>
+              <option value="1025">Água do mar (1025 kg/m³)</option>
+              <option value="800">Óleo mineral (800 kg/m³)</option>
+              <option value="1260">Ácido sulfúrico (1260 kg/m³)</option>
+              <option value="13600">Mercúrio (13600 kg/m³)</option>
+              <option value="custom">Personalizado</option>
+            </select>
+          </div>
+          <div class="calc-field">
+            <label>Densidade ρ (kg/m³)</label>
+            <input type="number" id="cs_rho" value="1000">
+          </div>
+          <div class="calc-field">
+            <label>Altura h (m)</label>
+            <input type="number" id="cs_h" placeholder="ex: 5">
+          </div>
+        </div>
+        <button class="calc-btn" onclick="calcStevin()">Calcular →</button>
+        <div class="calc-result" id="res_stevin">
+          <div class="calc-result__label">PRESSÃO HIDROSTÁTICA</div>
+          <div><span class="calc-result__value"></span> <span class="calc-result__unit"></span></div>
+          <div class="calc-result__detail"></div>
+        </div>
+      </div>
+
+      <div class="calc-wrap" style="--ac:var(--pressao)">
+        <div class="calc-wrap__title">🔄 Conversor de Unidades de Pressão</div>
+        <div class="calc-wrap__subtitle">Converta entre todas as unidades industriais</div>
+        <div class="calc-grid">
+          <div class="calc-field">
+            <label>Valor</label>
+            <input type="number" id="conv_val" placeholder="ex: 1.5">
+          </div>
+          <div class="calc-field">
+            <label>De</label>
+            <select id="conv_from">
+              <option value="Pa">Pascal (Pa)</option>
+              <option value="kPa">kPascal (kPa)</option>
+              <option value="MPa">MPascal (MPa)</option>
+              <option value="bar" selected>bar</option>
+              <option value="atm">atm</option>
+              <option value="psi">psi</option>
+              <option value="kgfcm2">kgf/cm²</option>
+              <option value="mmHg">mmHg</option>
+              <option value="mca">mca (mH₂O)</option>
+            </select>
+          </div>
+          <div class="calc-field">
+            <label>Para</label>
+            <select id="conv_to">
+              <option value="Pa">Pascal (Pa)</option>
+              <option value="kPa" selected>kPascal (kPa)</option>
+              <option value="MPa">MPascal (MPa)</option>
+              <option value="bar">bar</option>
+              <option value="atm">atm</option>
+              <option value="psi">psi</option>
+              <option value="kgfcm2">kgf/cm²</option>
+              <option value="mmHg">mmHg</option>
+              <option value="mca">mca (mH₂O)</option>
+            </select>
+          </div>
+        </div>
+        <button class="calc-btn" onclick="calcConv()">Converter →</button>
+        <div class="calc-result" id="res_conv">
+          <div class="calc-result__label">RESULTADO</div>
+          <div><span class="calc-result__value"></span> <span class="calc-result__unit"></span></div>
+          <div class="calc-result__detail"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TAB: Instrumentos -->
+    <div id="pressao-instrumentos" class="tab-panel">
+      <div class="card" style="--ac:var(--pressao)">
+        <h3>🔩 Tubo de Bourdon</h3>
+        <p>Inventado por Eugène Bourdon em 1849. Tubo metálico de seção ovalada, curvado em arco ou hélice, que se deforma elasticamente com a pressão interna.</p>
+        <ul>
+          <li><strong>Princípio:</strong> deformação elástica — tubo tende a se retificar proporcionalmente à pressão</li>
+          <li><strong>Tipos:</strong> Bourdon em C · Espiral · Helicoidal (alta pressão)</li>
+          <li><strong>Faixa:</strong> 0–600 bar (latão, aço inox, ligas especiais)</li>
+          <li><strong>Norma:</strong> EN 837-1 · ASME B40.100</li>
+        </ul>
+      </div>
+      <div class="card" style="--ac:var(--pressao)">
+        <h3>🫁 Diafragma e Fole</h3>
+        <div class="igrid">
+          <div class="icard">
+            <div class="icard__name">Diafragma Plano/Corrugado</div>
+            <div class="icard__desc">Membrana flexível que defleta com a pressão. Ideal para baixas pressões, fluidos viscosos ou corrosivos. Material: AISI 316L, Hastelloy, PTFE.</div>
+            <span class="badge">0–10 bar típico</span>
+          </div>
+          <div class="icard">
+            <div class="icard__name">Fole (Bellows)</div>
+            <div class="icard__desc">Tubo corrugado em acordeão que se deforma axialmente. Alta sensibilidade para baixas pressões e vácuo. Usado em válvulas reguladoras.</div>
+            <span class="badge">Vácuo–2 bar</span>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="--ac:var(--pressao)">
+        <h3>📡 Transmissores de Pressão — Princípios Eletrônicos</h3>
+        <div class="igrid">
+          <div class="icard">
+            <div class="icard__icon">⚡</div>
+            <div class="icard__name">Piezoresistivo (Strain Gauge)</div>
+            <div class="icard__desc">Resistores de filme fino colados ao diafragma. Deformação muda resistência — Ponte de Wheatstone. Precisão ±0,1%.</div>
+          </div>
+          <div class="icard">
+            <div class="icard__icon">🔋</div>
+            <div class="icard__name">Capacitivo</div>
+            <div class="icard__desc">Diafragma defleta entre duas placas, alterando capacitância. Excelente estabilidade de longo prazo. Rosemount 3051.</div>
+          </div>
+          <div class="icard">
+            <div class="icard__icon">💎</div>
+            <div class="icard__name">Piezoelétrico</div>
+            <div class="icard__desc">Cristal de quartzo gera carga elétrica por deformação. Ideal para pressões dinâmicas e pulsantes (até 100 kHz).</div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <p><strong>Sinais de saída:</strong> 4–20 mA (HART) · Foundation Fieldbus · Profibus PA · IO-Link · WirelessHART</p>
+      </div>
+    </div>
+
+    <!-- TAB: Flashcards -->
+    <div id="pressao-flashcards" class="tab-panel">
+      <div id="fc-pressao"></div>
+    </div>
+
+    <!-- TAB: Quiz -->
+    <div id="pressao-quiz" class="tab-panel">
+      <div id="quiz-pressao"></div>
+    </div>
+
+  </section><!-- /mod-pressao -->
+
+  <!-- ─────────────────────────────────────
+       MODULE: NÍVEL
+       ───────────────────────────────────── -->
+  <section id="mod-nivel" class="mod-content" style="display:none">
+
+    <div class="section-header" style="--ac:var(--nivel)">
+      <div class="section-header__icon">🔵</div>
+      <div>
+        <div class="section-header__title">Nível</div>
+        <div class="section-header__sub">Fonte: SENAI-SP · ISA-RP31.1 · Emerson Process Management</div>
+      </div>
+    </div>
+
+    <nav class="tab-bar" id="tabs-nivel">
+      <button class="tab-btn active" onclick="switchTab('nivel','teoria')">📖 Teoria</button>
+      <button class="tab-btn"        onclick="switchTab('nivel','formulas')">📐 Fórmulas</button>
+      <button class="tab-btn"        onclick="switchTab('nivel','calc')">🧮 Calculadoras</button>
+      <button class="tab-btn"        onclick="switchTab('nivel','instrumentos')">🔧 Instrumentos</button>
+      <button class="tab-btn"        onclick="switchTab('nivel','flashcards')">🃏 Flashcards</button>
+      <button class="tab-btn"        onclick="switchTab('nivel','quiz')">✅ Quiz</button>
+    </nav>
+
+    <div id="nivel-teoria" class="tab-panel active">
+      <div class="tile-row" style="--ac:var(--nivel)">
+        <div class="tile"><div class="tile__value">2 métodos</div><div class="tile__label">direto e inferencial</div></div>
+        <div class="tile"><div class="tile__value">h = P/ρg</div><div class="tile__label">nível por pressão</div></div>
+        <div class="tile"><div class="tile__value">0–100%</div><div class="tile__label">escala percentual</div></div>
+        <div class="tile"><div class="tile__value">mmca</div><div class="tile__label">mm coluna d'água</div></div>
+      </div>
+      <div class="card" style="--ac:var(--nivel)">
+        <h3>📌 Definição e Importância</h3>
+        <p>Nível é a <span class="hl">altura da interface de um fluido, sólido ou interface líquido-líquido em um recipiente</span>, medida a partir de uma referência definida.</p>
+        <ul>
+          <li><strong>Controle de estoque:</strong> tanques de processo, silos, reservatórios</li>
+          <li><strong>Segurança:</strong> prevenção de transbordamento (overfill) e esvaziamento (dry-run)</li>
+          <li><strong>Controle de processo:</strong> tempo de residência em reatores, colunas de destilação</li>
+          <li><strong>Faturamento:</strong> medição fiscal em tanques de petróleo (API MPMS Cap. 3)</li>
+        </ul>
+      </div>
+      <div class="card" style="--ac:var(--nivel)">
+        <h3>🔄 Métodos de Medição</h3>
+        <div class="igrid">
+          <div class="icard">
+            <div class="icard__icon">📏</div>
+            <div class="icard__name">Medida Direta</div>
+            <div class="icard__desc">Referência é o plano superior da substância. Instrumentos: régua, visor tubular, boia, ultrassom, radar, TDR.</div>
+          </div>
+          <div class="icard">
+            <div class="icard__icon">🧮</div>
+            <div class="icard__name">Medida Indireta (Inferencial)</div>
+            <div class="icard__desc">Nível calculado a partir de grandezas secundárias: pressão hidrostática, empuxo (deslocador), capacitância elétrica ou peso (células de carga).</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="nivel-formulas" class="tab-panel">
+      <div class="fv-card" style="--ac:var(--nivel)">
+        <div class="fv-card__name">① Nível por Pressão Hidrostática</div>
+        <div class="fv-card__context">Um transmissor de pressão na parte inferior do tanque mede a coluna de líquido acima. Método mais simples para tanques abertos.</div>
+        <div class="fv-card__eq">h = P / (ρ · g)</div>
+        <div class="fv-card__vars">
+          <div class="fv-card__var"><span>h</span> <em>= Nível / altura (m)</em></div>
+          <div class="fv-card__var"><span>P</span> <em>= Pressão manométrica no fundo (Pa)</em></div>
+          <div class="fv-card__var"><span>ρ</span> <em>= Densidade do fluido (kg/m³)</em></div>
+          <div class="fv-card__var"><span>g</span> <em>= 9,81 m/s²</em></div>
+        </div>
+        <div class="fv-card__source">📚 Ref: SENAI-SP MVFI | Rosemount Level Measurement Application Guide</div>
+      </div>
+      <div class="fv-card" style="--ac:var(--nivel)">
+        <div class="fv-card__name">② Nível Diferencial (Vaso Fechado)</div>
+        <div class="fv-card__context">Para vasos sob pressão ou vácuo, dois transmissores compensam a pressão interna.</div>
+        <div class="fv-card__eq">h = (P_baixo − P_alto) / (ρ · g)</div>
+        <div class="fv-card__vars">
+          <div class="fv-card__var"><span>P_baixo</span> <em>= Pressão na tomada inferior (Pa)</em></div>
+          <div class="fv-card__var"><span>P_alto</span> <em>= Pressão na tomada superior (Pa)</em></div>
+        </div>
+        <div class="fv-card__source">📚 Ref: ISA-RP31.1 | ABNT NBR 14050</div>
+      </div>
+      <div class="fv-card" style="--ac:var(--nivel)">
+        <div class="fv-card__name">③ Volume em Tanque Cilíndrico Vertical</div>
+        <div class="fv-card__eq">V = π · r² · h</div>
+        <div class="fv-card__vars">
+          <div class="fv-card__var"><span>V</span> <em>= Volume (m³)</em></div>
+          <div class="fv-card__var"><span>r</span> <em>= Raio interno do tanque (m)</em></div>
+          <div class="fv-card__var"><span>h</span> <em>= Nível medido (m)</em></div>
+        </div>
+        <div class="fv-card__source">📚 Ref: API MPMS Chapter 2 — Calibration of Upright Cylindrical Tanks</div>
+      </div>
+      <div class="fv-card" style="--ac:var(--nivel)">
+        <div class="fv-card__name">④ Span, URV e LRV para Calibração</div>
+        <div class="fv-card__eq">URV = ρ · g · h_max<br>LRV = ρ · g · h_min<br>Span = URV − LRV</div>
+        <div class="fv-card__vars">
+          <div class="fv-card__var"><span>URV</span> <em>= Upper Range Value → 20 mA (100%)</em></div>
+          <div class="fv-card__var"><span>LRV</span> <em>= Lower Range Value → 4 mA (0%)</em></div>
+        </div>
+        <div class="fv-card__source">📚 Ref: ABNT NBR 14050 | ISA-51.1 Terminology</div>
+      </div>
+    </div>
+
+    <div id="nivel-calc" class="tab-panel">
+      <div class="calc-wrap" style="--ac:var(--nivel)">
+        <div class="calc-wrap__title">🧮 Nível por Pressão Hidrostática — h = P/(ρ·g)</div>
+        <div class="calc-wrap__subtitle">Informe a pressão medida no fundo do tanque</div>
+        <div class="calc-grid">
+          <div class="calc-field">
+            <label>Fluido</label>
+            <select id="cn_fluido" onchange="setNivelDens()">
+              <option value="1000">Água (1000 kg/m³)</option>
+              <option value="850">Petróleo leve (850 kg/m³)</option>
+              <option value="1200">Solução salina (1200 kg/m³)</option>
+              <option value="custom">Personalizado</option>
+            </select>
+          </div>
+          <div class="calc-field">
+            <label>Densidade ρ (kg/m³)</label>
+            <input type="number" id="cn_rho" value="1000">
+          </div>
+          <div class="calc-field">
+            <label>Pressão medida (kPa)</label>
+            <input type="number" id="cn_P" placeholder="ex: 49.05">
+          </div>
+        </div>
+        <button class="calc-btn" onclick="calcNivel()">Calcular nível →</button>
+        <div class="calc-result" id="res_nivel">
+          <div class="calc-result__label">NÍVEL CALCULADO</div>
+          <div><span class="calc-result__value"></span> <span class="calc-result__unit">m</span></div>
+          <div class="calc-result__detail"></div>
+        </div>
+      </div>
+
+      <div class="calc-wrap" style="--ac:var(--nivel)">
+        <div class="calc-wrap__title">🧮 Volume em Tanque Cilíndrico — V = π·r²·h</div>
+        <div class="calc-wrap__subtitle">Calcule volume e percentual de preenchimento</div>
+        <div class="calc-grid">
+          <div class="calc-field">
+            <label>Diâmetro interno D (m)</label>
+            <input type="number" id="cv_D" placeholder="ex: 3.0">
+          </div>
+          <div class="calc-field">
+            <label>Nível h (m)</label>
+            <input type="number" id="cv_h" placeholder="ex: 2.5">
+          </div>
+          <div class="calc-field">
+            <label>Altura máxima H (m) — opcional</label>
+            <input type="number" id="cv_H" placeholder="ex: 5.0">
+          </div>
+        </div>
+        <button class="calc-btn" onclick="calcVolume()">Calcular volume →</button>
+        <div class="calc-result" id="res_vol">
+          <div class="calc-result__label">VOLUME / PERCENTUAL</div>
+          <div><span class="calc-result__value"></span> <span class="calc-result__unit">m³</span></div>
+          <div class="calc-result__detail"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="nivel-instrumentos" class="tab-panel">
+      <div class="card" style="--ac:var(--nivel)">
+        <h3>📏 Instrumentos de Medição Direta</h3>
+        <div class="igrid">
+          <div class="icard"><div class="icard__icon">📐</div><div class="icard__name">Régua / Trena</div><div class="icard__desc">Medição manual. Referência primária em tanques de armazenamento. API MPMS Cap. 3.</div></div>
+          <div class="icard"><div class="icard__icon">👁️</div><div class="icard__name">Visor Tubular</div><div class="icard__desc">Tubo de vidro borosilicato. Vasos até 20 bar. Com indicador de cor para melhor visualização.</div></div>
+          <div class="icard"><div class="icard__icon">🔴</div><div class="icard__name">Boia com Transmissor</div><div class="icard__desc">Float magnético movimenta imã externo sem contato elétrico com o fluido. Saída 4–20 mA.</div></div>
+          <div class="icard"><div class="icard__icon">📡</div><div class="icard__name">Ultrassônico</div><div class="icard__desc">Pulso ultrassônico mede tempo de eco. h = v_som × t / 2. Sem contato com o fluido.</div><span class="badge">Tempo de voo</span></div>
+          <div class="icard"><div class="icard__icon">📻</div><div class="icard__name">Radar FMCW</div><div class="icard__desc">Microondas (6–80 GHz) com modulação de frequência. Precisão ±1 mm. Imune a vapores e névoas.</div><span class="badge">FMCW / TOF</span></div>
+          <div class="icard"><div class="icard__icon">〰️</div><div class="icard__name">TDR (Radar Guiado)</div><div class="icard__desc">Pulso eletromagnético guiado por haste ou cabo. Funciona em espumas, interfaces e sólidos.</div><span class="badge">TDR / GWR</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="nivel-flashcards" class="tab-panel"><div id="fc-nivel"></div></div>
+    <div id="nivel-quiz" class="tab-panel"><div id="quiz-nivel"></div></div>
+
+  </section><!-- /mod-nivel -->
+
+  <!-- ─────────────────────────────────────
+       MODULE: VAZÃO
+       ───────────────────────────────────── -->
+  <section id="mod-vazao" class="mod-content" style="display:none">
+
+    <div class="section-header" style="--ac:var(--vazao)">
+      <div class="section-header__icon">🟢</div>
+      <div>
+        <div class="section-header__title">Vazão</div>
+        <div class="section-header__sub">Fonte: SENAI-SP · ISO 5167 · AGA-3 · ABNT NBR 9826</div>
+      </div>
+    </div>
+
+    <nav class="tab-bar" id="tabs-vazao">
+      <button class="tab-btn active" onclick="switchTab('vazao','teoria')">📖 Teoria</button>
+      <button class="tab-btn"        onclick="switchTab('vazao','formulas')">📐 Fórmulas</button>
+      <button class="tab-btn"        onclick="switchTab('vazao','calc')">🧮 Calculadoras</button>
+      <button class="tab-btn"        onclick="switchTab('vazao','instrumentos')">🔧 Instrumentos</button>
+      <button class="tab-btn"        onclick="switchTab('vazao','flashcards')">🃏 Flashcards</button>
+      <button class="tab-btn"        onclick="switchTab('vazao','quiz')">✅ Quiz</button>
+    </nav>
+
+    <div id="vazao-teoria" class="tab-panel active">
+      <div class="tile-row" style="--ac:var(--vazao)">
+        <div class="tile"><div class="tile__value">Q = A·v</div><div class="tile__label">equação da continuidade</div></div>
+        <div class="tile"><div class="tile__value">Re = ρvD/μ</div><div class="tile__label">número de Reynolds</div></div>
+        <div class="tile"><div class="tile__value">Q ∝ √ΔP</div><div class="tile__label">deprimogênios</div></div>
+        <div class="tile"><div class="tile__value">Qm = Q·ρ</div><div class="tile__label">vazão mássica</div></div>
+      </div>
+      <div class="card" style="--ac:var(--vazao)">
+        <h3>📌 Definição e Tipos de Vazão</h3>
+        <p>Vazão é a <span class="hl">quantidade de fluido que atravessa uma seção transversal por unidade de tempo</span>.</p>
+        <ul>
+          <li><strong>Volumétrica (Q):</strong> m³/s, m³/h, L/min — varia com T e P nos gases</li>
+          <li><strong>Mássica (Qm):</strong> kg/s, kg/h — invariante com T e P; preferida em reações e faturamento</li>
+          <li><strong>Normal (Qn):</strong> gases referenciados a T=0°C e P=1 atm (Nm³/h)</li>
+          <li><strong>Padrão (Qs):</strong> gases referenciados a T=15°C e P=1 atm (Sm³/h)</li>
+        </ul>
+      </div>
+      <div class="card" style="--ac:var(--vazao)">
+        <h3>🌊 Regimes de Escoamento</h3>
+        <ul>
+          <li><strong>Re &lt; 2.300 — Laminar:</strong> camadas paralelas, perfil parabólico (Hagen-Poiseuille)</li>
+          <li><strong>2.300 &lt; Re &lt; 4.000 — Transição:</strong> regime instável, alternância</li>
+          <li><strong>Re &gt; 4.000 — Turbulento:</strong> mistura intensa, perfil quase plano — usual em tubulações industriais</li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="vazao-formulas" class="tab-panel">
+      <div class="fv-card" style="--ac:var(--vazao)">
+        <div class="fv-card__name">① Equação da Continuidade</div>
+        <div class="fv-card__context">Conservação de massa em escoamento incompressível. Seção menor → velocidade maior.</div>
+        <div class="fv-card__eq">Q = A₁ · v₁ = A₂ · v₂</div>
+        <svg class="diagram" viewBox="0 0 360 120" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 20 35 L 120 35 L 160 50 L 240 50 L 280 35 L 360 35" fill="none" stroke="#4a5a7a" stroke-width="1.5"/>
+          <path d="M 20 85 L 120 85 L 160 70 L 240 70 L 280 85 L 360 85" fill="none" stroke="#4a5a7a" stroke-width="1.5"/>
+          <path d="M 20 35 L 20 85 M 360 35 L 360 85" stroke="#4a5a7a" stroke-width="1.5"/>
+          <rect x="21" y="36" width="98" height="48" fill="rgba(6,214,160,.08)"/>
+          <rect x="161" y="51" width="78" height="18" fill="rgba(6,214,160,.18)"/>
+          <rect x="281" y="36" width="78" height="48" fill="rgba(6,214,160,.08)"/>
+          <text x="70"  y="64" text-anchor="middle" fill="#06d6a0" font-size="11" font-family="IBM Plex Mono">v₁ (lento)</text>
+          <text x="200" y="63" text-anchor="middle" fill="#06d6a0" font-size="11" font-family="IBM Plex Mono">v₂ (rápido)</text>
+          <text x="70"  y="24" text-anchor="middle" fill="#7a90b8" font-size="10" font-family="IBM Plex Mono">A₁</text>
+          <text x="200" y="44" text-anchor="middle" fill="#7a90b8" font-size="10" font-family="IBM Plex Mono">A₂</text>
+        </svg>
+        <div class="fv-card__vars">
+          <div class="fv-card__var"><span>Q</span> <em>= Vazão volumétrica (m³/s)</em></div>
+          <div class="fv-card__var"><span>A₁, A₂</span> <em>= Áreas das seções (m²)</em></div>
+          <div class="fv-card__var"><span>v₁, v₂</span> <em>= Velocidades nas seções (m/s)</em></div>
+        </div>
+        <div class="fv-card__source">📚 Ref: Fox & McDonald — Introdução à Mecânica dos Fluidos, 8ª ed. | ISO 5167-1</div>
+      </div>
+
+      <div class="fv-card" style="--ac:var(--vazao)">
+        <div class="fv-card__name">② Equação de Bernoulli</div>
+        <div class="fv-card__context">Conservação de energia por unidade de volume em escoamento ideal. Fundamento dos medidores deprimogênios.</div>
+        <div class="fv-card__eq">P₁ + ½ρv₁² + ρgh₁ = P₂ + ½ρv₂² + ρgh₂ = cte</div>
+        <div class="fv-card__vars">
+          <div class="fv-card__var"><span>P</span> <em>= Pressão estática (Pa)</em></div>
+          <div class="fv-card__var"><span>½ρv²</span> <em>= Pressão dinâmica (Pa)</em></div>
+          <div class="fv-card__var"><span>ρgh</span> <em>= Energia potencial gravitacional (Pa)</em></div>
+        </div>
+        <div class="fv-card__source">📚 Ref: Munson, Young & Okiishi — Fundamentos da Mecânica dos Fluidos | ISO 5167-2</div>
+      </div>
+
+      <div class="fv-card" style="--ac:var(--vazao)">
+        <div class="fv-card__name">③ Número de Reynolds</div>
+        <div class="fv-card__eq">Re = (ρ · v · D) / μ = (v · D) / ν</div>
+        <div class="fv-card__vars">
+          <div class="fv-card__var"><span>ρ</span> <em>= Densidade (kg/m³)</em></div>
+          <div class="fv-card__var"><span>v</span> <em>= Velocidade média (m/s)</em></div>
+          <div class="fv-card__var"><span>D</span> <em>= Diâmetro interno da tubulação (m)</em></div>
+          <div class="fv-card__var"><span>μ</span> <em>= Viscosidade dinâmica (Pa·s)</em></div>
+          <div class="fv-card__var"><span>ν = μ/ρ</span> <em>= Viscosidade cinemática (m²/s)</em></div>
+        </div>
+        <div class="fv-card__source">📚 Ref: Reynolds, O. — Phil. Trans. R. Soc. (1883) | Fox & McDonald Cap. 8</div>
+      </div>
+
+      <div class="fv-card" style="--ac:var(--vazao)">
+        <div class="fv-card__name">④ Vazão por Placa de Orifício (ISO 5167)</div>
+        <div class="fv-card__eq">Q = Cd · (π/4) · d² · √(2·ΔP / ρ) / √(1−β⁴)</div>
+        <div class="fv-card__vars">
+          <div class="fv-card__var"><span>Cd</span> <em>≈ 0,61 (placa de orifício)</em></div>
+          <div class="fv-card__var"><span>d</span> <em>= Diâmetro do orifício (m)</em></div>
+          <div class="fv-card__var"><span>β = d/D</span> <em>= Razão de diâmetros</em></div>
+          <div class="fv-card__var"><span>ΔP</span> <em>= Pressão diferencial (Pa)</em></div>
+        </div>
+        <div class="fv-card__source">📚 Ref: ISO 5167-2:2022 — Measurement of fluid flow — Orifice plates</div>
+      </div>
+
+      <div class="fv-card" style="--ac:var(--vazao)">
+        <div class="fv-card__name">⑤ Vazão Mássica</div>
+        <div class="fv-card__eq">Qm = Q · ρ = A · v · ρ</div>
+        <div class="fv-card__vars">
+          <div class="fv-card__var"><span>Qm</span> <em>= Vazão mássica (kg/s)</em></div>
+          <div class="fv-card__var"><span>Q</span>  <em>= Vazão volumétrica (m³/s)</em></div>
+          <div class="fv-card__var"><span>ρ</span>  <em>= Densidade do fluido (kg/m³)</em></div>
+        </div>
+        <div class="fv-card__source">📚 Ref: ABNT NBR 9826 — Medição de vazão de fluidos em dutos fechados</div>
+      </div>
+    </div>
+
+    <div id="vazao-calc" class="tab-panel">
+      <div class="calc-wrap" style="--ac:var(--vazao)">
+        <div class="calc-wrap__title">🧮 Reynolds e Regime de Escoamento</div>
+        <div class="calc-wrap__subtitle">Re = ρ · v · D / μ</div>
+        <div class="calc-grid">
+          <div class="calc-field">
+            <label>Fluido (preset)</label>
+            <select id="cr_fluido" onchange="setReyDens()">
+              <option value="1000,0.001">Água 20°C (ρ=1000, μ=0.001)</option>
+              <option value="1.2,0.0000181">Ar 20°C (ρ=1.2, μ=1.81e-5)</option>
+              <option value="870,0.05">Óleo mineral (ρ=870, μ=0.05)</option>
+              <option value="custom,custom">Personalizado</option>
+            </select>
+          </div>
+          <div class="calc-field"><label>Densidade ρ (kg/m³)</label><input type="number" id="cr_rho" value="1000"></div>
+          <div class="calc-field"><label>Viscosidade dinâmica μ (Pa·s)</label><input type="number" id="cr_mu" value="0.001" step="0.0001"></div>
+          <div class="calc-field"><label>Velocidade v (m/s)</label><input type="number" id="cr_v" placeholder="ex: 2.0"></div>
+          <div class="calc-field"><label>Diâmetro interno D (m)</label><input type="number" id="cr_D" placeholder="ex: 0.1"></div>
+        </div>
+        <button class="calc-btn" onclick="calcReynolds()">Calcular Re →</button>
+        <div class="calc-result" id="res_re">
+          <div class="calc-result__label">NÚMERO DE REYNOLDS</div>
+          <div><span class="calc-result__value"></span> <span class="calc-result__unit"></span></div>
+          <div class="calc-result__detail"></div>
+        </div>
+      </div>
+
+      <div class="calc-wrap" style="--ac:var(--vazao)">
+        <div class="calc-wrap__title">🧮 Bernoulli — v₂ por ΔP (tubo horizontal)</div>
+        <div class="calc-wrap__subtitle">v₂ = √(v₁² + 2·ΔP/ρ)</div>
+        <div class="calc-grid">
+          <div class="calc-field"><label>Pressão P₁ (kPa)</label><input type="number" id="cb_P1" placeholder="ex: 200"></div>
+          <div class="calc-field"><label>Pressão P₂ (kPa)</label><input type="number" id="cb_P2" placeholder="ex: 150"></div>
+          <div class="calc-field"><label>Velocidade v₁ (m/s)</label><input type="number" id="cb_v1" placeholder="ex: 1.0"></div>
+          <div class="calc-field"><label>Densidade ρ (kg/m³)</label><input type="number" id="cb_rho" value="1000"></div>
+        </div>
+        <button class="calc-btn" onclick="calcBernoulli()">Calcular v₂ →</button>
+        <div class="calc-result" id="res_bern">
+          <div class="calc-result__label">VELOCIDADE v₂</div>
+          <div><span class="calc-result__value"></span> <span class="calc-result__unit">m/s</span></div>
+          <div class="calc-result__detail"></div>
+        </div>
+      </div>
+
+      <div class="calc-wrap" style="--ac:var(--vazao)">
+        <div class="calc-wrap__title">🧮 Continuidade — v₂ = (D₁/D₂)²·v₁</div>
+        <div class="calc-wrap__subtitle">A₁·v₁ = A₂·v₂ → v₂ e Q</div>
+        <div class="calc-grid">
+          <div class="calc-field"><label>Diâmetro seção 1 D₁ (mm)</label><input type="number" id="cc_D1" placeholder="ex: 100"></div>
+          <div class="calc-field"><label>Velocidade v₁ (m/s)</label><input type="number" id="cc_v1" placeholder="ex: 1.5"></div>
+          <div class="calc-field"><label>Diâmetro seção 2 D₂ (mm)</label><input type="number" id="cc_D2" placeholder="ex: 50"></div>
+        </div>
+        <button class="calc-btn" onclick="calcContinuidade()">Calcular v₂ e Q →</button>
+        <div class="calc-result" id="res_cont">
+          <div class="calc-result__label">VELOCIDADE v₂</div>
+          <div><span class="calc-result__value"></span> <span class="calc-result__unit">m/s</span></div>
+          <div class="calc-result__detail"></div>
+        </div>
+      </div>
+
+      <div class="calc-wrap" style="--ac:var(--vazao)">
+        <div class="calc-wrap__title">🧮 Vazão Volumétrica e Mássica — Q = A·v</div>
+        <div class="calc-wrap__subtitle">Q em m³/h e Qm em kg/h</div>
+        <div class="calc-grid">
+          <div class="calc-field"><label>Diâmetro interno D (mm)</label><input type="number" id="cq_D" placeholder="ex: 100"></div>
+          <div class="calc-field"><label>Velocidade média v (m/s)</label><input type="number" id="cq_v" placeholder="ex: 2.0"></div>
+          <div class="calc-field"><label>Densidade ρ (kg/m³)</label><input type="number" id="cq_rho" value="1000"></div>
+        </div>
+        <button class="calc-btn" onclick="calcVazao()">Calcular →</button>
+        <div class="calc-result" id="res_qv">
+          <div class="calc-result__label">VAZÃO VOLUMÉTRICA</div>
+          <div><span class="calc-result__value"></span> <span class="calc-result__unit">m³/h</span></div>
+          <div class="calc-result__detail"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="vazao-instrumentos" class="tab-panel">
+      <div class="card" style="--ac:var(--vazao)">
+        <h3>🔻 Medidores Deprimogênios (ΔP)</h3>
+        <div class="igrid">
+          <div class="icard"><div class="icard__icon">⭕</div><div class="icard__name">Placa de Orifício</div><div class="icard__desc">ISO 5167-2. Mais simples e barato. Beta 0,2–0,75. Alta perda de carga (~60%). Requer 10-20D retas upstream.</div><span class="badge">Cd ≈ 0,61</span></div>
+          <div class="icard"><div class="icard__icon">🏺</div><div class="icard__name">Venturi (ISO 5167-4)</div><div class="icard__desc">Convergente-divergente. Menor perda de carga (~10%). Ideal para líquidos com sólidos e gases.</div><span class="badge">Cd ≈ 0,984</span></div>
+          <div class="icard"><div class="icard__icon">🔺</div><div class="icard__name">Bocal (ISO 5167-3)</div><div class="icard__desc">Intermediário entre placa e venturi. Boa precisão, menor erosão. Usado em vapor a alta velocidade.</div><span class="badge">Cd ≈ 0,96</span></div>
+        </div>
+      </div>
+      <div class="card" style="--ac:var(--vazao)">
+        <h3>📈 Medidores Lineares e Especiais</h3>
+        <div class="igrid">
+          <div class="icard"><div class="icard__icon">🌀</div><div class="icard__name">Rotâmetro</div><div class="icard__desc">Float sobe em tubo cônico. Sem energia elétrica. ±2–5%. ISO 11605.</div></div>
+          <div class="icard"><div class="icard__icon">⚙️</div><div class="icard__name">Turbina</div><div class="icard__desc">Hélice gira proporcional à velocidade. ±0,25–0,5%. AGA-7. Fluidos limpos.</div></div>
+          <div class="icard"><div class="icard__icon">🔊</div><div class="icard__name">Ultrassônico</div><div class="icard__desc">Tempo de trânsito entre transdutores. ISO 17089. Não invasivo (clamp-on).</div></div>
+          <div class="icard"><div class="icard__icon">🌊</div><div class="icard__name">Vórtex</div><div class="icard__desc">Frequência dos vórtices ∝ velocidade (St = f·D/v). Bom para vapor. IEC 62362.</div></div>
+          <div class="icard"><div class="icard__icon">🧲</div><div class="icard__name">Eletromagnético</div><div class="icard__desc">Lei de Faraday. ±0,3%. Sem peças móveis. Exige σ &gt; 5 μS/cm.</div></div>
+          <div class="icard"><div class="icard__icon">🔀</div><div class="icard__name">Coriolis</div><div class="icard__desc">Mede massa diretamente. ±0,1%. Mede também densidade e temperatura. Referência para faturamento.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="vazao-flashcards" class="tab-panel"><div id="fc-vazao"></div></div>
+    <div id="vazao-quiz" class="tab-panel"><div id="quiz-vazao"></div></div>
+
+  </section><!-- /mod-vazao -->
+
+  <!-- ─────────────────────────────────────
+       MODULE: TEMPERATURA
+       ───────────────────────────────────── -->
+  <section id="mod-temperatura" class="mod-content" style="display:none">
+
+    <div class="section-header" style="--ac:var(--temperatura)">
+      <div class="section-header__icon">🟡</div>
+      <div>
+        <div class="section-header__title">Temperatura</div>
+        <div class="section-header__sub">Fonte: SENAI-SP · IEC 60751 · ISA MC96.1 · ASTM E230</div>
+      </div>
+    </div>
+
+    <nav class="tab-bar" id="tabs-temperatura">
+      <button class="tab-btn active" onclick="switchTab('temperatura','teoria')">📖 Teoria</button>
+      <button class="tab-btn"        onclick="switchTab('temperatura','formulas')">📐 Fórmulas</button>
+      <button class="tab-btn"        onclick="switchTab('temperatura','calc')">🧮 Calculadoras</button>
+      <button class="tab-btn"        onclick="switchTab('temperatura','instrumentos')">🔧 Instrumentos</button>
+      <button class="tab-btn"        onclick="switchTab('temperatura','flashcards')">🃏 Flashcards</button>
+      <button class="tab-btn"        onclick="switchTab('temperatura','quiz')">✅ Quiz</button>
+    </nav>
+
+    <div id="temperatura-teoria" class="tab-panel active">
+      <div class="tile-row" style="--ac:var(--temperatura)">
+        <div class="tile"><div class="tile__value">−273,15°C</div><div class="tile__label">zero absoluto (0 K)</div></div>
+        <div class="tile"><div class="tile__value">PT100</div><div class="tile__label">RTD mais usada</div></div>
+        <div class="tile"><div class="tile__value">Tipo K</div><div class="tile__label">termopar mais universal</div></div>
+        <div class="tile"><div class="tile__value">IEC 60751</div><div class="tile__label">norma da PT100</div></div>
+      </div>
+      <div class="card" style="--ac:var(--temperatura)">
+        <h3>🌡️ Definição e Escalas</h3>
+        <p>Temperatura é a <span class="hl">grandeza física que expressa o grau de agitação termal das partículas</span> de um sistema. Grandeza intensiva — exige transdução indireta.</p>
+        <ul>
+          <li><strong>Celsius (°C):</strong> 0°C = fusão da água · 100°C = ebulição (1 atm)</li>
+          <li><strong>Kelvin (K):</strong> escala absoluta SI — T(K) = T(°C) + 273,15</li>
+          <li><strong>Fahrenheit (°F):</strong> T(°F) = T(°C) × 9/5 + 32 — padrão americano</li>
+          <li><strong>Rankine (°R):</strong> escala absoluta americana — T(°R) = T(°F) + 459,67</li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="temperatura-formulas" class="tab-panel">
+      <div class="fv-card" style="--ac:var(--temperatura)">
+        <div class="fv-card__name">① Conversão entre Escalas</div>
+        <div class="fv-card__eq">K = °C + 273,15<br>°F = °C × 9/5 + 32<br>°R = °F + 459,67</div>
+        <div class="fv-card__source">📚 Ref: NIST SP 811 | BIPM — International Temperature Scale (ITS-90)</div>
+      </div>
+      <div class="fv-card" style="--ac:var(--temperatura)">
+        <div class="fv-card__name">② PT100 — Resistência × Temperatura (Callendar-Van Dusen)</div>
+        <div class="fv-card__context">IEC 60751. Para T entre 0°C e 850°C:</div>
+        <div class="fv-card__eq">R(T) = R₀ · (1 + A·T + B·T²)<br>Linear: R ≈ R₀(1 + α·T)</div>
+        <div class="fv-card__vars">
+          <div class="fv-card__var"><span>R₀</span> <em>= 100 Ω a 0°C</em></div>
+          <div class="fv-card__var"><span>A</span>  <em>= 3,9083 × 10⁻³ °C⁻¹</em></div>
+          <div class="fv-card__var"><span>B</span>  <em>= −5,775 × 10⁻⁷ °C⁻²</em></div>
+          <div class="fv-card__var"><span>α</span>  <em>= 0,003850 Ω/Ω/°C</em></div>
+        </div>
+        <div class="fv-card__source">📚 Ref: IEC 60751:2022 — Industrial Platinum Resistance Thermometers</div>
+      </div>
+      <div class="fv-card" style="--ac:var(--temperatura)">
+        <div class="fv-card__name">③ Efeito Seebeck (Termopar)</div>
+        <div class="fv-card__eq">V = S_AB · (T_q − T_f)</div>
+        <div class="fv-card__vars">
+          <div class="fv-card__var"><span>V</span>    <em>= FEM gerada (mV)</em></div>
+          <div class="fv-card__var"><span>S_AB</span> <em>= Coeficiente de Seebeck (μV/°C)</em></div>
+          <div class="fv-card__var"><span>T_q</span>  <em>= Temperatura da junção quente (medida)</em></div>
+          <div class="fv-card__var"><span>T_f</span>  <em>= Temperatura da junção fria (referência)</em></div>
+        </div>
+        <div class="fv-card__source">📚 Ref: ISA MC96.1 — Temperature Measurement Thermocouples | ASTM E230</div>
+      </div>
+      <div class="fv-card" style="--ac:var(--temperatura)">
+        <div class="fv-card__name">④ Dilatação Linear (Termômetro Bimetálico)</div>
+        <div class="fv-card__eq">ΔL = L₀ · α · ΔT</div>
+        <div class="fv-card__vars">
+          <div class="fv-card__var"><span>ΔL</span> <em>= Variação de comprimento (m)</em></div>
+          <div class="fv-card__var"><span>L₀</span> <em>= Comprimento inicial (m)</em></div>
+          <div class="fv-card__var"><span>α</span>  <em>= Coeficiente de dilatação (°C⁻¹) — Aço: 12×10⁻⁶, Latão: 19×10⁻⁶</em></div>
+          <div class="fv-card__var"><span>ΔT</span> <em>= Variação de temperatura (°C)</em></div>
+        </div>
+        <div class="fv-card__source">📚 Ref: Young & Freedman — Física Universitária Vol. 2 | SENAI-SP MVFI Cap. 4</div>
+      </div>
+    </div>
+
+    <div id="temperatura-calc" class="tab-panel">
+      <div class="calc-wrap" style="--ac:var(--temperatura)">
+        <div class="calc-wrap__title">🌡️ Conversor em Tempo Real — °C ↔ K ↔ °F ↔ °R</div>
+        <div class="calc-wrap__subtitle">Digite em qualquer campo para converter automaticamente</div>
+        <div class="calc-grid">
+          <div class="calc-field"><label>Celsius (°C)</label><input type="number" id="tc_C" placeholder="ex: 100"  oninput="convTemp('C')"></div>
+          <div class="calc-field"><label>Kelvin (K)</label>   <input type="number" id="tc_K" placeholder="calculado" oninput="convTemp('K')"></div>
+          <div class="calc-field"><label>Fahrenheit (°F)</label><input type="number" id="tc_F" placeholder="calculado" oninput="convTemp('F')"></div>
+          <div class="calc-field"><label>Rankine (°R)</label> <input type="number" id="tc_R" placeholder="calculado" oninput="convTemp('R')"></div>
+        </div>
+        <div class="calc-result" style="display:block" id="res_temp_ctx">
+          <div class="calc-result__label">REFERÊNCIAS</div>
+          <div><span class="calc-result__value"></span></div>
+          <div class="calc-result__detail" id="det_temp_ctx">Digite um valor em qualquer campo para converter.</div>
+        </div>
+      </div>
+
+      <div class="calc-wrap" style="--ac:var(--temperatura)">
+        <div class="calc-wrap__title">🔋 PT100 — Resistência ↔ Temperatura</div>
+        <div class="calc-wrap__subtitle">Callendar-Van Dusen (IEC 60751)</div>
+        <div class="calc-grid">
+          <div class="calc-field"><label>Temperatura T (°C)</label><input type="number" id="pt_T" placeholder="ex: 150"></div>
+          <div class="calc-field"><label>Resistência R (Ω)</label><input type="number" id="pt_R" placeholder="ex: 157.31"></div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="calc-btn" onclick="calcPT100_TtoR()">T (°C) → R (Ω)</button>
+          <button class="calc-btn" onclick="calcPT100_RtoT()">R (Ω) → T (°C)</button>
+        </div>
+        <div class="calc-result" id="res_pt100">
+          <div class="calc-result__label">RESULTADO PT100</div>
+          <div><span class="calc-result__value"></span> <span class="calc-result__unit"></span></div>
+          <div class="calc-result__detail"></div>
+        </div>
+      </div>
+
+      <div class="calc-wrap" style="--ac:var(--temperatura)">
+        <div class="calc-wrap__title">⚡ Termopar — FEM Aproximada (Seebeck)</div>
+        <div class="calc-wrap__subtitle">V ≈ S_AB · (T_quente − T_fria)</div>
+        <div class="calc-grid">
+          <div class="calc-field">
+            <label>Tipo de Termopar</label>
+            <select id="tc_tipo">
+              <option value="41">Tipo K (Chromel-Alumel) — 41 μV/°C</option>
+              <option value="52">Tipo E (Chromel-Constantan) — 52 μV/°C</option>
+              <option value="51">Tipo J (Fe-Constantan) — 51 μV/°C</option>
+              <option value="40">Tipo T (Cu-Constantan) — 40 μV/°C</option>
+              <option value="10">Tipo S (Pt-Rh/Pt) — 10 μV/°C</option>
+            </select>
+          </div>
+          <div class="calc-field"><label>Junção quente T_q (°C)</label><input type="number" id="tc_Tq" placeholder="ex: 500"></div>
+          <div class="calc-field"><label>Junção fria T_f (°C)</label><input type="number" id="tc_Tf" value="25"></div>
+        </div>
+        <button class="calc-btn" onclick="calcTermopar()">Calcular FEM →</button>
+        <div class="calc-result" id="res_tc">
+          <div class="calc-result__label">FEM GERADA</div>
+          <div><span class="calc-result__value"></span> <span class="calc-result__unit">mV</span></div>
+          <div class="calc-result__detail"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="temperatura-instrumentos" class="tab-panel">
+      <div class="card" style="--ac:var(--temperatura)">
+        <h3>🔋 PT100 — Termoresistência de Platina</h3>
+        <ul>
+          <li><strong>Norma:</strong> IEC 60751:2022 — Pt100 (100Ω), Pt200, Pt500, Pt1000</li>
+          <li><strong>Faixa:</strong> −200°C a +850°C</li>
+          <li><strong>Precisão:</strong> Classe AA (±0,1°C) · Classe A (±0,15°C) · Classe B (±0,3°C) a 0°C</li>
+          <li><strong>Ligação:</strong> 2 fios (simples) · 3 fios (compensação parcial) · 4 fios (eliminação total do erro do cabo)</li>
+          <li><strong>Construtivo:</strong> fio bobinado (WW) ou filme fino (TF) — filme fino mais resistente a vibrações</li>
+        </ul>
+      </div>
+      <div class="card" style="--ac:var(--temperatura)">
+        <h3>⚡ Termopares — Tipos e Aplicações</h3>
+        <div class="igrid">
+          <div class="icard"><div class="icard__name">Tipo J (Fe/Co) — PRETO</div><div class="icard__desc">Ferro-Constantan. −210 a +760°C. Ambiente redutor. 51 μV/°C. Não usar em atmosfera oxidante acima de 550°C.</div></div>
+          <div class="icard"><div class="icard__name">Tipo K (Cr/Al) — VERDE</div><div class="icard__desc">Chromel-Alumel. −270 a +1372°C. O mais universal. Resistente a oxidação. 41 μV/°C.</div></div>
+          <div class="icard"><div class="icard__name">Tipo T (Cu/Co) — AZUL</div><div class="icard__desc">Cobre-Constantan. −270 a +400°C. Criogenia e câmaras frias. 40 μV/°C. Estável em meios úmidos.</div></div>
+          <div class="icard"><div class="icard__name">Tipo E (Cr/Co) — VIOLETA</div><div class="icard__desc">Chromel-Constantan. Maior sensibilidade: 52 μV/°C. −270 a +1000°C.</div></div>
+          <div class="icard"><div class="icard__name">Tipo S/R (Pt-Rh) — LARANJA</div><div class="icard__desc">Platina-Ródio. Até 1760°C. Alta precisão. Siderurgia, fornos cerâmicos. 10 μV/°C.</div></div>
+          <div class="icard"><div class="icard__name">Tipo B (Pt-Rh/Pt-Rh)</div><div class="icard__desc">Ambos os fios de Pt-Rh (6% e 30%). 0°C a 1820°C. Temperaturas extremas. Insensível abaixo de 50°C.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="temperatura-flashcards" class="tab-panel"><div id="fc-temperatura"></div></div>
+    <div id="temperatura-quiz" class="tab-panel"><div id="quiz-temperatura"></div></div>
+
+  </section><!-- /mod-temperatura -->
+
+</main><!-- /content -->
+
+<!-- Scripts -->
+<script src="app.js"></script>
+
+</body>
+</html>
