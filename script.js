@@ -16,7 +16,7 @@ const PAGES = [
   'home','m1','m2','m3','m4',
   'formulas','pressao','nivel','vazao','temperatura',
   'relacoes','cenarios',
-  'calibracao','flash','quiz','calc','bernoulli'
+  'calibracao','flash','quiz','calc','bernoulli','changelog'
 ];
 
 /** Troca a tela ativa e rola o item de nav para visível */
@@ -254,160 +254,245 @@ Object.values(C).forEach(fn=>fn());
 
 /* ── § 7. SIMULADORES ────────────────────────────────────────── */
 
-function inp(id){return parseFloat(document.getElementById(id).value);}
+function inp(id){const v=parseFloat(document.getElementById(id).value);return isNaN(v)?NaN:v;}
+function setRho(v){document.getElementById('b-rho').value=v;bernCalcRT();}
 
-/* ── Simulador 1: Continuidade ── */
-function contCalc(){
-  const d1=inp('c-d1'),v1=inp('c-v1'),d2=inp('c-d2');
-  const err=document.getElementById('c-err'),res=document.getElementById('c-res');
-  err.style.display='none';res.style.display='none';
-  if([d1,v1,d2].some(isNaN)||d1<=0||d2<=0||v1<0){
-    err.textContent='Preencha D₁, V₁ e D₂ com valores válidos.';err.style.display='block';return;
-  }
-  const a1=Math.PI*(d1/2)**2,a2=Math.PI*(d2/2)**2,v2=v1*(a1/a2),qv=a1*v1;
-  document.getElementById('c-v2-prev').textContent='V₂ = '+v2.toFixed(4)+' m/s';
-  document.getElementById('c-qv-prev').textContent='Qv = '+(qv*1000).toFixed(3)+' L/s = '+(qv*3600).toFixed(2)+' m³/h';
-
-  const mb=(eq)=>`<div style="background:var(--bg);border:1px solid rgba(0,212,255,0.2);border-radius:6px;padding:10px 14px;font-size:13px;color:var(--t2);line-height:2.4;margin:6px 0">${eq}</div>`;
-  const rw=(n,t,b)=>`<div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--bd)">
-    <div style="width:22px;height:22px;border-radius:50%;background:rgba(0,212,255,0.15);border:1px solid rgba(0,212,255,0.4);display:flex;align-items:center;justify-content:center;font-family:var(--fm);font-size:11px;font-weight:700;color:var(--p);flex-shrink:0;margin-top:2px">${n}</div>
-    <div style="flex:1"><div style="font-size:10px;font-weight:600;color:var(--p);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">${t}</div>${b}</div>
+/* ── helpers de passo a passo (sem MathJax) ── */
+function numP(n,color){
+  return `<div class="sim-solve-num sim-solve-num-${color}">${n}</div>`;
+}
+function stepP(n,title,body){
+  return `<div class="sim-solve-step">
+    ${numP(n,'p')}
+    <div style="flex:1"><div style="font-size:10px;font-weight:600;color:var(--p);text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px">${title}</div>${body}</div>
   </div>`;
+}
+function stepG(n,title,body){
+  return `<div class="sim-solve-step">
+    ${numP(n,'g')}
+    <div style="flex:1"><div style="font-size:10px;font-weight:600;color:var(--g);text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px">${title}</div>${body}</div>
+  </div>`;
+}
+function eq(txt,green){return `<div class="sim-eq-box${green?' sim-eq-box-g':''}">${txt}</div>`;}
+function valGrid(items,cols){
+  return `<div class="sim-val-box" style="grid-template-columns:repeat(${cols},1fr)">
+    ${items.map(([lbl,val,c])=>`<div class="sim-val-card"><div class="sim-val-lbl">${lbl}</div><div class="sim-val-num" style="color:var(--${c||'p'})">${val}</div></div>`).join('')}
+  </div>`;
+}
 
-  let html='<div>';
-  html+=rw('1','Dados conhecidos',`<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
-    <div class="mcard"><div class="mlbl">D₁</div><div style="font-size:15px;font-weight:600;color:var(--p);font-family:var(--fm)">${d1} m</div></div>
-    <div class="mcard"><div class="mlbl">V₁</div><div style="font-size:15px;font-weight:600;color:var(--p);font-family:var(--fm)">${v1} m/s</div></div>
-    <div class="mcard"><div class="mlbl">D₂</div><div style="font-size:15px;font-weight:600;color:var(--g);font-family:var(--fm)">${d2} m</div></div>
-  </div>`);
-  html+=rw('2','Calcule as áreas — A = π·(D/2)²',
-    mb(`\\( A_1 = \\pi \\cdot \\left(\\dfrac{${d1}}{2}\\right)^2 = ${a1.toFixed(4)}\\,\\text{m}^2 = ${(a1*1e4).toFixed(2)}\\,\\text{cm}^2 \\)`)+
-    mb(`\\( A_2 = \\pi \\cdot \\left(\\dfrac{${d2}}{2}\\right)^2 = ${a2.toFixed(4)}\\,\\text{m}^2 = ${(a2*1e4).toFixed(2)}\\,\\text{cm}^2 \\)`)
-  );
-  html+=rw('3','Equação da Continuidade — isole V₂',
-    mb(`\\( A_1 \\cdot V_1 = A_2 \\cdot V_2 \\;\\Rightarrow\\; V_2 = V_1 \\cdot \\dfrac{A_1}{A_2} = V_1 \\cdot \\left(\\dfrac{D_1}{D_2}\\right)^2 \\)`)
-  );
-  html+=rw('4','Substitua os valores',
-    mb(`\\( V_2 = ${v1} \\cdot \\left(\\dfrac{${d1}}{${d2}}\\right)^2 = ${v1} \\cdot ${((d1/d2)**2).toFixed(4)} = ${v2.toFixed(4)}\\,\\text{m/s} \\)`)
-  );
-  html+=rw('5','Resultado',`
-    <div style="background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.3);border-radius:7px;padding:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
-      <div style="font-size:13px;color:var(--t2)">V₂ — Velocidade na Seção 2</div>
-      <div style="text-align:right">
-        <div style="font-size:22px;font-weight:700;color:var(--p);font-family:var(--fm)">${v2.toFixed(4)} m/s</div>
-        <div style="font-size:11px;color:var(--t3)">${v2>v1?'↑ acelerou':'↓ desacelerou'} · Qv = ${(qv*1000).toFixed(3)} L/s</div>
-      </div>
-    </div>
-    <p style="font-size:11px;color:var(--t3);margin-top:8px">
-      ${v2>v1?'A área diminuiu → fluido precisa acelerar para manter o mesmo Qv.':'A área aumentou → fluido desacelera.'}
-    </p>`);
-  html+='</div>';
+/* ── Simulador 1: Continuidade — tempo real ── */
+function contCalcRT(){
+  const d1=inp('c-d1'),v1=inp('c-v1'),d2=inp('c-d2');
+  const err=document.getElementById('c-err');
+  const alertEl=document.getElementById('c-alert');
+  err.style.display='none'; alertEl.style.display='none';
 
-  document.getElementById('c-res-body').innerHTML=html;
-  res.style.display='block';
-  if(window.MathJax&&MathJax.typesetPromise)MathJax.typesetPromise([document.getElementById('c-res-body')]).catch(e=>console.warn(e));
-  setTimeout(()=>res.scrollIntoView({behavior:'smooth',block:'nearest'}),120);
+  if([d1,v1,d2].some(isNaN)||d1<=0||d2<=0||v1<0){
+    document.getElementById('c-v2-prev').textContent='V₂ = ?';
+    document.getElementById('c-qv-prev').textContent='Qv = ?';
+    updateContSVG(null,null,null,null,null);
+    return;
+  }
+
+  const a1=Math.PI*(d1/2)**2, a2=Math.PI*(d2/2)**2;
+  const v2=v1*(a1/a2), qv=a1*v1;
+  const accel=v2>v1;
+
+  document.getElementById('c-v2-prev').textContent=`V₂ = ${v2.toFixed(3)} m/s`;
+  document.getElementById('c-qv-prev').textContent=`Qv = ${(qv*1000).toFixed(3)} L/s = ${(qv*3600).toFixed(2)} m³/h`;
+  document.getElementById('c-d-hint').textContent=
+    d2<d1 ? 'D₂ < D₁ → fluido acelera' : d2>d1 ? 'D₂ > D₁ → fluido desacelera' : 'D₂ = D₁ → velocidade constante';
+
+  // Alerta contextual
+  if(v2>15){
+    alertEl.className='sim-alert-ctx sim-alert-warn';
+    alertEl.innerHTML='⚠ V₂ muito alta (>15 m/s) — pode causar erosão na tubulação e ruído excessivo.';
+    alertEl.style.display='block';
+  } else if(v2<0.3){
+    alertEl.className='sim-alert-ctx sim-alert-info';
+    alertEl.innerHTML='ℹ V₂ muito baixa (<0,3 m/s) — medidores de turbina podem não operar corretamente.';
+    alertEl.style.display='block';
+  }
+
+  updateContSVG(d1,v1,d2,v2,qv);
+  buildContSolve(d1,v1,d2,a1,a2,v2,qv);
+}
+
+function updateContSVG(d1,v1,d2,v2,qv){
+  const s=document.getElementById('svg-cont');
+  if(!s||!d1)return;
+  const ratio=d2&&d1?Math.min(Math.max(d2/d1,0.2),1):0.5;
+  // v2 arrow length proportional to velocity ratio
+  const vr=v2&&v1?Math.min(v2/v1,6):1;
+  const maxL=160, baseL=80;
+  const l2=Math.min(baseL*vr, maxL);
+  const sv2a=document.getElementById('sv2a');
+  const sv2b=document.getElementById('sv2b');
+  const sv2c=document.getElementById('sv2c');
+  if(sv2a){sv2a.setAttribute('x2',String(250+l2));sv2b.setAttribute('x2',String(255+l2*0.85));sv2c.setAttribute('x2',String(255+l2*0.85));}
+  const lblV2=document.getElementById('lbl-v2');
+  const lblQv=document.getElementById('lbl-qv');
+  const lblD1=document.getElementById('lbl-d1');
+  const lblV1=document.getElementById('lbl-v1');
+  const lblD2=document.getElementById('lbl-d2');
+  if(lblV2) lblV2.textContent=`V₂=${v2.toFixed(2)} m/s`;
+  if(lblQv) lblQv.textContent=`Qv = ${(qv*1000).toFixed(2)} L/s`;
+  if(lblD1) lblD1.textContent=`D₁=${d1} m`;
+  if(lblV1) lblV1.textContent=`V₁=${v1} m/s`;
+  if(lblD2) lblD2.textContent=`D₂=${d2} m`;
+}
+
+function buildContSolve(d1,v1,d2,a1,a2,v2,qv){
+  const body=document.getElementById('solve-c-body');
+  if(!body)return;
+  let h='';
+  h+=stepP('1','Dados conhecidos', valGrid([['D₁',d1+' m','p'],['V₁',v1+' m/s','p'],['D₂',d2+' m','g']],3));
+  h+=stepP('2','Áreas — A = π·(D/2)²',
+    eq(`A₁ = π × (${d1}/2)² = ${a1.toFixed(5)} m² = ${(a1*1e4).toFixed(2)} cm²`)+
+    eq(`A₂ = π × (${d2}/2)² = ${a2.toFixed(5)} m² = ${(a2*1e4).toFixed(2)} cm²`));
+  h+=stepP('3','Isole V₂ — Continuidade',
+    eq(`A₁·V₁ = A₂·V₂  →  V₂ = V₁ × (D₁/D₂)²`));
+  h+=stepP('4','Substituição',
+    eq(`V₂ = ${v1} × (${d1}/${d2})² = ${v1} × ${((d1/d2)**2).toFixed(4)} = ${v2.toFixed(4)} m/s`));
+  h+=stepP('5','Resultado',
+    `<div class="sim-res-final sim-res-final-p">
+      <div><div class="sim-res-label">V₂ — Velocidade na Seção 2</div><div class="sim-res-sub">${v2>v1?'↑ fluido acelerou':'↓ fluido desacelerou'} · Qv = ${(qv*1000).toFixed(3)} L/s</div></div>
+      <div style="text-align:right"><div class="sim-res-value sim-res-value-p">${v2.toFixed(3)} m/s</div></div>
+    </div>`);
+  body.innerHTML=h;
+}
+
+function toggleSimSolve(id){
+  const el=document.getElementById('solve-'+id);
+  const btn=document.getElementById('btn-'+id+'solve');
+  if(!el)return;
+  const open=el.style.display==='none';
+  el.style.display=open?'block':'none';
+  if(btn) btn.textContent=(open?'▼ ':'▶ ')+'Passo a passo';
 }
 
 function contReset(){
-  document.getElementById('c-d1').value='0.1';
-  document.getElementById('c-v1').value='2';
-  document.getElementById('c-d2').value='0.05';
+  ['c-d1','c-v1','c-d2'].forEach((id,i)=>document.getElementById(id).value=['0.1','2','0.05'][i]);
   document.getElementById('c-err').style.display='none';
-  document.getElementById('c-res').style.display='none';
-  document.getElementById('c-v2-prev').textContent='V₂ = ? m/s';
-  document.getElementById('c-qv-prev').textContent='Qv = ? L/s';
+  document.getElementById('c-alert').style.display='none';
+  document.getElementById('c-v2-prev').textContent='V₂ = ?';
+  document.getElementById('c-qv-prev').textContent='Qv = ?';
+  document.getElementById('solve-c').style.display='none';
+  document.getElementById('btn-csolve').textContent='▶ Passo a passo';
+  contCalcRT();
 }
 
-/* ── Simulador 2: Bernoulli ── */
+/* ── Simulador 2: Bernoulli — tempo real ── */
+function bernCalcRT(){
+  const rho=inp('b-rho'),v1=inp('b-v1'),p1=inp('b-p1'),
+        z1=inp('b-z1')||0, v2=inp('b-v2'), z2=inp('b-z2')||0, g=9.81;
+  const err=document.getElementById('b-err');
+  const alertEl=document.getElementById('b-alert');
+  err.style.display='none'; alertEl.style.display='none';
+
+  // P1 hint
+  const p1hint=document.getElementById('b-p1-hint');
+  if(p1hint&&!isNaN(p1)) p1hint.textContent=`${p1.toFixed(0)} Pa = ${(p1/1e5).toFixed(4)} bar`;
+
+  if([rho,v1,p1,v2].some(isNaN)||rho<=0||v1<0||v2<0){
+    document.getElementById('b-p2-prev').textContent='P₂ = ?';
+    document.getElementById('b-bar-prev').textContent='';
+    return;
+  }
+
+  const tCin=rho*(v1**2-v2**2)/2, tPot=rho*g*(z1-z2), p2=p1+tCin+tPot, dp=p1-p2;
+
+  document.getElementById('b-p2-prev').textContent=`P₂ = ${p2.toFixed(0)} Pa`;
+  document.getElementById('b-bar-prev').textContent=`${(p2/1e5).toFixed(4)} bar`;
+
+  // Alertas contextuais
+  const alerts=[];
+  if(p2<0) alerts.push(['danger','⚠ Cavitação: P₂ negativo! O fluido vaporiza criando bolhas que danificam tubulações e bombas. Aumente P₁ ou reduza ΔV.']);
+  if(p2<2300&&p2>=0) alerts.push(['warn','⚠ P₂ muito baixa (< 0,023 bar) — risco real de cavitação. Revise as condições de operação.']);
+  if(dp<0) alerts.push(['info','ℹ ΔP negativo: P₂ > P₁. Isso acontece quando V₂ < V₁ ou h₂ < h₁ — o fluido desacelerou ou desceu.']);
+  if(v2>0&&v1>0){
+    const re=rho*Math.max(v1,v2)*0.05/0.001;
+    if(re<2300) alerts.push(['info',`ℹ Reynolds estimado ≈ ${re.toFixed(0)} → Escoamento laminar. Bernoulli é válido, mas perdas por viscosidade podem ser significativas.`]);
+  }
+  if(alerts.length>0){
+    alertEl.className='sim-alert-ctx sim-alert-'+alerts[0][0];
+    alertEl.innerHTML=alerts.map(([,m])=>m).join('<br>');
+    alertEl.style.display='block';
+  }
+
+  updateBernSVG(v1,v2,p1,p2,dp,z1,z2);
+  buildBernSolve(rho,v1,p1,z1,v2,z2,g,tCin,tPot,p2,dp);
+}
+
+function updateBernSVG(v1,v2,p1,p2,dp,z1,z2){
+  const upd=(id,txt)=>{const el=document.getElementById(id);if(el)el.textContent=txt;};
+  upd('bp1-val',(p1/1e5).toFixed(3)+' bar');
+  upd('bp2-val',isNaN(p2)?'?':(p2/1e5).toFixed(3)+' bar');
+  upd('bv1-lbl','V₁='+v1+' m/s');
+  upd('bv2-lbl','V₂='+v2+' m/s');
+  upd('bdp-lbl',isNaN(dp)?'ΔP = ?':'ΔP = '+(dp/1e5).toFixed(3)+' bar');
+  // Escala seta V2 proporcional
+  const sv2=document.getElementById('bv2-line');
+  if(sv2&&!isNaN(v2)&&v2>=0){
+    const ratio=Math.min(Math.max(v2/Math.max(v1,0.1),0.3),5);
+    const len=Math.min(ratio*90,200);
+    sv2.setAttribute('x2',String(225+len));
+  }
+  // Cor P2 label
+  const bp2lbl=document.getElementById('bp2-lbl');
+  if(bp2lbl) bp2lbl.setAttribute('fill',isNaN(p2)||p2<0?'var(--r)':'var(--g)');
+}
+
+function buildBernSolve(rho,v1,p1,z1,v2,z2,g,tCin,tPot,p2,dp){
+  const body=document.getElementById('solve-b-body');
+  if(!body)return;
+  const hz=(z1===z2);
+  let h='';
+  h+=stepG('1','Dados conhecidos',
+    valGrid([['ρ',rho+' kg/m³','t2'],['V₁',v1+' m/s','p'],['V₂',v2+' m/s','g'],['P₁',(p1/1e5).toFixed(3)+' bar','p'],['Δh',(z1-z2)+' m','t2']],5));
+  h+=stepG('2','Equação de Bernoulli (isolando P₂)',
+    eq('P₂ = P₁ + ρ·(v₁²−v₂²)/2 + ρ·g·(h₁−h₂)',true));
+  h+=stepG('3','Termo cinético — ρ·(v₁²−v₂²)/2',
+    eq(`${rho} × (${v1}² − ${v2}²) / 2 = ${rho} × (${v1**2} − ${v2**2}) / 2 = ${tCin.toFixed(2)} Pa`,true));
+  h+=stepG('4','Termo potencial — ρ·g·(h₁−h₂)',
+    hz ? eq('h₁ = h₂ → termo potencial = 0',true)
+       : eq(`${rho} × ${g} × (${z1} − ${z2}) = ${tPot.toFixed(2)} Pa`,true));
+  h+=stepG('5','Substituição final',
+    eq(`P₂ = ${p1} + (${tCin.toFixed(2)}) + (${tPot.toFixed(2)}) = ${p2.toFixed(2)} Pa`,true));
+  h+=stepG('6','Resultado',
+    `<div class="sim-res-final">
+      <div><div class="sim-res-label">P₂ — Pressão na Seção 2</div><div class="sim-res-sub">${(p2/1000).toFixed(2)} kPa · ${(p2/1e5).toFixed(4)} bar</div></div>
+      <div style="text-align:right"><div class="sim-res-value" style="color:${p2<0?'var(--r)':'var(--g)'}">${p2.toFixed(0)} Pa</div></div>
+    </div>
+    <div class="sim-dp-grid">
+      <div class="sim-dp-cell"><div class="sim-dp-lbl">ΔP = P₁ − P₂</div><div class="sim-dp-val" style="color:${dp>=0?'var(--y)':'var(--r)'}">${dp.toFixed(0)} Pa</div></div>
+      <div class="sim-dp-cell"><div class="sim-dp-lbl">Variação</div><div class="sim-dp-val" style="color:${p2<p1?'var(--r)':'var(--g)'}">${p2<p1?'Pressão caiu ↓':'Pressão subiu ↑'}</div></div>
+    </div>
+    ${p2<0?'<div class="sim-alert-ctx sim-alert-danger" style="margin-top:8px">⚠ P₂ negativo → cavitação. O fluido vaporiza localmente danificando o sistema.</div>':''}`);
+  body.innerHTML=h;
+}
+
 function importV2(){
   const d1=inp('c-d1'),v1=inp('c-v1'),d2=inp('c-d2');
-  if([d1,v1,d2].some(isNaN)||d1<=0||d2<=0){alert('Calcule o Simulador 1 primeiro.');return;}
+  if([d1,v1,d2].some(isNaN)||d1<=0||d2<=0){alert('Preencha o Simulador 1 primeiro.');return;}
   const a1=Math.PI*(d1/2)**2,a2=Math.PI*(d2/2)**2;
   document.getElementById('b-v2').value=(v1*(a1/a2)).toFixed(4);
-}
-
-function bernCalc(){
-  const rho=inp('b-rho'),v1=inp('b-v1'),p1=inp('b-p1'),
-        z1=inp('b-z1')||0,v2=inp('b-v2'),z2=inp('b-z2')||0,g=9.81;
-  const err=document.getElementById('b-err'),res=document.getElementById('b-res');
-  err.style.display='none';res.style.display='none';
-  if([rho,v1,p1,v2].some(isNaN)||rho<=0||v1<0||v2<0){
-    err.textContent='Preencha ρ, V₁, P₁ e V₂ com valores válidos.';err.style.display='block';return;
-  }
-  const tCin=rho*(v1**2-v2**2)/2,tPot=rho*g*(z1-z2),p2=p1+tCin+tPot,dp=p1-p2,hz=(z1===z2);
-
-  document.getElementById('b-p2-prev').textContent='P₂ = '+p2.toFixed(0)+' Pa';
-  document.getElementById('b-bar-prev').textContent='≈ '+(p2/1e5).toFixed(4)+' bar';
-
-  const mb=(eq)=>`<div style="background:var(--bg);border:1px solid rgba(0,255,157,0.2);border-radius:6px;padding:10px 14px;font-size:13px;color:var(--t2);line-height:2.4;margin:6px 0">${eq}</div>`;
-  const rw=(n,t,b)=>`<div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--bd)">
-    <div style="width:22px;height:22px;border-radius:50%;background:rgba(0,255,157,0.12);border:1px solid rgba(0,255,157,0.4);display:flex;align-items:center;justify-content:center;font-family:var(--fm);font-size:11px;font-weight:700;color:var(--g);flex-shrink:0;margin-top:2px">${n}</div>
-    <div style="flex:1"><div style="font-size:10px;font-weight:600;color:var(--g);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">${t}</div>${b}</div>
-  </div>`;
-
-  let html='<div>';
-  html+=rw('1','Dados conhecidos',`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(70px,1fr));gap:6px">
-    <div class="mcard"><div class="mlbl">ρ</div><div style="font-size:13px;font-weight:600;color:var(--p);font-family:var(--fm)">${rho}</div></div>
-    <div class="mcard"><div class="mlbl">V₁</div><div style="font-size:13px;font-weight:600;color:var(--p);font-family:var(--fm)">${v1} m/s</div></div>
-    <div class="mcard"><div class="mlbl">V₂</div><div style="font-size:13px;font-weight:600;color:var(--g);font-family:var(--fm)">${v2} m/s</div></div>
-    <div class="mcard"><div class="mlbl">P₁</div><div style="font-size:13px;font-weight:600;color:var(--p);font-family:var(--fm)">${(p1/1e5).toFixed(3)} bar</div></div>
-    <div class="mcard"><div class="mlbl">h₁−h₂</div><div style="font-size:13px;font-weight:600;color:var(--t2);font-family:var(--fm)">${z1-z2} m</div></div>
-  </div>`);
-  html+=rw('2','Equação de Bernoulli (por unidade de massa)',
-    mb(`\\( \\dfrac{P_1}{\\rho} + \\dfrac{v_1^2}{2} + g\\,h_1 = \\dfrac{P_2}{\\rho} + \\dfrac{v_2^2}{2} + g\\,h_2 \\)`)+
-    '<p style="font-size:10px;color:var(--t3);margin-top:4px">Unidade de cada termo: J/kg. A soma é constante ao longo do escoamento.</p>'
-  );
-  html+=rw('3','Isole P₂',
-    mb(`\\( P_2 = P_1 + \\rho\\,\\dfrac{v_1^2-v_2^2}{2} + \\rho\\,g\\,(h_1-h_2) \\)`)+
-    (hz?'<p style="font-size:10px;color:var(--t3);margin-top:4px">h₁=h₂ → termo potencial = 0.</p>':
-        `<p style="font-size:10px;color:var(--t3);margin-top:4px">h₁−h₂=${z1-z2} m → desnível ${(z1-z2)>0?'aumenta':'reduz'} P₂.</p>`)
-  );
-  html+=rw('4','Calcule cada parcela',
-    mb(`\\( \\rho\\,\\dfrac{v_1^2-v_2^2}{2} = ${rho}\\cdot\\dfrac{${v1**2}-${v2**2}}{2} = ${tCin.toFixed(2)}\\,\\text{Pa} \\)`)+
-    mb(`\\( \\rho\\,g\\,(h_1-h_2) = ${rho}\\cdot${g}\\cdot(${z1-z2}) = ${tPot.toFixed(2)}\\,\\text{Pa} \\)`)
-  );
-  html+=rw('5','Substituição final',
-    mb(`\\( P_2 = ${p1} + (${tCin.toFixed(2)}) + (${tPot.toFixed(2)}) = ${p2.toFixed(2)}\\,\\text{Pa} \\)`)
-  );
-  html+=rw('6','Resultado',`
-    <div style="background:rgba(0,255,157,0.08);border:1px solid rgba(0,255,157,0.3);border-radius:7px;padding:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
-      <div style="font-size:13px;color:var(--t2)">P₂ — Pressão na Seção 2</div>
-      <div style="text-align:right">
-        <div style="font-size:22px;font-weight:700;color:var(--g);font-family:var(--fm)">${p2.toFixed(0)} Pa</div>
-        <div style="font-size:12px;color:var(--t3)">${(p2/1000).toFixed(2)} kPa · ${(p2/1e5).toFixed(4)} bar</div>
-      </div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px">
-      <div style="background:var(--bg3);border-radius:6px;padding:10px;text-align:center">
-        <div style="font-size:10px;color:var(--t3)">ΔP = P₁ − P₂</div>
-        <div style="font-size:15px;font-weight:600;color:${dp>=0?'var(--y)':'var(--r)'}">${dp.toFixed(0)} Pa</div>
-      </div>
-      <div style="background:var(--bg3);border-radius:6px;padding:10px;text-align:center">
-        <div style="font-size:10px;color:var(--t3)">Variação</div>
-        <div style="font-size:13px;font-weight:600;color:${p2<p1?'var(--r)':'var(--g)'}">${p2<p1?'Pressão caiu ↓':'Pressão subiu ↑'}</div>
-      </div>
-    </div>
-    ${p2<0?'<div class="alert aw" style="margin-top:8px">⚠ P₂ negativo → cavitação. Aumente P₁ ou reduza a diferença de velocidades.</div>':''}`
-  );
-  html+='</div>';
-
-  document.getElementById('b-res-body').innerHTML=html;
-  res.style.display='block';
-  if(window.MathJax&&MathJax.typesetPromise)MathJax.typesetPromise([document.getElementById('b-res-body')]).catch(e=>console.warn(e));
-  setTimeout(()=>res.scrollIntoView({behavior:'smooth',block:'nearest'}),120);
+  bernCalcRT();
 }
 
 function bernReset(){
-  ['b-rho','b-v1','b-p1','b-z1','b-v2','b-z2'].forEach((id,i)=>{
-    document.getElementById(id).value=['1000','2','220000','0','8','0'][i];
-  });
+  ['b-rho','b-v1','b-p1','b-z1','b-v2','b-z2'].forEach((id,i)=>
+    document.getElementById(id).value=['1000','2','220000','0','8','0'][i]);
   document.getElementById('b-err').style.display='none';
-  document.getElementById('b-res').style.display='none';
-  document.getElementById('b-p2-prev').textContent='P₂ = ? Pa';
-  document.getElementById('b-bar-prev').textContent='? bar';
+  document.getElementById('b-alert').style.display='none';
+  document.getElementById('b-p2-prev').textContent='P₂ = ?';
+  document.getElementById('b-bar-prev').textContent='';
+  document.getElementById('solve-b').style.display='none';
+  document.getElementById('btn-bsolve').textContent='▶ Passo a passo';
+  bernCalcRT();
 }
 
+/* ── Exemplos prontos ── */
 function exLoad(d1,v1,p1,z1,d2,z2){
   document.getElementById('c-d1').value=d1;
   document.getElementById('c-v1').value=v1;
@@ -419,7 +504,7 @@ function exLoad(d1,v1,p1,z1,d2,z2){
   document.getElementById('b-rho').value=1000;
   const a1=Math.PI*(d1/2)**2,a2=Math.PI*(d2/2)**2;
   document.getElementById('b-v2').value=(v1*(a1/a2)).toFixed(4);
-  contCalc();bernCalc();
+  contCalcRT();bernCalcRT();
 }
 
 function exLoadBern(rho,v1,z1,p1,v2,z2){
@@ -429,5 +514,58 @@ function exLoadBern(rho,v1,z1,p1,v2,z2){
   document.getElementById('b-z1').value=z1;
   document.getElementById('b-v2').value=v2;
   document.getElementById('b-z2').value=z2;
-  bernCalc();
+  bernCalcRT();
 }
+
+/* ─ Resolução fórmulas visuais (botão "Ver resolução") ─ */
+function toggleSolve(id){
+  const el=document.getElementById('fsolve-'+id);
+  if(!el)return;
+  const btn=el.previousElementSibling.querySelector('button');
+  const open=!el.classList.contains('open');
+  el.classList.toggle('open',open);
+  if(btn) btn.textContent=(open?'▼ ':'▶ ')+'Ver resolução';
+}
+
+/* ─ Highlight diagrama ↔ legenda (fórmulas visuais) ─ */
+(function initFvInteract(){
+  function onHover(varKey, on){
+    // formula spans
+    document.querySelectorAll(`[data-var="${varKey}"]`).forEach(el=>{
+      if(el.tagName==='TR'){
+        el.classList.toggle('leg-hl',on);
+      } else {
+        // detect color class
+        const cls=[...el.classList].find(c=>c.startsWith('fv-'))?.replace('fv-','') || 'p';
+        if(on) el.classList.add('fv-hl-'+cls);
+        else el.classList.remove(...[...el.classList].filter(c=>c.startsWith('fv-hl-')));
+      }
+    });
+    // SVG elements
+    document.querySelectorAll(`.fv-el[data-var="${varKey}"]`).forEach(el=>{
+      el.style.filter=on?'brightness(1.5) drop-shadow(0 0 4px currentColor)':'';
+    });
+  }
+  document.addEventListener('mouseover',e=>{
+    const t=e.target.closest('[data-var]');
+    if(t) onHover(t.dataset.var,true);
+  });
+  document.addEventListener('mouseout',e=>{
+    const t=e.target.closest('[data-var]');
+    if(t) onHover(t.dataset.var,false);
+  });
+  document.addEventListener('touchstart',e=>{
+    const t=e.target.closest('[data-var]');
+    if(t) onHover(t.dataset.var,true);
+  },{passive:true});
+  document.addEventListener('touchend',e=>{
+    const t=e.target.closest('[data-var]');
+    if(t) setTimeout(()=>onHover(t.dataset.var,false),600);
+  },{passive:true});
+})();
+
+/* ─ Init simuladores em tempo real no load ─ */
+window.addEventListener('DOMContentLoaded',()=>{
+  contCalcRT();
+  bernCalcRT();
+});
