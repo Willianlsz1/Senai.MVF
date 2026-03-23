@@ -925,3 +925,76 @@ html,body{
   .bern-sf-btns{ gap:5px }
   .bern-sf-btn{ padding:6px 10px; font-size:12px }
 }
+
+/* ── Dashboard tools row (Fase 4.1) ──────────────────────────── */
+.dash-tools{
+  display:flex; flex-direction:column; gap:8px; margin-bottom:4px;
+}
+.dash-tool{
+  display:flex; align-items:center; gap:14px;
+  background:var(--bg3); border:1px solid var(--bd);
+  border-radius:var(--radius); padding:14px 16px;
+  cursor:pointer; box-shadow:var(--shadow);
+  border-left:3px solid var(--bd);
+}
+.dash-tool:hover{ transform:translateX(3px); box-shadow:0 4px 16px rgba(0,0,0,0.3) }
+.dash-tool-p { border-left-color:var(--p) }
+.dash-tool-g { border-left-color:var(--g) }
+.dash-tool-r { border-left-color:var(--r) }
+.dash-tool-p2{ border-left-color:var(--p); opacity:.85 }
+.dash-tool-icon{ font-size:22px; flex-shrink:0; width:32px; text-align:center }
+.dash-tool-body{ flex:1 }
+.dash-tool-title{
+  font-size:14px; font-weight:600; color:var(--t1); margin-bottom:2px;
+}
+.dash-tool-p .dash-tool-title{ color:var(--p) }
+.dash-tool-g .dash-tool-title{ color:var(--g) }
+.dash-tool-r .dash-tool-title{ color:var(--r) }
+.dash-tool-sub{ font-size:12px; color:var(--t3) }
+.dash-tool-arrow{
+  font-size:20px; color:var(--t3); flex-shrink:0;
+  transition:transform .15s;
+}
+.dash-tool:hover .dash-tool-arrow{ transform:translateX(4px); color:var(--t1) }
+
+/* Variáveis com border-left no dashboard */
+.card.click[style*="border-left"]{
+  border-top:1px solid var(--bd);
+  border-right:1px solid var(--bd);
+  border-bottom:1px solid var(--bd);
+}
+
+/* ── Bernoulli resultado full-width (Fase 4.1) ───────────────── */
+.bern-result-bar{
+  display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+  background:rgba(0,255,157,0.06);
+  border:2px solid rgba(0,255,157,0.3);
+  border-radius:10px; padding:14px 18px;
+  margin-bottom:12px;
+}
+.bern-result-lbl{
+  font-size:11px; text-transform:uppercase; letter-spacing:1.5px;
+  color:var(--t3); font-family:var(--fm); white-space:nowrap;
+}
+.bern-result-val{
+  font-family:var(--fm); font-size:22px; font-weight:700;
+  color:var(--g); flex:1; text-align:center;
+}
+.bern-result-sub{
+  font-size:13px; color:var(--t3); font-family:var(--fm);
+  white-space:nowrap;
+}
+/* Cor da barra muda conforme a variável alvo */
+.bern-result-bar.target-s1{
+  background:rgba(0,212,255,0.06);
+  border-color:rgba(0,212,255,0.3);
+}
+.bern-result-bar.target-s1 .bern-result-val{ color:var(--p) }
+
+/* Mobile */
+@media(max-width:900px){
+  .dash-tool{ padding:11px 12px; gap:10px }
+  .dash-tool-title{ font-size:13px }
+  .dash-tool-icon{ font-size:18px; width:24px }
+  .bern-result-val{ font-size:18px }
+}
