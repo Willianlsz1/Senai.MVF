@@ -85,7 +85,7 @@
   <div class="sub">Medição de Variáveis Físicas Industriais · SENAI · v5.4</div>
 
   <!-- Contadores dinâmicos -->
-  <div class="grid g4" style="margin-bottom:20px">
+  <div class="grid g4" style="margin-bottom:18px">
     <div class="card dash-stat" onclick="S('m1')">
       <div class="sc">Módulos</div>
       <div class="sv">13</div>
@@ -94,7 +94,7 @@
     <div class="card dash-stat" onclick="S('flash')">
       <div class="sc">Flashcards</div>
       <div class="sv" id="dash-cards">66</div>
-      <div class="ss" id="dash-cards-sub">8 categorias · com filtros</div>
+      <div class="ss">8 categorias · flip 3D</div>
     </div>
     <div class="card dash-stat" onclick="S('quiz')">
       <div class="sc">Questões Quiz</div>
@@ -108,33 +108,68 @@
     </div>
   </div>
 
-  <!-- Acesso rápido à prática -->
-  <div class="dash-quick">
-    <button class="dash-qbtn dash-qbtn-p" onclick="S('flash')">🃏 Flashcards</button>
-    <button class="dash-qbtn dash-qbtn-g" onclick="S('quiz')">📝 Quiz</button>
-    <button class="dash-qbtn dash-qbtn-y" onclick="S('calc')">🧮 Calculadora</button>
-    <button class="dash-qbtn dash-qbtn-pu" onclick="S('bernoulli')">⚡ Bernoulli</button>
-    <button class="dash-qbtn" onclick="S('formulas')">★ Fórmulas</button>
-  </div>
-
-  <div class="sec">Módulos de Estudo</div>
-  <div class="grid g4">
+  <!-- Módulos de Teoria -->
+  <div class="sec">Teoria</div>
+  <div class="grid g4" style="margin-bottom:18px">
     <div class="card click" onclick="S('m1')"><div class="mn">01</div><div class="mt">Fundamentos</div><div class="pb"><div class="pf"></div></div><div class="ps">PV · MV · SP · Sinais</div></div>
     <div class="card click" onclick="S('m2')"><div class="mn">02</div><div class="mt">Malha de Controle</div><div class="pb"><div class="pf"></div></div><div class="ps">Aberta · Fechada · PID</div></div>
     <div class="card click" onclick="S('m3')"><div class="mn">03</div><div class="mt">Instrumentação</div><div class="pb"><div class="pf"></div></div><div class="ps">Range · Span · Acurácia</div></div>
     <div class="card click" onclick="S('m4')"><div class="mn">04</div><div class="mt">Erros de Medição</div><div class="pb"><div class="pf"></div></div><div class="ps">EA · %FS · %Span</div></div>
-    <div class="card click" onclick="S('pressao')" style="border-color:rgba(0,212,255,0.28)"><div class="mn" style="color:var(--p)">05 · PRESSÃO</div><div class="mt">Variável de Processo</div><div class="pb"><div class="pf"></div></div><div class="ps">Pascal · Bar · Bourdon</div></div>
-    <div class="card click" onclick="S('nivel')" style="border-color:rgba(0,255,157,0.28)"><div class="mn" style="color:var(--g)">06 · NÍVEL</div><div class="mt">Variável de Processo</div><div class="pb"><div class="pf" style="background:var(--g)"></div></div><div class="ps">Direta · Indireta · Chaves</div></div>
-    <div class="card click" onclick="S('vazao')" style="border-color:rgba(255,192,64,0.28)"><div class="mn" style="color:var(--y)">07 · VAZÃO</div><div class="mt">Variável de Processo</div><div class="pb"><div class="pf" style="background:var(--y)"></div></div><div class="ps">Deprimogênios · Lineares</div></div>
-    <div class="card click" onclick="S('temperatura')" style="border-color:rgba(192,132,255,0.35)"><div class="mn" style="color:var(--pu)">08 · TEMP ★</div><div class="mt">Variável de Processo</div><div class="pb"><div class="pf" style="background:var(--pu)"></div></div><div class="ps">Termopar · PT100</div></div>
-    <div class="card click" onclick="S('relacoes')" style="border-color:rgba(255,144,64,0.28)"><div class="mn" style="color:var(--or)">09</div><div class="mt">Relações P · N · Q</div><div class="pb"><div class="pf" style="background:var(--or)"></div></div><div class="ps">Como as 3 se conectam</div></div>
-    <div class="card click" onclick="S('cenarios')" style="border-color:rgba(255,144,64,0.28)"><div class="mn" style="color:var(--or)">10</div><div class="mt">Cenários Reais</div><div class="pb"><div class="pf" style="background:var(--or)"></div></div><div class="ps">Caldeira · ETA · Reator</div></div>
-    <div class="card click" onclick="S('calibracao')" style="border-color:rgba(255,192,64,0.35)"><div class="mn" style="color:var(--y)">11 · CALIB ★</div><div class="mt">Metrologia Industrial</div><div class="pb"><div class="pf" style="background:var(--y)"></div></div><div class="ps">Procedimento · INMETRO</div></div>
-    <div class="card click" onclick="S('formulas')" style="border-color:rgba(255,192,64,0.22)"><div class="mn" style="color:var(--y)">★</div><div class="mt">Fórmulas Visuais</div><div class="pb"><div class="pf" style="background:var(--y)"></div></div><div class="ps">Diagramas interativos</div></div>
-    <div class="card click" onclick="S('bernoulli')" style="border-color:rgba(0,255,157,0.22)"><div class="mn" style="color:var(--g)">⚡</div><div class="mt">Simuladores</div><div class="pb"><div class="pf" style="background:var(--g)"></div></div><div class="ps">Continuidade · Bernoulli</div></div>
-    <div class="card click" onclick="S('flash')" style="border-color:rgba(0,212,255,0.22)"><div class="mn" style="color:var(--p)" id="dash-fc-mn">66 cards</div><div class="mt">Flashcards</div><div class="pb"><div class="pf"></div></div><div class="ps">8 categorias · flip 3D</div></div>
-    <div class="card click" onclick="S('quiz')" style="border-color:rgba(255,85,102,0.22)"><div class="mn" style="color:var(--r)" id="dash-qz-mn">46 questões</div><div class="mt">Quiz</div><div class="pb"><div class="pf" style="background:var(--r)"></div></div><div class="ps">Situações reais de prova</div></div>
-    <div class="card click" onclick="S('calc')" style="border-color:rgba(0,212,255,0.18)"><div class="mn" style="color:var(--p)">9</div><div class="mt">Calculadora</div><div class="pb"><div class="pf"></div></div><div class="ps">Stevin · Reynolds · Gases</div></div>
+  </div>
+
+  <!-- Variáveis de Processo -->
+  <div class="sec">Variáveis de Processo</div>
+  <div class="grid g4" style="margin-bottom:18px">
+    <div class="card click" onclick="S('pressao')" style="border-left:3px solid var(--p)"><div class="mn" style="color:var(--p)">PRESSÃO</div><div class="mt">Módulo 05</div><div class="pb"><div class="pf"></div></div><div class="ps">Pascal · Bar · Bourdon · Stevin</div></div>
+    <div class="card click" onclick="S('nivel')" style="border-left:3px solid var(--g)"><div class="mn" style="color:var(--g)">NÍVEL</div><div class="mt">Módulo 06</div><div class="pb"><div class="pf" style="background:var(--g)"></div></div><div class="ps">Direta · Indireta · Chaves</div></div>
+    <div class="card click" onclick="S('vazao')" style="border-left:3px solid var(--y)"><div class="mn" style="color:var(--y)">VAZÃO</div><div class="mt">Módulo 07</div><div class="pb"><div class="pf" style="background:var(--y)"></div></div><div class="ps">Deprimogênios · Lineares</div></div>
+    <div class="card click" onclick="S('temperatura')" style="border-left:3px solid var(--pu)"><div class="mn" style="color:var(--pu)">TEMPERATURA ★</div><div class="mt">Módulo 08</div><div class="pb"><div class="pf" style="background:var(--pu)"></div></div><div class="ps">Termopar · PT100 · RTD</div></div>
+  </div>
+
+  <!-- Conexões e Prática -->
+  <div class="sec">Conexões &amp; Prática</div>
+  <div class="grid g4" style="margin-bottom:18px">
+    <div class="card click" onclick="S('relacoes')" style="border-left:3px solid var(--or)"><div class="mn" style="color:var(--or)">P · N · Q</div><div class="mt">Relações</div><div class="pb"><div class="pf" style="background:var(--or)"></div></div><div class="ps">Como as 3 se conectam</div></div>
+    <div class="card click" onclick="S('cenarios')" style="border-left:3px solid var(--or)"><div class="mn" style="color:var(--or)">CENÁRIOS</div><div class="mt">Exemplos Reais</div><div class="pb"><div class="pf" style="background:var(--or)"></div></div><div class="ps">Caldeira · ETA · Reator</div></div>
+    <div class="card click" onclick="S('calibracao')" style="border-left:3px solid var(--y)"><div class="mn" style="color:var(--y)">CALIBRAÇÃO ★</div><div class="mt">Metrologia</div><div class="pb"><div class="pf" style="background:var(--y)"></div></div><div class="ps">Procedimento · INMETRO</div></div>
+    <div class="card click" onclick="S('formulas')" style="border-left:3px solid var(--y)"><div class="mn" style="color:var(--y)">★ FÓRMULAS</div><div class="mt">Visuais</div><div class="pb"><div class="pf" style="background:var(--y)"></div></div><div class="ps">Diagramas interativos</div></div>
+  </div>
+
+  <!-- Ferramentas de Estudo -->
+  <div class="sec">Ferramentas de Estudo</div>
+  <div class="dash-tools">
+    <div class="dash-tool dash-tool-p" onclick="S('flash')">
+      <div class="dash-tool-icon">🃏</div>
+      <div class="dash-tool-body">
+        <div class="dash-tool-title">Flashcards</div>
+        <div class="dash-tool-sub" id="dash-fc-mn">66 cards · 8 categorias · flip 3D</div>
+      </div>
+      <div class="dash-tool-arrow">›</div>
+    </div>
+    <div class="dash-tool dash-tool-r" onclick="S('quiz')">
+      <div class="dash-tool-icon">📝</div>
+      <div class="dash-tool-body">
+        <div class="dash-tool-title">Quiz</div>
+        <div class="dash-tool-sub" id="dash-qz-mn">46 questões · situações reais de prova</div>
+      </div>
+      <div class="dash-tool-arrow">›</div>
+    </div>
+    <div class="dash-tool dash-tool-p2" onclick="S('calc')">
+      <div class="dash-tool-icon">🧮</div>
+      <div class="dash-tool-body">
+        <div class="dash-tool-title">Calculadora</div>
+        <div class="dash-tool-sub">9 fórmulas · Stevin · Reynolds · Torricelli · Gases</div>
+      </div>
+      <div class="dash-tool-arrow">›</div>
+    </div>
+    <div class="dash-tool dash-tool-g" onclick="S('bernoulli')">
+      <div class="dash-tool-icon">⚡</div>
+      <div class="dash-tool-body">
+        <div class="dash-tool-title">Simuladores</div>
+        <div class="dash-tool-sub">Continuidade · Bernoulli · tempo real · variável livre</div>
+      </div>
+      <div class="dash-tool-arrow">›</div>
+    </div>
   </div>
 </div>
 
@@ -1211,13 +1246,15 @@
         <label class="lbl" id="lbl-b-p2" style="margin-top:8px">P₂ (Pa) — <span style="color:var(--y)">calculado</span></label>
         <input id="b-p2-input" type="number" value="190000" step="1000" class="sim-input sim-input-g" oninput="bernCalcRT()" style="margin-bottom:3px" disabled>
         <label class="lbl" style="margin-top:8px">h₂ (m)</label>
-        <input id="b-z2" type="number" value="0" step="0.1" class="sim-input sim-input-n" oninput="bernCalcRT()" style="margin-bottom:8px">
-        <div class="sim-result-box" id="b-result-box">
-          <div class="sim-result-lbl">Resultado em tempo real</div>
-          <div class="sim-result-val sim-result-val-g" id="b-p2-prev">P₂ = ?</div>
-          <div class="sim-result-sub" id="b-bar-prev"></div>
-        </div>
+        <input id="b-z2" type="number" value="0" step="0.1" class="sim-input sim-input-n" oninput="bernCalcRT()">
       </div>
+    </div>
+
+    <!-- Resultado destacado — full width, fora das colunas -->
+    <div class="bern-result-bar" id="b-result-box">
+      <div class="bern-result-lbl" id="b-result-box-lbl">Resultado em tempo real</div>
+      <div class="bern-result-val" id="b-p2-prev">—</div>
+      <div class="bern-result-sub" id="b-bar-prev"></div>
     </div>
     <div id="b-err" class="sim-err" style="display:none"></div>
     <div id="b-alert" class="sim-alert-ctx" style="display:none"></div>
