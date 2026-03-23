@@ -201,10 +201,23 @@
           <button class="btn btn-p fex-btn" onclick="toggleSolve('pfa')">▶ Ver resolução</button>
         </div>
         <div class="fsolve" id="fsolve-pfa">
-          <div class="fsolve-hdr">Exemplo: F = 100 N · A = 0,01 m²</div>
+          <div class="fsolve-method">
+            <div class="fsolve-method-title">📋 Como organizar antes de calcular</div>
+            <div class="fsolve-method-steps">
+              <div class="fsolve-mstep"><span class="fsolve-mbadge">1</span>Liste o que o enunciado dá: F em N e A em m²</div>
+              <div class="fsolve-mstep"><span class="fsolve-mbadge">2</span>Identifique a incógnita (P, F ou A) e isole-a antes de substituir</div>
+              <div class="fsolve-mstep"><span class="fsolve-mbadge">3</span>Unifique unidades: F em N, A em m², resultado P sai em Pa (÷100.000 = bar)</div>
+            </div>
+          </div>
+          <div class="fsolve-hdr">Exemplo A — calcular P: F = 100 N, A = 0,01 m²</div>
           <div class="fsolve-step"><span class="fsolve-num">1</span><span>Fórmula: <span class="fsolve-eq">P = F / A</span></span></div>
-          <div class="fsolve-step"><span class="fsolve-num">2</span><span>Substituição: <span class="fsolve-eq">P = 100 / 0,01</span></span></div>
+          <div class="fsolve-step"><span class="fsolve-num">2</span><span>Substitua: <span class="fsolve-eq">P = 100 / 0,01</span></span></div>
           <div class="fsolve-step fsolve-res"><span class="fsolve-num">3</span><span>Resultado: <span class="fsolve-eq" style="color:var(--p)">P = 10.000 Pa = 0,1 bar</span></span></div>
+          <div class="fsolve-hdr">Exemplo B — calcular A: F = 500 N, P = 2 bar</div>
+          <div class="fsolve-step"><span class="fsolve-num">1</span><span>Isole A: <span class="fsolve-eq">A = F / P</span></span></div>
+          <div class="fsolve-step"><span class="fsolve-num">2</span><span>Converta P: <span class="fsolve-eq">2 bar × 100.000 = 200.000 Pa</span></span></div>
+          <div class="fsolve-step fsolve-res"><span class="fsolve-num">3</span><span>Resultado: <span class="fsolve-eq" style="color:var(--g)">A = 500 / 200.000 = 0,0025 m²</span></span></div>
+          <div class="fsolve-tip">⚠ <strong>Armadilha:</strong> nunca divida N por bar diretamente. Converta tudo para Pa antes de calcular.</div>
         </div>
       </div>
       <div class="fcard-right">
@@ -261,11 +274,25 @@
           <button class="btn btn-p fex-btn" onclick="toggleSolve('stv')">▶ Ver resolução</button>
         </div>
         <div class="fsolve" id="fsolve-stv">
-          <div class="fsolve-hdr">Exemplo: água (ρ=1000) · h = 5 m</div>
+          <div class="fsolve-method">
+            <div class="fsolve-method-title">📋 Como organizar antes de calcular</div>
+            <div class="fsolve-method-steps">
+              <div class="fsolve-mstep"><span class="fsolve-mbadge">1</span>Identifique o fluido → pegue ρ: água=1000, óleo≈850, mercúrio=13.600 kg/m³</div>
+              <div class="fsolve-mstep"><span class="fsolve-mbadge">2</span>h em metros = diferença de altura entre os dois pontos (não a posição absoluta)</div>
+              <div class="fsolve-mstep"><span class="fsolve-mbadge">3</span>g = 9,81 m/s² (fixo). Resultado em Pa → ÷100.000 para bar</div>
+            </div>
+          </div>
+          <div class="fsolve-hdr">Exemplo A — calcular ΔP: água, h = 5 m</div>
           <div class="fsolve-step"><span class="fsolve-num">1</span><span>Fórmula: <span class="fsolve-eq">ΔP = ρ × g × h</span></span></div>
-          <div class="fsolve-step"><span class="fsolve-num">2</span><span>Substituição: <span class="fsolve-eq">ΔP = 1000 × 9,81 × 5</span></span></div>
-          <div class="fsolve-step"><span class="fsolve-num">3</span><span>Operação: <span class="fsolve-eq">ΔP = 49.050 Pa</span></span></div>
-          <div class="fsolve-step fsolve-res"><span class="fsolve-num">4</span><span>Resultado: <span class="fsolve-eq" style="color:var(--p)">ΔP ≈ 0,49 bar</span></span></div>
+          <div class="fsolve-step"><span class="fsolve-num">2</span><span>Substitua: <span class="fsolve-eq">ΔP = 1.000 × 9,81 × 5</span></span></div>
+          <div class="fsolve-step"><span class="fsolve-num">3</span><span>Calcule: <span class="fsolve-eq">1.000 × 9,81 = 9.810 → × 5 = 49.050 Pa</span></span></div>
+          <div class="fsolve-step fsolve-res"><span class="fsolve-num">4</span><span>Converta: <span class="fsolve-eq" style="color:var(--p)">49.050 ÷ 100.000 = 0,49 bar</span></span></div>
+          <div class="fsolve-hdr">Exemplo B — calcular h (nível): ΔP = 1,2 bar, petróleo (ρ = 820)</div>
+          <div class="fsolve-step"><span class="fsolve-num">1</span><span>Isole h: <span class="fsolve-eq">h = ΔP / (ρ × g)</span></span></div>
+          <div class="fsolve-step"><span class="fsolve-num">2</span><span>Converta ΔP: <span class="fsolve-eq">1,2 × 100.000 = 120.000 Pa</span></span></div>
+          <div class="fsolve-step"><span class="fsolve-num">3</span><span>Denominador: <span class="fsolve-eq">820 × 9,81 = 8.044,2</span></span></div>
+          <div class="fsolve-step fsolve-res"><span class="fsolve-num">4</span><span>Resultado: <span class="fsolve-eq" style="color:var(--g)">h = 120.000 / 8.044,2 = 14,92 m</span></span></div>
+          <div class="fsolve-tip">⚠ <strong>Armadilha:</strong> usar ρ da água (1000) para outro fluido. Se ρ mudar, o nível calculado fica errado — erro clássico em medição de nível por pressão com fluido de densidade variável.</div>
         </div>
       </div>
       <div class="fcard-right">
@@ -331,10 +358,23 @@
           <button class="btn btn-y fex-btn" onclick="toggleSolve('qv')">▶ Ver resolução</button>
         </div>
         <div class="fsolve" id="fsolve-qv">
-          <div class="fsolve-hdr">Exemplo: D = 10 cm → S = π·(0,05)² = 0,00785 m² · v = 2 m/s</div>
-          <div class="fsolve-step"><span class="fsolve-num">1</span><span>Fórmula: <span class="fsolve-eq">Qv = S × v</span></span></div>
-          <div class="fsolve-step"><span class="fsolve-num">2</span><span>Substituição: <span class="fsolve-eq">Qv = 0,00785 × 2</span></span></div>
-          <div class="fsolve-step fsolve-res"><span class="fsolve-num">3</span><span>Resultado: <span class="fsolve-eq" style="color:var(--y)">Qv = 0,0157 m³/s ≈ 942 L/min</span></span></div>
+          <div class="fsolve-method">
+            <div class="fsolve-method-title">📋 Como organizar antes de calcular</div>
+            <div class="fsolve-method-steps">
+              <div class="fsolve-mstep"><span class="fsolve-mbadge">1</span>Calcule a área: S = π × r² onde r = D/2 (use raio, não diâmetro!)</div>
+              <div class="fsolve-mstep"><span class="fsolve-mbadge">2</span>Converta D para metros: 10 cm → 0,10 m → r = 0,05 m</div>
+              <div class="fsolve-mstep"><span class="fsolve-mbadge">3</span>Para converter m³/s → L/min: multiplique por 60.000</div>
+            </div>
+          </div>
+          <div class="fsolve-hdr">Exemplo A — calcular Qv: D = 10 cm, v = 2 m/s</div>
+          <div class="fsolve-step"><span class="fsolve-num">1</span><span>Calcule S: <span class="fsolve-eq">r = 0,05 m → S = π × 0,05² = 0,00785 m²</span></span></div>
+          <div class="fsolve-step"><span class="fsolve-num">2</span><span>Aplique: <span class="fsolve-eq">Qv = 0,00785 × 2 = 0,01571 m³/s</span></span></div>
+          <div class="fsolve-step fsolve-res"><span class="fsolve-num">3</span><span>Converta: <span class="fsolve-eq" style="color:var(--y)">0,01571 × 60.000 = 942 L/min</span></span></div>
+          <div class="fsolve-hdr">Exemplo B — calcular v: Qv = 500 L/min, D = 8 cm</div>
+          <div class="fsolve-step"><span class="fsolve-num">1</span><span>Converta Qv: <span class="fsolve-eq">500 ÷ 60.000 = 0,00833 m³/s</span></span></div>
+          <div class="fsolve-step"><span class="fsolve-num">2</span><span>Calcule S: <span class="fsolve-eq">S = π × 0,04² = 0,005027 m²</span></span></div>
+          <div class="fsolve-step fsolve-res"><span class="fsolve-num">3</span><span>Resultado: <span class="fsolve-eq" style="color:var(--g)">v = Qv/S = 0,00833 / 0,005027 = 1,66 m/s</span></span></div>
+          <div class="fsolve-tip">⚠ <strong>Armadilha:</strong> usar D no lugar de r ao calcular a área. S = π×r², onde r = D/2. Errar isso quadruplica o erro na área!</div>
         </div>
       </div>
       <div class="fcard-right">
@@ -395,11 +435,23 @@
           <button class="btn btn-p fex-btn" onclick="toggleSolve('re')">▶ Ver resolução</button>
         </div>
         <div class="fsolve" id="fsolve-re">
-          <div class="fsolve-hdr">Exemplo: água · v=2 m/s · D=0,05 m · μ=0,001 Pa·s</div>
-          <div class="fsolve-step"><span class="fsolve-num">1</span><span>Fórmula: <span class="fsolve-eq">Re = (ρ × v × D) / μ</span></span></div>
-          <div class="fsolve-step"><span class="fsolve-num">2</span><span>Substituição: <span class="fsolve-eq">Re = (1000 × 2 × 0,05) / 0,001</span></span></div>
-          <div class="fsolve-step"><span class="fsolve-num">3</span><span>Numerador: <span class="fsolve-eq">1000 × 2 × 0,05 = 100</span></span></div>
-          <div class="fsolve-step fsolve-res"><span class="fsolve-num">4</span><span>Resultado: <span class="fsolve-eq" style="color:var(--r)">Re = 100 / 0,001 = 100.000 → Turbulento</span></span></div>
+          <div class="fsolve-method">
+            <div class="fsolve-method-title">📋 Como organizar antes de calcular</div>
+            <div class="fsolve-method-steps">
+              <div class="fsolve-mstep"><span class="fsolve-mbadge">1</span>Calcule o numerador: ρ × v × D (todos em SI: kg/m³, m/s, m)</div>
+              <div class="fsolve-mstep"><span class="fsolve-mbadge">2</span>Divida por μ (viscosidade dinâmica em Pa·s = kg/m·s)</div>
+              <div class="fsolve-mstep"><span class="fsolve-mbadge">3</span>Classifique: Re &lt; 2.300 = laminar · 2.300–4.000 = transição · &gt; 4.000 = turbulento</div>
+            </div>
+          </div>
+          <div class="fsolve-hdr">Exemplo A — água: ρ=1000, v=2 m/s, D=0,05 m, μ=0,001 Pa·s</div>
+          <div class="fsolve-step"><span class="fsolve-num">1</span><span>Numerador: <span class="fsolve-eq">1000 × 2 × 0,05 = 100</span></span></div>
+          <div class="fsolve-step"><span class="fsolve-num">2</span><span>Divida: <span class="fsolve-eq">Re = 100 / 0,001 = 100.000</span></span></div>
+          <div class="fsolve-step fsolve-res"><span class="fsolve-num">3</span><span>Resultado: <span class="fsolve-eq" style="color:var(--r)">Re = 100.000 → Turbulento</span></span></div>
+          <div class="fsolve-hdr">Exemplo B — óleo viscoso: ρ=900, v=0,5 m/s, D=0,03 m, μ=0,1 Pa·s</div>
+          <div class="fsolve-step"><span class="fsolve-num">1</span><span>Numerador: <span class="fsolve-eq">900 × 0,5 × 0,03 = 13,5</span></span></div>
+          <div class="fsolve-step"><span class="fsolve-num">2</span><span>Divida: <span class="fsolve-eq">Re = 13,5 / 0,1 = 135</span></span></div>
+          <div class="fsolve-step fsolve-res"><span class="fsolve-num">3</span><span>Resultado: <span class="fsolve-eq" style="color:var(--g)">Re = 135 → Laminar (óleo viscoso = escoamento suave)</span></span></div>
+          <div class="fsolve-tip">⚠ <strong>Armadilha:</strong> confundir μ dinâmica (Pa·s) com ν cinemática (m²/s). Se o enunciado der ν, use Re = v×D/ν (sem ρ). Água a 20°C: μ ≈ 0,001 Pa·s.</div>
         </div>
       </div>
       <div class="fcard-right">
@@ -463,11 +515,21 @@
           <button class="btn btn-r fex-btn" onclick="toggleSolve('ea')">▶ Ver resolução</button>
         </div>
         <div class="fsolve" id="fsolve-ea">
-          <div class="fsolve-hdr">Exemplo: Indicado = 6,12 bar · Real = 6,00 bar · FS = 10 bar · Span = 6 bar</div>
-          <div class="fsolve-step"><span class="fsolve-num">1</span><span>EA: <span class="fsolve-eq">EA = 6,12 − 6,00 = 0,12 bar</span></span></div>
-          <div class="fsolve-step"><span class="fsolve-num">2</span><span>%FS: <span class="fsolve-eq">(0,12 / 10) × 100 = 1,2 %FS</span></span></div>
-          <div class="fsolve-step"><span class="fsolve-num">3</span><span>%Span: <span class="fsolve-eq">(0,12 / 6) × 100 = 2,0 %Span</span></span></div>
-          <div class="fsolve-step fsolve-res"><span class="fsolve-num">4</span><span>%Leitura: <span class="fsolve-eq" style="color:var(--r)">(0,12 / 6,00) × 100 = 2,0 %Leit. — mesmo EA, % diferente!</span></span></div>
+          <div class="fsolve-method">
+            <div class="fsolve-method-title">📋 Como organizar antes de calcular</div>
+            <div class="fsolve-method-steps">
+              <div class="fsolve-mstep"><span class="fsolve-mbadge">1</span>Anote: Indicado (leitura), Real (padrão), FS (maior valor da escala) e Span (URV−LRV)</div>
+              <div class="fsolve-mstep"><span class="fsolve-mbadge">2</span>EA = Indicado − Real (pode ser + ou −; o sinal indica direção do desvio)</div>
+              <div class="fsolve-mstep"><span class="fsolve-mbadge">3</span>%FS÷FS · %Span÷Span · %Leitura÷Valor_lido — denominador diferente, % diferente</div>
+            </div>
+          </div>
+          <div class="fsolve-hdr">Exemplo — Indicado=6,12 bar, Real=6,00 bar, FS=10 bar, Span=6 bar</div>
+          <div class="fsolve-step"><span class="fsolve-num">1</span><span>EA: <span class="fsolve-eq">EA = 6,12 − 6,00 = +0,12 bar</span> (positivo = indica acima)</span></div>
+          <div class="fsolve-step"><span class="fsolve-num">2</span><span>%FS: <span class="fsolve-eq">(0,12 / 10) × 100 = 1,2%</span> ← divide pelo FS</span></div>
+          <div class="fsolve-step"><span class="fsolve-num">3</span><span>%Span: <span class="fsolve-eq">(0,12 / 6) × 100 = 2,0%</span> ← divide pelo Span</span></div>
+          <div class="fsolve-step fsolve-res"><span class="fsolve-num">4</span><span>%Leitura: <span class="fsolve-eq" style="color:var(--r)">(0,12 / 6,12) × 100 = 1,96%</span> ← divide pelo lido</span></div>
+          <div class="fsolve-step"><span class="fsolve-num">💡</span><span>Mesmo EA = 0,12 bar gera % diferente porque o denominador muda. Catálogos usam %FS. Re-range usa %Span.</span></div>
+          <div class="fsolve-tip">⚠ <strong>Armadilha:</strong> usar Span no lugar de FS. FS = valor máximo da escala. Span = URV−LRV. Se o zero não for suprimido, FS = Span. Se for, são diferentes.</div>
         </div>
       </div>
     </div>
@@ -496,11 +558,23 @@
           <button class="btn btn-r fex-btn" onclick="toggleSolve('tp')">▶ Ver resolução</button>
         </div>
         <div class="fsolve" id="fsolve-tp">
-          <div class="fsolve-hdr">Exemplo: Tipo K · T_quente = 500°C · T_fria = 25°C</div>
-          <div class="fsolve-step"><span class="fsolve-num">1</span><span>Fórmula: <span class="fsolve-eq">V = α × (T_q − T_f)</span></span></div>
-          <div class="fsolve-step"><span class="fsolve-num">2</span><span>ΔT: <span class="fsolve-eq">500 − 25 = 475 °C</span></span></div>
-          <div class="fsolve-step"><span class="fsolve-num">3</span><span>Substituição: <span class="fsolve-eq">V = 41 µV/°C × 475</span></span></div>
-          <div class="fsolve-step fsolve-res"><span class="fsolve-num">4</span><span>Resultado: <span class="fsolve-eq" style="color:var(--r)">V = 19.475 µV = 19,475 mV</span></span></div>
+          <div class="fsolve-method">
+            <div class="fsolve-method-title">📋 Como organizar antes de calcular</div>
+            <div class="fsolve-method-steps">
+              <div class="fsolve-mstep"><span class="fsolve-mbadge">1</span>Identifique o tipo → pegue α: Tipo K ≈ 41 µV/°C · Tipo J ≈ 53 µV/°C · Tipo E ≈ 76 µV/°C</div>
+              <div class="fsolve-mstep"><span class="fsolve-mbadge">2</span>ΔT = T_quente − T_fria (sempre subtraia a junta fria — nunca ignore!)</div>
+              <div class="fsolve-mstep"><span class="fsolve-mbadge">3</span>V em µV → divida por 1.000 para obter mV (unidade dos transmissores)</div>
+            </div>
+          </div>
+          <div class="fsolve-hdr">Exemplo A — calcular V: Tipo K, T_quente=500°C, T_fria=25°C</div>
+          <div class="fsolve-step"><span class="fsolve-num">1</span><span>ΔT: <span class="fsolve-eq">500 − 25 = 475 °C</span></span></div>
+          <div class="fsolve-step"><span class="fsolve-num">2</span><span>Aplique: <span class="fsolve-eq">V = 41 × 475 = 19.475 µV</span></span></div>
+          <div class="fsolve-step fsolve-res"><span class="fsolve-num">3</span><span>Converta: <span class="fsolve-eq" style="color:var(--r)">19.475 µV ÷ 1.000 = 19,475 mV</span></span></div>
+          <div class="fsolve-hdr">Exemplo B — calcular T_quente: V=25 mV, Tipo K, T_fria=20°C</div>
+          <div class="fsolve-step"><span class="fsolve-num">1</span><span>Converta: <span class="fsolve-eq">25 mV = 25.000 µV</span></span></div>
+          <div class="fsolve-step"><span class="fsolve-num">2</span><span>ΔT: <span class="fsolve-eq">ΔT = 25.000 / 41 = 609,8 °C</span></span></div>
+          <div class="fsolve-step fsolve-res"><span class="fsolve-num">3</span><span>T_quente: <span class="fsolve-eq" style="color:var(--g)">T = 609,8 + 20 = 629,8 °C</span> ← some a T_fria!</span></div>
+          <div class="fsolve-tip">⚠ <strong>Armadilha:</strong> esquecer de somar T_fria ao resultado. O termopar mede diferença — a junta fria precisa ser compensada. Transmissores fazem isso automaticamente; em cálculos manuais, você faz.</div>
         </div>
       </div>
     </div>
@@ -531,11 +605,25 @@
           <button class="btn btn-pu fex-btn" onclick="toggleSolve('pt')">▶ Ver resolução</button>
         </div>
         <div class="fsolve" id="fsolve-pt">
-          <div class="fsolve-hdr">Exemplo: T = 100°C · R₀ = 100 Ω · α = 0,00385</div>
-          <div class="fsolve-step"><span class="fsolve-num">1</span><span>Fórmula: <span class="fsolve-eq">R(T) = R₀ × (1 + α × T)</span></span></div>
-          <div class="fsolve-step"><span class="fsolve-num">2</span><span>Parte interna: <span class="fsolve-eq">α × T = 0,00385 × 100 = 0,385</span></span></div>
+          <div class="fsolve-method">
+            <div class="fsolve-method-title">📋 Como organizar antes de calcular</div>
+            <div class="fsolve-method-steps">
+              <div class="fsolve-mstep"><span class="fsolve-mbadge">1</span>R₀ = 100 Ω e α = 0,00385 Ω/°C são constantes fixas do PT100 — memorize</div>
+              <div class="fsolve-mstep"><span class="fsolve-mbadge">2</span>Resolva de dentro para fora: α×T primeiro, depois (1 + …), depois × R₀</div>
+              <div class="fsolve-mstep"><span class="fsolve-mbadge">3</span>Se deram R e pediram T: isole T = (R/R₀ − 1) / α</div>
+            </div>
+          </div>
+          <div class="fsolve-hdr">Exemplo A — calcular R: T = 100°C</div>
+          <div class="fsolve-step"><span class="fsolve-num">1</span><span>Fórmula: <span class="fsolve-eq">R = R₀ × (1 + α × T)</span></span></div>
+          <div class="fsolve-step"><span class="fsolve-num">2</span><span>α×T: <span class="fsolve-eq">0,00385 × 100 = 0,385</span></span></div>
           <div class="fsolve-step"><span class="fsolve-num">3</span><span>Parênteses: <span class="fsolve-eq">1 + 0,385 = 1,385</span></span></div>
-          <div class="fsolve-step fsolve-res"><span class="fsolve-num">4</span><span>Resultado: <span class="fsolve-eq" style="color:var(--pu)">R = 100 × 1,385 = 138,5 Ω</span></span></div>
+          <div class="fsolve-step fsolve-res"><span class="fsolve-num">4</span><span>Resultado: <span class="fsolve-eq" style="color:var(--pu)">R = 100 × 1,385 = 138,5 Ω</span> ← valor da tabela PT100!</span></div>
+          <div class="fsolve-hdr">Exemplo B — calcular T: R medida = 121,3 Ω</div>
+          <div class="fsolve-step"><span class="fsolve-num">1</span><span>Isole T: <span class="fsolve-eq">T = (R/R₀ − 1) / α</span></span></div>
+          <div class="fsolve-step"><span class="fsolve-num">2</span><span>R/R₀: <span class="fsolve-eq">121,3 / 100 = 1,213</span></span></div>
+          <div class="fsolve-step"><span class="fsolve-num">3</span><span>Subtraia 1: <span class="fsolve-eq">1,213 − 1 = 0,213</span></span></div>
+          <div class="fsolve-step fsolve-res"><span class="fsolve-num">4</span><span>T: <span class="fsolve-eq" style="color:var(--g)">T = 0,213 / 0,00385 = 55,3 °C</span></span></div>
+          <div class="fsolve-tip">⚠ <strong>Armadilha:</strong> a fórmula R = R₀×(1+α×T) é uma aproximação linear. Para maior precisão use Callendar-Van Dusen: R = R₀×[1+A×T+B×T²]. Em provas de nível básico, a linear é aceita.</div>
         </div>
       </div>
     </div>
@@ -1481,6 +1569,24 @@
 <div class="screen" id="screen-changelog">
   <div class="h1">Atualizações</div>
   <div class="sub">O que mudou em cada versão do SENAI · MVF</div>
+
+  <!-- v5.6 -->
+  <div class="cl-entry">
+    <div class="cl-dot cl-dot-g"></div>
+    <div class="cl-body">
+      <div class="cl-header">
+        <span class="cl-tag" style="background:rgba(0,255,157,0.10);color:var(--g);border:1px solid rgba(0,255,157,0.3)">v5.6</span>
+        <span class="cl-title">Passo a Passo e Dicas de Resolução</span>
+        <span class="cl-date">Mar 2026</span>
+      </div>
+      <ul class="cl-list">
+        <li>Cada fórmula visual agora tem um guia de como organizar as variáveis antes de calcular</li>
+        <li>Dois exemplos numéricos completos por fórmula — um calculando a variável principal, outro isolando uma variável diferente</li>
+        <li>Caixa de armadilha ⚠ em cada fórmula com os erros mais frequentes em prova (unidades erradas, raio vs diâmetro, junta fria esquecida, etc.)</li>
+        <li>Fórmulas: P=F/A · Stevin · Vazão Qv · Reynolds · Erros EA/%FS/%Span · Termopar Seebeck · PT100 (sentido direto e inverso)</li>
+      </ul>
+    </div>
+  </div>
 
   <!-- v5.5 -->
   <div class="cl-entry">
