@@ -381,141 +381,175 @@ function contReset(){
   document.getElementById('btn-csolve').textContent='▶ Passo a passo';
   contCalcRT();
 }
+/* ── Simulador 2: Bernoulli — variável desconhecida selecionável ── */
+let bernTarget = 'p2';
 
-/* ── Simulador 2: Bernoulli — tempo real ── */
+function setBernTarget(target){
+  bernTarget = target;
+  ['p2','v2','p1','v1'].forEach(function(t){
+    const btn=document.getElementById('bsf-'+t);
+    if(btn) btn.classList.toggle('bsf-active', t===target);
+  });
+  const resultOf={'p2':['b-p2-input'],'v2':['b-v2'],'p1':['b-p1'],'v1':['b-v1']};
+  ['b-v1','b-p1','b-v2','b-p2-input'].forEach(function(id){
+    const el=document.getElementById(id); if(!el) return;
+    const isResult=(resultOf[target]||[]).includes(id);
+    el.disabled=isResult; el.style.opacity=isResult?'0.5':'1'; el.style.color=isResult?'var(--y)':'';
+  });
+  const lblMap={
+    'p2':{'lbl-b-p2':'P₂ (Pa) — <span style="color:var(--y)">calculado</span>','lbl-b-v2':'V₂ (m/s)','lbl-b-v1':'V₁ (m/s)','lbl-b-p1':'P₁ (Pa)'},
+    'v2':{'lbl-b-v2':'V₂ (m/s) — <span style="color:var(--y)">calculado</span>','lbl-b-p2':'P₂ (Pa)','lbl-b-v1':'V₁ (m/s)','lbl-b-p1':'P₁ (Pa)'},
+    'p1':{'lbl-b-p1':'P₁ (Pa) — <span style="color:var(--y)">calculado</span>','lbl-b-p2':'P₂ (Pa)','lbl-b-v2':'V₂ (m/s)','lbl-b-v1':'V₁ (m/s)'},
+    'v1':{'lbl-b-v1':'V₁ (m/s) — <span style="color:var(--y)">calculado</span>','lbl-b-p2':'P₂ (Pa)','lbl-b-v2':'V₂ (m/s)','lbl-b-p1':'P₁ (Pa)'},
+  };
+  const map=lblMap[target]||{};
+  Object.keys(map).forEach(function(id){const el=document.getElementById(id);if(el)el.innerHTML=map[id];});
+  const resLbls={'p2':'P₂ — Pressão saída','v2':'V₂ — Velocidade saída','p1':'P₁ — Pressão entrada','v1':'V₁ — Velocidade entrada'};
+  const rl=document.querySelector('#b-result-box .sim-result-lbl');
+  if(rl) rl.textContent=resLbls[target]||'Resultado';
+  bernCalcRT();
+}
+
 function bernCalcRT(){
-  const rho=inp('b-rho'),v1=inp('b-v1'),p1=inp('b-p1'),
-        z1=inp('b-z1')||0, v2=inp('b-v2'), z2=inp('b-z2')||0, g=9.81;
+  const g=9.81, rho=inp('b-rho');
+  const z1=inp('b-z1')||0, z2=inp('b-z2')||0;
   const err=document.getElementById('b-err');
   const alertEl=document.getElementById('b-alert');
   err.style.display='none'; alertEl.style.display='none';
+  function setRes(txt,sub){document.getElementById('b-p2-prev').textContent=txt;document.getElementById('b-bar-prev').textContent=sub||'';}
 
-  // P1 hint
-  const p1hint=document.getElementById('b-p1-hint');
-  if(p1hint&&!isNaN(p1)) p1hint.textContent=`${p1.toFixed(0)} Pa = ${(p1/1e5).toFixed(4)} bar`;
+  if(bernTarget==='p2'){
+    const v1=inp('b-v1'),p1=inp('b-p1'),v2=inp('b-v2');
+    if([rho,v1,p1,v2].some(isNaN)||rho<=0||v1<0||v2<0){setRes('P₂ = ?','');return;}
+    const tCin=rho*(v1**2-v2**2)/2,tPot=rho*g*(z1-z2),p2=p1+tCin+tPot,dp=p1-p2;
+    setRes('P₂ = '+p2.toFixed(0)+' Pa',(p2/1e5).toFixed(4)+' bar');
+    const pi=document.getElementById('b-p2-input');if(pi)pi.value=p2.toFixed(0);
+    _updP1hint(p1);updateBernSVG(v1,v2,p1,p2,dp);
+    buildBernSolveP2(rho,v1,p1,z1,v2,z2,g,tCin,tPot,p2,dp);setBernAlerts(p2,dp,v1,v2,rho,alertEl);
 
-  if([rho,v1,p1,v2].some(isNaN)||rho<=0||v1<0||v2<0){
-    document.getElementById('b-p2-prev').textContent='P₂ = ?';
-    document.getElementById('b-bar-prev').textContent='';
-    return;
+  }else if(bernTarget==='v2'){
+    const v1=inp('b-v1'),p1=inp('b-p1'),p2=inp('b-p2-input');
+    if([rho,v1,p1,p2].some(isNaN)||rho<=0||v1<0){setRes('V₂ = ?','');return;}
+    const inner=v1**2+2*(p1-p2)/rho+2*g*(z1-z2);
+    if(inner<0){err.textContent='Impossível: combinação resulta em V₂² negativo.';err.style.display='block';return;}
+    const v2=Math.sqrt(inner),dp=p1-p2;
+    setRes('V₂ = '+v2.toFixed(4)+' m/s','velocidade na saída');
+    const vi=document.getElementById('b-v2');if(vi&&vi.disabled)vi.value=v2.toFixed(4);
+    _updP1hint(p1);updateBernSVG(v1,v2,p1,p2,dp);
+    buildBernSolveV2(rho,v1,p1,z1,p2,z2,g,v2);setBernAlerts(p2,dp,v1,v2,rho,alertEl);
+
+  }else if(bernTarget==='p1'){
+    const v1=inp('b-v1'),v2=inp('b-v2'),p2=inp('b-p2-input');
+    if([rho,v1,v2,p2].some(isNaN)||rho<=0||v1<0||v2<0){setRes('P₁ = ?','');return;}
+    const tCin=rho*(v2**2-v1**2)/2,tPot=rho*g*(z2-z1),p1=p2+tCin+tPot,dp=p1-p2;
+    setRes('P₁ = '+p1.toFixed(0)+' Pa',(p1/1e5).toFixed(4)+' bar');
+    const pi=document.getElementById('b-p1');if(pi&&pi.disabled)pi.value=p1.toFixed(0);
+    const ph=document.getElementById('b-p1-hint');if(ph)ph.textContent=p1.toFixed(0)+' Pa = '+(p1/1e5).toFixed(4)+' bar';
+    updateBernSVG(v1,v2,p1,p2,dp);
+    buildBernSolveP1(rho,v1,p1,z1,v2,p2,z2,g,tCin,tPot,dp);setBernAlerts(p2,dp,v1,v2,rho,alertEl);
+
+  }else if(bernTarget==='v1'){
+    const p1=inp('b-p1'),v2=inp('b-v2'),p2=inp('b-p2-input');
+    if([rho,p1,v2,p2].some(isNaN)||rho<=0||v2<0){setRes('V₁ = ?','');return;}
+    const inner=v2**2+2*(p2-p1)/rho+2*g*(z2-z1);
+    if(inner<0){err.textContent='Impossível: combinação resulta em V₁² negativo.';err.style.display='block';return;}
+    const v1=Math.sqrt(inner),dp=p1-p2;
+    setRes('V₁ = '+v1.toFixed(4)+' m/s','velocidade na entrada');
+    const vi=document.getElementById('b-v1');if(vi&&vi.disabled)vi.value=v1.toFixed(4);
+    _updP1hint(p1);updateBernSVG(v1,v2,p1,p2,dp);
+    buildBernSolveV1(rho,v1,p1,z1,v2,p2,z2,g);setBernAlerts(p2,dp,v1,v2,rho,alertEl);
   }
-
-  const tCin=rho*(v1**2-v2**2)/2, tPot=rho*g*(z1-z2), p2=p1+tCin+tPot, dp=p1-p2;
-
-  document.getElementById('b-p2-prev').textContent=`P₂ = ${p2.toFixed(0)} Pa`;
-  document.getElementById('b-bar-prev').textContent=`${(p2/1e5).toFixed(4)} bar`;
-
-  // Alertas contextuais
-  const alerts=[];
-  if(p2<0) alerts.push(['danger','⚠ Cavitação: P₂ negativo! O fluido vaporiza criando bolhas que danificam tubulações e bombas. Aumente P₁ ou reduza ΔV.']);
-  if(p2<2300&&p2>=0) alerts.push(['warn','⚠ P₂ muito baixa (< 0,023 bar) — risco real de cavitação. Revise as condições de operação.']);
-  if(dp<0) alerts.push(['info','ℹ ΔP negativo: P₂ > P₁. Isso acontece quando V₂ < V₁ ou h₂ < h₁ — o fluido desacelerou ou desceu.']);
-  if(v2>0&&v1>0){
-    const re=rho*Math.max(v1,v2)*0.05/0.001;
-    if(re<2300) alerts.push(['info',`ℹ Reynolds estimado ≈ ${re.toFixed(0)} → Escoamento laminar. Bernoulli é válido, mas perdas por viscosidade podem ser significativas.`]);
-  }
-  if(alerts.length>0){
-    alertEl.className='sim-alert-ctx sim-alert-'+alerts[0][0];
-    alertEl.innerHTML=alerts.map(([,m])=>m).join('<br>');
-    alertEl.style.display='block';
-  }
-
-  updateBernSVG(v1,v2,p1,p2,dp,z1,z2);
-  buildBernSolve(rho,v1,p1,z1,v2,z2,g,tCin,tPot,p2,dp);
 }
 
-function updateBernSVG(v1,v2,p1,p2,dp,z1,z2){
-  const upd=(id,txt)=>{const el=document.getElementById(id);if(el)el.textContent=txt;};
-  upd('bp1-val',(p1/1e5).toFixed(3)+' bar');
+function _updP1hint(p1){
+  const h=document.getElementById('b-p1-hint');
+  if(h&&!isNaN(p1)&&bernTarget!=='p1')h.textContent=p1.toFixed(0)+' Pa = '+(p1/1e5).toFixed(4)+' bar';
+}
+function setBernAlerts(p2,dp,v1,v2,rho,alertEl){
+  const al=[];
+  if(!isNaN(p2)&&p2<0)al.push(['danger','⚠ Cavitação: pressão negativa! O fluido vaporiza, danificando bombas e tubulações.']);
+  if(!isNaN(p2)&&p2<2300&&p2>=0)al.push(['warn','⚠ Pressão muito baixa — risco de cavitação.']);
+  if(!isNaN(dp)&&dp<0)al.push(['info','ℹ ΔP negativo: pressão de saída maior que a de entrada.']);
+  if(!isNaN(v1)&&!isNaN(v2)&&v1>0&&v2>0&&rho>0){const re=rho*Math.max(v1,v2)*0.05/0.001;if(re<2300)al.push(['info','ℹ Reynolds ≈ '+re.toFixed(0)+' → Laminar.']);}
+  if(!isNaN(v2)&&v2>15)al.push(['warn','⚠ V₂ > 15 m/s — risco de erosão e ruído.']);
+  if(al.length){alertEl.className='sim-alert-ctx sim-alert-'+al[0][0];alertEl.innerHTML=al.map(a=>a[1]).join('<br>');alertEl.style.display='block';}
+}
+function updateBernSVG(v1,v2,p1,p2,dp){
+  function upd(id,txt){const el=document.getElementById(id);if(el)el.textContent=txt;}
+  upd('bp1-val',isNaN(p1)?'?':(p1/1e5).toFixed(3)+' bar');
   upd('bp2-val',isNaN(p2)?'?':(p2/1e5).toFixed(3)+' bar');
-  upd('bv1-lbl','V₁='+v1+' m/s');
-  upd('bv2-lbl','V₂='+v2+' m/s');
+  upd('bv1-lbl','V₁='+(isNaN(v1)?'?':Number(v1).toFixed(2))+' m/s');
+  upd('bv2-lbl','V₂='+(isNaN(v2)?'?':Number(v2).toFixed(2))+' m/s');
   upd('bdp-lbl',isNaN(dp)?'ΔP = ?':'ΔP = '+(dp/1e5).toFixed(3)+' bar');
-  // Escala seta V2 proporcional
   const sv2=document.getElementById('bv2-line');
-  if(sv2&&!isNaN(v2)&&v2>=0){
-    const ratio=Math.min(Math.max(v2/Math.max(v1,0.1),0.3),5);
-    const len=Math.min(ratio*90,200);
-    sv2.setAttribute('x2',String(225+len));
-  }
-  // Cor P2 label
+  if(sv2&&!isNaN(v2)&&!isNaN(v1)&&v2>=0){const r=Math.min(Math.max(v2/Math.max(v1||1,0.1),0.3),5);sv2.setAttribute('x2',String(225+Math.min(r*90,200)));}
   const bp2lbl=document.getElementById('bp2-lbl');
-  if(bp2lbl) bp2lbl.setAttribute('fill',isNaN(p2)||p2<0?'var(--r)':'var(--g)');
+  if(bp2lbl)bp2lbl.setAttribute('fill',isNaN(p2)||p2<0?'var(--r)':'var(--g)');
 }
-
-function buildBernSolve(rho,v1,p1,z1,v2,z2,g,tCin,tPot,p2,dp){
-  const body=document.getElementById('solve-b-body');
-  if(!body)return;
-  const hz=(z1===z2);
+function _bsolveBody(h){const b=document.getElementById('solve-b-body');if(b)b.innerHTML=h;}
+function buildBernSolveP2(rho,v1,p1,z1,v2,z2,g,tCin,tPot,p2,dp){
+  const hz=(z1===z2);let h='';
+  h+=stepG('1','Dados',valGrid([['\u03c1',rho+' kg/m³','t2'],['V₁',v1+' m/s','p'],['V₂',v2+' m/s','g'],['P₁',(p1/1e5).toFixed(3)+' bar','p']],4));
+  h+=stepG('2','Fórmula',eq('P₂ = P₁ + ρ·(V₁²−V₂²)/2 + ρ·g·(h₁−h₂)',true));
+  h+=stepG('3','Cinético',eq(rho+'×('+v1+'²−'+v2+'²)/2 = '+tCin.toFixed(2)+' Pa',true));
+  h+=stepG('4','Potencial',hz?eq('h₁=h₂ → 0',true):eq(rho+'×'+g+'×('+(z1-z2)+') = '+tPot.toFixed(2)+' Pa',true));
+  h+=stepG('5','Resultado','<div class="sim-res-final"><div><div class="sim-res-label">P₂</div><div class="sim-res-sub">'+(p2/1e5).toFixed(4)+' bar</div></div><div style="text-align:right"><div class="sim-res-value" style="color:'+(p2<0?'var(--r)':'var(--g)')+'">'+p2.toFixed(0)+' Pa</div></div></div>');
+  _bsolveBody(h);
+}
+function buildBernSolveV2(rho,v1,p1,z1,p2,z2,g,v2){
   let h='';
-  h+=stepG('1','Dados conhecidos',
-    valGrid([['ρ',rho+' kg/m³','t2'],['V₁',v1+' m/s','p'],['V₂',v2+' m/s','g'],['P₁',(p1/1e5).toFixed(3)+' bar','p'],['Δh',(z1-z2)+' m','t2']],5));
-  h+=stepG('2','Equação de Bernoulli (isolando P₂)',
-    eq('P₂ = P₁ + ρ·(v₁²−v₂²)/2 + ρ·g·(h₁−h₂)',true));
-  h+=stepG('3','Termo cinético — ρ·(v₁²−v₂²)/2',
-    eq(`${rho} × (${v1}² − ${v2}²) / 2 = ${rho} × (${v1**2} − ${v2**2}) / 2 = ${tCin.toFixed(2)} Pa`,true));
-  h+=stepG('4','Termo potencial — ρ·g·(h₁−h₂)',
-    hz ? eq('h₁ = h₂ → termo potencial = 0',true)
-       : eq(`${rho} × ${g} × (${z1} − ${z2}) = ${tPot.toFixed(2)} Pa`,true));
-  h+=stepG('5','Substituição final',
-    eq(`P₂ = ${p1} + (${tCin.toFixed(2)}) + (${tPot.toFixed(2)}) = ${p2.toFixed(2)} Pa`,true));
-  h+=stepG('6','Resultado',
-    `<div class="sim-res-final">
-      <div><div class="sim-res-label">P₂ — Pressão na Seção 2</div><div class="sim-res-sub">${(p2/1000).toFixed(2)} kPa · ${(p2/1e5).toFixed(4)} bar</div></div>
-      <div style="text-align:right"><div class="sim-res-value" style="color:${p2<0?'var(--r)':'var(--g)'}">${p2.toFixed(0)} Pa</div></div>
-    </div>
-    <div class="sim-dp-grid">
-      <div class="sim-dp-cell"><div class="sim-dp-lbl">ΔP = P₁ − P₂</div><div class="sim-dp-val" style="color:${dp>=0?'var(--y)':'var(--r)'}">${dp.toFixed(0)} Pa</div></div>
-      <div class="sim-dp-cell"><div class="sim-dp-lbl">Variação</div><div class="sim-dp-val" style="color:${p2<p1?'var(--r)':'var(--g)'}">${p2<p1?'Pressão caiu ↓':'Pressão subiu ↑'}</div></div>
-    </div>
-    ${p2<0?'<div class="sim-alert-ctx sim-alert-danger" style="margin-top:8px">⚠ P₂ negativo → cavitação. O fluido vaporiza localmente danificando o sistema.</div>':''}`);
-  body.innerHTML=h;
+  h+=stepG('1','Dados',valGrid([['\u03c1',rho+' kg/m³','t2'],['V₁',v1+' m/s','p'],['P₁',(p1/1e5).toFixed(3)+' bar','p'],['P₂',(p2/1e5).toFixed(3)+' bar','g']],4));
+  h+=stepG('2','Fórmula',eq('V₂ = √[ V₁² + 2(P₁−P₂)/ρ + 2g·(h₁−h₂) ]',true));
+  h+=stepG('3','Resultado','<div class="sim-res-final"><div class="sim-res-label">V₂</div><div style="text-align:right"><div class="sim-res-value">'+v2.toFixed(4)+' m/s</div></div></div>');
+  _bsolveBody(h);
 }
-
+function buildBernSolveP1(rho,v1,p1,z1,v2,p2,z2,g,tCin,tPot,dp){
+  let h='';
+  h+=stepG('1','Dados',valGrid([['\u03c1',rho+' kg/m³','t2'],['V₁',v1+' m/s','p'],['V₂',v2+' m/s','g'],['P₂',(p2/1e5).toFixed(3)+' bar','g']],4));
+  h+=stepG('2','Fórmula',eq('P₁ = P₂ + ρ·(V₂²−V₁²)/2 + ρ·g·(h₂−h₁)',true));
+  h+=stepG('3','Substituição',eq('P₁ = '+p2+' + '+tCin.toFixed(2)+' + '+tPot.toFixed(2)+' = '+p1.toFixed(2)+' Pa',true));
+  h+=stepG('4','Resultado','<div class="sim-res-final"><div class="sim-res-label">P₁</div><div style="text-align:right"><div class="sim-res-value sim-res-value-p">'+p1.toFixed(0)+' Pa</div><div class="sim-res-sub">'+(p1/1e5).toFixed(4)+' bar</div></div></div>');
+  _bsolveBody(h);
+}
+function buildBernSolveV1(rho,v1,p1,z1,v2,p2,z2,g){
+  let h='';
+  h+=stepG('1','Dados',valGrid([['\u03c1',rho+' kg/m³','t2'],['V₂',v2+' m/s','g'],['P₁',(p1/1e5).toFixed(3)+' bar','p'],['P₂',(p2/1e5).toFixed(3)+' bar','g']],4));
+  h+=stepG('2','Fórmula',eq('V₁ = √[ V₂² + 2(P₂−P₁)/ρ + 2g·(h₂−h₁) ]',true));
+  h+=stepG('3','Resultado','<div class="sim-res-final"><div class="sim-res-label">V₁</div><div style="text-align:right"><div class="sim-res-value sim-res-value-p">'+v1.toFixed(4)+' m/s</div></div></div>');
+  _bsolveBody(h);
+}
 function importV2(){
   const d1=inp('c-d1'),v1=inp('c-v1'),d2=inp('c-d2');
   if([d1,v1,d2].some(isNaN)||d1<=0||d2<=0){alert('Preencha o Simulador 1 primeiro.');return;}
   const a1=Math.PI*(d1/2)**2,a2=Math.PI*(d2/2)**2;
-  document.getElementById('b-v2').value=(v1*(a1/a2)).toFixed(4);
+  const el=document.getElementById('b-v2');if(el)el.value=(v1*(a1/a2)).toFixed(4);
   bernCalcRT();
 }
-
 function bernReset(){
-  ['b-rho','b-v1','b-p1','b-z1','b-v2','b-z2'].forEach((id,i)=>
-    document.getElementById(id).value=['1000','2','220000','0','8','0'][i]);
+  ['b-rho','b-v1','b-p1','b-z1','b-v2','b-z2'].forEach((id,i)=>document.getElementById(id).value=['1000','2','220000','0','8','0'][i]);
+  const p2i=document.getElementById('b-p2-input');if(p2i)p2i.value='190000';
   document.getElementById('b-err').style.display='none';
   document.getElementById('b-alert').style.display='none';
   document.getElementById('b-p2-prev').textContent='P₂ = ?';
   document.getElementById('b-bar-prev').textContent='';
   document.getElementById('solve-b').style.display='none';
   document.getElementById('btn-bsolve').textContent='▶ Passo a passo';
-  bernCalcRT();
+  setBernTarget('p2');
 }
-
-/* ── Exemplos prontos ── */
 function exLoad(d1,v1,p1,z1,d2,z2){
-  document.getElementById('c-d1').value=d1;
-  document.getElementById('c-v1').value=v1;
-  document.getElementById('c-d2').value=d2;
-  document.getElementById('b-v1').value=v1;
-  document.getElementById('b-p1').value=p1;
-  document.getElementById('b-z1').value=z1;
-  document.getElementById('b-z2').value=z2;
-  document.getElementById('b-rho').value=1000;
+  ['c-d1','c-v1','c-d2'].forEach((id,i)=>document.getElementById(id).value=[d1,v1,d2][i]);
+  ['b-v1','b-p1','b-z1','b-z2','b-rho'].forEach((id,i)=>document.getElementById(id).value=[v1,p1,z1,z2,1000][i]);
   const a1=Math.PI*(d1/2)**2,a2=Math.PI*(d2/2)**2;
-  document.getElementById('b-v2').value=(v1*(a1/a2)).toFixed(4);
-  contCalcRT();bernCalcRT();
+  const v2el=document.getElementById('b-v2');if(v2el)v2el.value=(v1*(a1/a2)).toFixed(4);
+  contCalcRT();setBernTarget('p2');
+}
+function exLoadBern(rho,v1,z1,p1,v2,z2){
+  ['b-rho','b-v1','b-p1','b-z1','b-v2','b-z2'].forEach((id,i)=>document.getElementById(id).value=[rho,v1,p1,z1,v2,z2][i]);
+  setBernTarget('p2');
 }
 
-function exLoadBern(rho,v1,z1,p1,v2,z2){
-  document.getElementById('b-rho').value=rho;
-  document.getElementById('b-v1').value=v1;
-  document.getElementById('b-p1').value=p1;
-  document.getElementById('b-z1').value=z1;
-  document.getElementById('b-v2').value=v2;
-  document.getElementById('b-z2').value=z2;
-  bernCalcRT();
-}
+
+
 
 /* ─ Resolução fórmulas visuais (botão "Ver resolução") ─ */
 function toggleSolve(id){
@@ -567,5 +601,20 @@ function toggleSolve(id){
 /* ─ Init simuladores em tempo real no load ─ */
 window.addEventListener('DOMContentLoaded',()=>{
   contCalcRT();
-  bernCalcRT();
+  setBernTarget('p2');
+  // Contadores dinâmicos do dashboard
+  const nc=document.getElementById('dash-cards');
+  const nq=document.getElementById('dash-qs');
+  const fcmn=document.getElementById('dash-fc-mn');
+  const qzmn=document.getElementById('dash-qz-mn');
+  if(typeof CARDS!=='undefined'){
+    const cc=CARDS.length;
+    if(nc) nc.textContent=cc;
+    if(fcmn) fcmn.textContent=cc+' cards';
+  }
+  if(typeof QS!=='undefined'){
+    const qc=QS.length;
+    if(nq) nq.textContent=qc;
+    if(qzmn) qzmn.textContent=qc+' questões';
+  }
 });
