@@ -17,7 +17,6 @@
     14. Responsivo Mobile (≤900px) e Desktop médio (901–1300px)
 ════════════════════════════════════════════════════════════════ */
 
-
 /* ── 1. VARIÁVEIS E RESET ─────────────────────────────────────── */
 *{box-sizing:border-box;margin:0;padding:0}
 
@@ -805,4 +804,124 @@ html,body{
   font-family:var(--fm); font-size:12px;
   background:var(--bg4); padding:1px 5px; border-radius:3px;
   color:var(--p);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FASE 3 — Conteúdo: analogias, mapa de variáveis, cotidiano
+═══════════════════════════════════════════════════════════════ */
+
+/* Caixa de analogia dentro do hl */
+.analogy-box{
+  margin-top:8px; padding:8px 10px;
+  background:var(--bg); border-radius:6px;
+  font-size:12px; color:var(--t2); line-height:1.55;
+  border-left:3px solid rgba(255,255,255,0.12);
+}
+
+/* Mapa de variáveis */
+.varmap-card{
+  border-radius:var(--radius); padding:14px 16px;
+  border:1px solid var(--bd); background:var(--bg4);
+}
+.varmap-p{ border-color:rgba(0,212,255,0.25) }
+.varmap-g{ border-color:rgba(0,255,157,0.25) }
+.varmap-y{ border-color:rgba(255,192,64,0.25) }
+.varmap-pu{ border-color:rgba(192,132,255,0.25) }
+.varmap-icon{
+  font-size:22px; margin-bottom:6px;
+}
+.varmap-name{
+  font-size:14px; font-weight:600; color:var(--t1); margin-bottom:6px;
+}
+.varmap-p .varmap-name{ color:var(--p) }
+.varmap-g .varmap-name{ color:var(--g) }
+.varmap-y .varmap-name{ color:var(--y) }
+.varmap-pu .varmap-name{ color:var(--pu) }
+.varmap-where{
+  font-size:11px; color:var(--t3); line-height:1.5; margin-bottom:4px;
+}
+.varmap-where::before{ content:'📍 '; }
+.varmap-why{
+  font-size:11px; color:var(--t2); line-height:1.5;
+}
+.varmap-why::before{ content:'💡 '; }
+
+/* Cards "Você já viu isso" */
+.everyday-card{
+  background:var(--bg3); border:1px solid var(--bd);
+  border-radius:var(--radius); padding:16px;
+  box-shadow:var(--shadow);
+}
+.everyday-p{ border-top:3px solid var(--p) }
+.everyday-g{ border-top:3px solid var(--g) }
+.everyday-y{ border-top:3px solid var(--y) }
+.everyday-pu{ border-top:3px solid var(--pu) }
+.everyday-icon{ font-size:26px; margin-bottom:6px }
+.everyday-title{
+  font-size:13px; font-weight:600; color:var(--t1);
+  margin-bottom:8px;
+}
+.everyday-body{
+  font-size:12px; color:var(--t2); line-height:1.65;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FASE 4 — Dashboard + Seletor Bernoulli
+═══════════════════════════════════════════════════════════════ */
+
+/* Dashboard stat cards clickáveis */
+.dash-stat{ cursor:pointer }
+.dash-stat:hover{ border-color:var(--p); transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,212,255,0.12) }
+
+/* Acesso rápido */
+.dash-quick{
+  display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px;
+}
+.dash-qbtn{
+  padding:8px 16px; border-radius:8px; font-size:13px; font-weight:500;
+  cursor:pointer; border:1px solid var(--bd); background:var(--bg4);
+  color:var(--t2); font-family:var(--f);
+}
+.dash-qbtn:hover{ transform:translateY(-1px); box-shadow:0 3px 10px rgba(0,0,0,0.3) }
+.dash-qbtn-p{ border-color:rgba(0,212,255,0.35); color:var(--p); background:rgba(0,212,255,0.06) }
+.dash-qbtn-g{ border-color:rgba(0,255,157,0.35); color:var(--g); background:rgba(0,255,157,0.06) }
+.dash-qbtn-y{ border-color:rgba(255,192,64,0.35); color:var(--y); background:rgba(255,192,64,0.06) }
+.dash-qbtn-pu{ border-color:rgba(192,132,255,0.35); color:var(--pu); background:rgba(192,132,255,0.06) }
+
+/* Seletor de variável desconhecida — Bernoulli */
+.bern-solve-for{
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+  background:var(--bg4); border:1px solid var(--bd);
+  border-radius:8px; padding:10px 14px; margin-bottom:14px;
+}
+.bern-sf-lbl{
+  font-size:11px; font-weight:600; text-transform:uppercase;
+  letter-spacing:1.5px; color:var(--t3); font-family:var(--fm);
+  white-space:nowrap;
+}
+.bern-sf-btns{ display:flex; gap:6px; flex-wrap:wrap; flex:1 }
+.bern-sf-btn{
+  padding:7px 14px; border-radius:7px;
+  border:1px solid var(--bd); background:var(--bg3);
+  color:var(--t2); cursor:pointer; font-size:13px; font-weight:500;
+  font-family:var(--f); display:flex; flex-direction:column;
+  align-items:center; gap:1px;
+}
+.bern-sf-btn:hover{ border-color:var(--g); color:var(--t1) }
+.bern-sf-btn.bsf-active{
+  background:rgba(0,255,157,0.1); border-color:var(--g);
+  color:var(--g); font-weight:700;
+}
+.bern-sf-sub{
+  font-size:9px; color:var(--t3); font-family:var(--fm);
+  font-weight:400; letter-spacing:.3px;
+}
+.bern-sf-btn.bsf-active .bern-sf-sub{ color:var(--g); opacity:.7 }
+
+/* Mobile ajustes fase 4 */
+@media(max-width:900px){
+  .dash-quick{ gap:6px }
+  .dash-qbtn{ padding:7px 12px; font-size:12px }
+  .bern-sf-btns{ gap:5px }
+  .bern-sf-btn{ padding:6px 10px; font-size:12px }
 }
