@@ -82,28 +82,59 @@
 ════════════════════════════════════════════════════ -->
 <div class="screen active" id="screen-home">
   <div class="h1">Dashboard de Estudos</div>
-  <div class="sub">Medição de Variáveis Físicas Industriais · SENAI · v5.0</div>
+  <div class="sub">Medição de Variáveis Físicas Industriais · SENAI · v5.4</div>
+
+  <!-- Contadores dinâmicos -->
   <div class="grid g4" style="margin-bottom:20px">
-    <div class="card"><div class="sc">Módulos</div><div class="sv">12</div><div class="ss">+Temperatura +Calibração</div></div>
-    <div class="card"><div class="sc">Flashcards</div><div class="sv">54</div><div class="ss">8 categorias · com filtros</div></div>
-    <div class="card"><div class="sc">Questões Quiz</div><div class="sv">38</div><div class="ss">Temperatura · Calibração · Nível</div></div>
-    <div class="card"><div class="sc">Calculadoras</div><div class="sv">9</div><div class="ss">+Conversor de temperatura</div></div>
+    <div class="card dash-stat" onclick="S('m1')">
+      <div class="sc">Módulos</div>
+      <div class="sv">13</div>
+      <div class="ss">Teoria · Variáveis · Prática</div>
+    </div>
+    <div class="card dash-stat" onclick="S('flash')">
+      <div class="sc">Flashcards</div>
+      <div class="sv" id="dash-cards">66</div>
+      <div class="ss" id="dash-cards-sub">8 categorias · com filtros</div>
+    </div>
+    <div class="card dash-stat" onclick="S('quiz')">
+      <div class="sc">Questões Quiz</div>
+      <div class="sv" id="dash-qs">46</div>
+      <div class="ss">Pressão · Vazão · Calibração</div>
+    </div>
+    <div class="card dash-stat" onclick="S('calc')">
+      <div class="sc">Calculadoras</div>
+      <div class="sv">9</div>
+      <div class="ss">Stevin · Reynolds · Torricelli…</div>
+    </div>
   </div>
-  <div class="alert ai">Novidade v5: Módulo <strong>Temperatura</strong> completo (termopares, RTDs, PT100, transmissores) e módulo <strong>Calibração</strong> com relatório e procedimento passo a passo — direto do material oficial SENAI.</div>
+
+  <!-- Acesso rápido à prática -->
+  <div class="dash-quick">
+    <button class="dash-qbtn dash-qbtn-p" onclick="S('flash')">🃏 Flashcards</button>
+    <button class="dash-qbtn dash-qbtn-g" onclick="S('quiz')">📝 Quiz</button>
+    <button class="dash-qbtn dash-qbtn-y" onclick="S('calc')">🧮 Calculadora</button>
+    <button class="dash-qbtn dash-qbtn-pu" onclick="S('bernoulli')">⚡ Bernoulli</button>
+    <button class="dash-qbtn" onclick="S('formulas')">★ Fórmulas</button>
+  </div>
+
   <div class="sec">Módulos de Estudo</div>
-  <div class="grid g3">
+  <div class="grid g4">
     <div class="card click" onclick="S('m1')"><div class="mn">01</div><div class="mt">Fundamentos</div><div class="pb"><div class="pf"></div></div><div class="ps">PV · MV · SP · Sinais</div></div>
     <div class="card click" onclick="S('m2')"><div class="mn">02</div><div class="mt">Malha de Controle</div><div class="pb"><div class="pf"></div></div><div class="ps">Aberta · Fechada · PID</div></div>
     <div class="card click" onclick="S('m3')"><div class="mn">03</div><div class="mt">Instrumentação</div><div class="pb"><div class="pf"></div></div><div class="ps">Range · Span · Acurácia</div></div>
     <div class="card click" onclick="S('m4')"><div class="mn">04</div><div class="mt">Erros de Medição</div><div class="pb"><div class="pf"></div></div><div class="ps">EA · %FS · %Span</div></div>
-    <div class="card click" onclick="S('formulas')" style="border-color:rgba(255,192,64,0.3)"><div class="mn" style="color:var(--y)">★</div><div class="mt">Fórmulas Visuais</div><div class="pb"><div class="pf" style="background:var(--y)"></div></div><div class="ps">Diagramas + Legendas</div></div>
-    <div class="card click" onclick="S('pressao')" style="border-color:rgba(0,212,255,0.22)"><div class="mn" style="color:var(--p)">05 · PRESSÃO</div><div class="mt">Variável de Processo</div><div class="pb"><div class="pf"></div></div><div class="ps">Pascal · Bar · Bourdon · Diafragma</div></div>
-    <div class="card click" onclick="S('nivel')" style="border-color:rgba(0,255,157,0.22)"><div class="mn" style="color:var(--g)">06 · NÍVEL</div><div class="mt">Variável de Processo</div><div class="pb"><div class="pf" style="background:var(--g)"></div></div><div class="ps">Direta · Indireta · Chaves</div></div>
-    <div class="card click" onclick="S('vazao')" style="border-color:rgba(255,192,64,0.22)"><div class="mn" style="color:var(--y)">07 · VAZÃO</div><div class="mt">Variável de Processo</div><div class="pb"><div class="pf" style="background:var(--y)"></div></div><div class="ps">Deprimogênios · Lineares · Especiais</div></div>
-    <div class="card click" onclick="S('temperatura')" style="border-color:rgba(192,132,255,0.35)"><div class="mn" style="color:var(--pu)">08 · TEMPERATURA ★</div><div class="mt">Variável de Processo</div><div class="pb"><div class="pf" style="background:var(--pu)"></div></div><div class="ps">Termopar · PT100 · Transmissor</div></div>
-    <div class="card click" onclick="S('relacoes')" style="border-color:rgba(255,144,64,0.22)"><div class="mn" style="color:var(--or)">09</div><div class="mt">Relações P · N · Q</div><div class="pb"><div class="pf" style="background:var(--or)"></div></div><div class="ps">Como as 3 se conectam</div></div>
-    <div class="card click" onclick="S('cenarios')" style="border-color:rgba(255,144,64,0.22)"><div class="mn" style="color:var(--or)">10</div><div class="mt">Cenários Reais</div><div class="pb"><div class="pf" style="background:var(--or)"></div></div><div class="ps">Caldeira · ETA · Reator</div></div>
-    <div class="card click" onclick="S('calibracao')" style="border-color:rgba(255,192,64,0.35)"><div class="mn" style="color:var(--y)">11 · CALIBRAÇÃO ★</div><div class="mt">Metrologia Industrial</div><div class="pb"><div class="pf" style="background:var(--y)"></div></div><div class="ps">Procedimento · Relatório · INMETRO</div></div>
+    <div class="card click" onclick="S('pressao')" style="border-color:rgba(0,212,255,0.28)"><div class="mn" style="color:var(--p)">05 · PRESSÃO</div><div class="mt">Variável de Processo</div><div class="pb"><div class="pf"></div></div><div class="ps">Pascal · Bar · Bourdon</div></div>
+    <div class="card click" onclick="S('nivel')" style="border-color:rgba(0,255,157,0.28)"><div class="mn" style="color:var(--g)">06 · NÍVEL</div><div class="mt">Variável de Processo</div><div class="pb"><div class="pf" style="background:var(--g)"></div></div><div class="ps">Direta · Indireta · Chaves</div></div>
+    <div class="card click" onclick="S('vazao')" style="border-color:rgba(255,192,64,0.28)"><div class="mn" style="color:var(--y)">07 · VAZÃO</div><div class="mt">Variável de Processo</div><div class="pb"><div class="pf" style="background:var(--y)"></div></div><div class="ps">Deprimogênios · Lineares</div></div>
+    <div class="card click" onclick="S('temperatura')" style="border-color:rgba(192,132,255,0.35)"><div class="mn" style="color:var(--pu)">08 · TEMP ★</div><div class="mt">Variável de Processo</div><div class="pb"><div class="pf" style="background:var(--pu)"></div></div><div class="ps">Termopar · PT100</div></div>
+    <div class="card click" onclick="S('relacoes')" style="border-color:rgba(255,144,64,0.28)"><div class="mn" style="color:var(--or)">09</div><div class="mt">Relações P · N · Q</div><div class="pb"><div class="pf" style="background:var(--or)"></div></div><div class="ps">Como as 3 se conectam</div></div>
+    <div class="card click" onclick="S('cenarios')" style="border-color:rgba(255,144,64,0.28)"><div class="mn" style="color:var(--or)">10</div><div class="mt">Cenários Reais</div><div class="pb"><div class="pf" style="background:var(--or)"></div></div><div class="ps">Caldeira · ETA · Reator</div></div>
+    <div class="card click" onclick="S('calibracao')" style="border-color:rgba(255,192,64,0.35)"><div class="mn" style="color:var(--y)">11 · CALIB ★</div><div class="mt">Metrologia Industrial</div><div class="pb"><div class="pf" style="background:var(--y)"></div></div><div class="ps">Procedimento · INMETRO</div></div>
+    <div class="card click" onclick="S('formulas')" style="border-color:rgba(255,192,64,0.22)"><div class="mn" style="color:var(--y)">★</div><div class="mt">Fórmulas Visuais</div><div class="pb"><div class="pf" style="background:var(--y)"></div></div><div class="ps">Diagramas interativos</div></div>
+    <div class="card click" onclick="S('bernoulli')" style="border-color:rgba(0,255,157,0.22)"><div class="mn" style="color:var(--g)">⚡</div><div class="mt">Simuladores</div><div class="pb"><div class="pf" style="background:var(--g)"></div></div><div class="ps">Continuidade · Bernoulli</div></div>
+    <div class="card click" onclick="S('flash')" style="border-color:rgba(0,212,255,0.22)"><div class="mn" style="color:var(--p)" id="dash-fc-mn">66 cards</div><div class="mt">Flashcards</div><div class="pb"><div class="pf"></div></div><div class="ps">8 categorias · flip 3D</div></div>
+    <div class="card click" onclick="S('quiz')" style="border-color:rgba(255,85,102,0.22)"><div class="mn" style="color:var(--r)" id="dash-qz-mn">46 questões</div><div class="mt">Quiz</div><div class="pb"><div class="pf" style="background:var(--r)"></div></div><div class="ps">Situações reais de prova</div></div>
+    <div class="card click" onclick="S('calc')" style="border-color:rgba(0,212,255,0.18)"><div class="mn" style="color:var(--p)">9</div><div class="mt">Calculadora</div><div class="pb"><div class="pf"></div></div><div class="ps">Stevin · Reynolds · Gases</div></div>
   </div>
 </div>
 
@@ -487,24 +518,76 @@
      §03–06 · TEORIA
 ════════════════════════════════════════════════════ -->
 <div class="screen" id="screen-m1">
-  <div class="h1">Fundamentos</div><div class="sub">Módulo 01</div>
-  <div class="alert ai">"O que não se mede, não se controla."</div>
-  <div class="blk"><h3>PV · MV · SP</h3>
+  <div class="h1">Fundamentos</div><div class="sub">Módulo 01 · PV · MV · SP · Sinais</div>
+  <div class="alert ai">"O que não se mede, não se controla." — Peter Drucker</div>
+
+  <!-- PV / MV / SP com analogias -->
+  <div class="blk"><h3>PV · MV · SP — As 3 Variáveis do Controle</h3>
     <div class="grid g3" style="margin-top:8px">
-      <div class="hl hl-p"><div class="hl-hdr">PV — Process Variable</div><p>A grandeza física medida: temperatura, pressão, nível, vazão. É o que o sensor lê em tempo real.</p></div>
-      <div class="hl hl-g"><div class="hl-hdr">MV — Manipulated Variable</div><p>O que o controlador ajusta para influenciar a PV: válvula, bomba, chama, motor.</p></div>
-      <div class="hl hl-y"><div class="hl-hdr">SP — Set Point</div><p>Valor desejado para a PV. O controlador age na MV até que PV = SP.</p></div>
+      <div class="hl hl-p">
+        <div class="hl-hdr">PV — Process Variable</div>
+        <p>A grandeza física medida em tempo real pelo sensor: temperatura, pressão, nível, vazão.</p>
+        <div class="analogy-box">🚿 <strong>Analogia:</strong> a temperatura real da água que sai do chuveiro — o que você está sentindo agora.</div>
+      </div>
+      <div class="hl hl-y">
+        <div class="hl-hdr">SP — Set Point</div>
+        <p>O valor desejado para a PV. O controlador trabalha para que PV = SP.</p>
+        <div class="analogy-box">🌡️ <strong>Analogia:</strong> a temperatura que você definiu no chuveiro elétrico — o alvo.</div>
+      </div>
+      <div class="hl hl-g">
+        <div class="hl-hdr">MV — Manipulated Variable</div>
+        <p>O que o controlador ajusta para influenciar a PV: abertura de válvula, rotação de bomba, potência da chama.</p>
+        <div class="analogy-box">🔧 <strong>Analogia:</strong> o quanto você gira o registro de água quente — a ação de correção.</div>
+      </div>
+    </div>
+    <div class="alert aw" style="margin-top:10px">
+      <strong>Erro comum de prova:</strong> confundir PV com SP. PV é o que o sensor <em>mede agora</em>. SP é o que você <em>quer</em>. Quando PV = SP, o sistema está em equilíbrio — mas o controlador ainda está ligado e monitorando.
     </div>
   </div>
+
+  <!-- Mapa visual das 4 variáveis -->
+  <div class="blk"><h3>As 4 Variáveis — Onde Aparecem num Processo</h3>
+    <p style="font-size:13px;color:var(--t2);margin-bottom:14px">Imagine uma fábrica de bebidas: um tanque recebe líquido, aquece, e enche garrafas. As 4 variáveis estão presentes ao mesmo tempo:</p>
+    <div class="grid g2" style="margin-bottom:12px">
+      <div class="varmap-card varmap-p">
+        <div class="varmap-icon">⊕</div>
+        <div class="varmap-name">Pressão (P)</div>
+        <div class="varmap-where">Onde: bomba de entrada, válvula de saída, vaso de pressão</div>
+        <div class="varmap-why">Por que medir: evitar ruptura de tubulações; controlar a força da bomba</div>
+      </div>
+      <div class="varmap-card varmap-g">
+        <div class="varmap-icon">≡</div>
+        <div class="varmap-name">Nível (N)</div>
+        <div class="varmap-where">Onde: tanque de armazenamento, vaso de processo</div>
+        <div class="varmap-why">Por que medir: evitar transbordamento ou bomba funcionando seca</div>
+      </div>
+      <div class="varmap-card varmap-y">
+        <div class="varmap-icon">→</div>
+        <div class="varmap-name">Vazão (Q)</div>
+        <div class="varmap-where">Onde: entrada e saída do tanque, linha de enchimento</div>
+        <div class="varmap-why">Por que medir: controlar quantidade produzida; balanço de massa</div>
+      </div>
+      <div class="varmap-card varmap-pu">
+        <div class="varmap-icon">~</div>
+        <div class="varmap-name">Temperatura (T)</div>
+        <div class="varmap-where">Onde: trocador de calor, pasteurizador, CIP</div>
+        <div class="varmap-why">Por que medir: garantir qualidade, segurança alimentar e eficiência</div>
+      </div>
+    </div>
+    <div class="alert ai">As 4 variáveis raramente aparecem isoladas. Um tanque aquecido envolve P (pressão de vapor), N (nível do líquido), Q (entrada/saída) e T (temperatura) simultaneamente.</div>
+  </div>
+
+  <!-- Sinais -->
   <div class="blk"><h3>Sinais de Instrumentação</h3>
     <table class="tbl"><thead><tr><th>Tipo</th><th>Descrição</th><th>Uso industrial</th></tr></thead>
     <tbody>
       <tr><td>Digital</td><td>0 ou 1 — variação discreta</td><td>Sensores fim de curso, CLPs</td></tr>
-      <tr><td>4–20 mA</td><td>Corrente proporcional — padrão de campo</td><td>Transmissores industriais</td></tr>
+      <tr><td><strong style="color:var(--p)">4–20 mA</strong></td><td>Corrente proporcional — padrão de campo</td><td>Transmissores industriais</td></tr>
       <tr><td>HART</td><td>Digital sobre 4–20 mA</td><td>Diagnóstico remoto simultâneo</td></tr>
       <tr><td>PROFIBUS / FF</td><td>Rede digital industrial</td><td>Plantas modernas integradas</td></tr>
     </tbody></table>
-    <div class="alert ag" style="margin-top:8px">4–20 mA: sinal de corrente não degrada com distância. Abaixo de 4 mA = fio partido (falha detectável).</div>
+    <div class="alert ag" style="margin-top:8px">4–20 mA: sinal de corrente não degrada com distância. Abaixo de 4 mA = fio partido (falha detectável). 4 mA → 0% · 20 mA → 100%.</div>
+    <div class="alert aw" style="margin-top:6px"><strong>Erro comum de prova:</strong> dizer que 0 mA = 0% de processo. Errado — 0 mA indica falha (fio partido). O live zero começa em 4 mA justamente para distinguir "zero processo" de "sem sinal".</div>
   </div>
 </div>
 
@@ -609,6 +692,27 @@
     </tbody></table>
   </div>
   <div class="alert ai">Fórmulas visuais de Stevin, Bernoulli e P=F/A estão em <button class="btn btn-p" onclick="S('formulas')" style="padding:4px 10px;font-size:12px">Fórmulas Visuais ★</button></div>
+
+  <!-- Você já viu isso -->
+  <div class="sec">Você já viu isso</div>
+  <div class="grid g3">
+    <div class="everyday-card everyday-p">
+      <div class="everyday-icon">🚗</div>
+      <div class="everyday-title">Pneu de carro</div>
+      <div class="everyday-body">O pneu calibrado a 32 PSI (≈ 2,2 bar) usa pressão manométrica — relativa à atmosfera. Se furar e você medir 0 PSI no manômetro, a pressão absoluta ainda é 1 atm. A diferença entre pressão absoluta e manométrica aparece todo posto de gasolina.</div>
+    </div>
+    <div class="everyday-card everyday-p">
+      <div class="everyday-icon">🍲</div>
+      <div class="everyday-title">Panela de pressão</div>
+      <div class="everyday-body">A tampa veda o vapor, elevando a pressão interna para ≈ 2 atm. Isso aumenta o ponto de ebulição da água para ~120°C, cozinhando mais rápido. A válvula de segurança é um pressostato mecânico: abre quando P ultrapassa o limite, exatamente como um instrumento de alarmagem.</div>
+    </div>
+    <div class="everyday-card everyday-p">
+      <div class="everyday-icon">💉</div>
+      <div class="everyday-title">Seringa médica</div>
+      <div class="everyday-body">Ao puxar o êmbolo, você reduz a pressão interna (criando vácuo parcial) — o líquido é empurrado para dentro pela pressão atmosférica. É pressão diferencial: ΔP entre o exterior e o interior da seringa força o fluido a entrar. Mesmo princípio de um transmissor de ΔP.</div>
+    </div>
+  </div>
+  <div class="alert aw" style="margin-top:4px"><strong>Erro comum de prova:</strong> confundir pressão absoluta com manométrica em cálculos da Lei dos Gases. Sempre converta para absoluta antes de calcular P₁V₁T₂ = P₂V₂T₁.</div>
 </div>
 
 <!-- ════ NÍVEL ════ -->
@@ -647,6 +751,27 @@
     </div>
   </div>
   <div class="alert ai">A equação de balanço de massa e Torricelli com diagramas estão em <button class="btn btn-p" onclick="S('formulas')" style="padding:4px 10px;font-size:12px">Fórmulas Visuais ★</button></div>
+
+  <!-- Você já viu isso -->
+  <div class="sec">Você já viu isso</div>
+  <div class="grid g3">
+    <div class="everyday-card everyday-g">
+      <div class="everyday-icon">🏠</div>
+      <div class="everyday-title">Caixa d'água residencial</div>
+      <div class="everyday-body">A boia da caixa d'água é um chaveamento de nível por empuxo (princípio de Arquimedes): quando o nível sobe, a boia sobe e fecha a válvula de entrada. É um controle on/off — exatamente como uma chave de nível com set point de alto nível.</div>
+    </div>
+    <div class="everyday-card everyday-g">
+      <div class="everyday-icon">⛽</div>
+      <div class="everyday-title">Tanque de gasolina</div>
+      <div class="everyday-body">O indicador de combustível usa um sensor de boia resistivo: a posição da boia varia a resistência de um potenciômetro, que move o ponteiro no painel. É uma medição contínua de nível — o transmissor converte posição em sinal elétrico proporcional.</div>
+    </div>
+    <div class="everyday-card everyday-g">
+      <div class="everyday-icon">🚽</div>
+      <div class="everyday-title">Caixa acoplada do vaso</div>
+      <div class="everyday-body">Funciona em dois estágios: enchimento (boia sobe, fecha a válvula de entrada quando atinge o SP de nível alto) e descarga (acionamento manual abre a válvula de saída). É um sistema de controle de nível com dois set points: LL (vazio) e HH (cheio).</div>
+    </div>
+  </div>
+  <div class="alert aw" style="margin-top:4px"><strong>Erro comum de prova:</strong> esquecer que a fórmula h = P / (ρ×g) só é válida se a densidade for constante. Temperatura alta, mistura de fluidos ou espuma mudam a densidade e invalidam o cálculo.</div>
 </div>
 
 <!-- ════ VAZÃO ════ -->
@@ -679,6 +804,27 @@
     </tbody></table>
   </div>
   <div class="alert ai">Fórmulas visuais de Qv, Qm, Reynolds e Bernoulli estão em <button class="btn btn-p" onclick="S('formulas')" style="padding:4px 10px;font-size:12px">Fórmulas Visuais ★</button></div>
+
+  <!-- Você já viu isso -->
+  <div class="sec">Você já viu isso</div>
+  <div class="grid g3">
+    <div class="everyday-card everyday-y">
+      <div class="everyday-icon">🚿</div>
+      <div class="everyday-title">Torneira do banheiro</div>
+      <div class="everyday-body">Ao fechar parcialmente a torneira, você reduz a seção de passagem (S↓). Para manter a pressão, a velocidade do fio d'água aumenta (v↑) — é a Equação da Continuidade: Qv = S × v. O Qv cai só porque S diminuiu mais do que v aumentou.</div>
+    </div>
+    <div class="everyday-card everyday-y">
+      <div class="everyday-icon">🏥</div>
+      <div class="everyday-title">Soro hospitalar (gotejamento)</div>
+      <div class="everyday-body">O médico prescreve "60 gotas/min" — isso é controle de vazão. Cada gota tem volume padrão (~0,05 mL), então 60 gotas/min = 3 mL/min = 180 mL/h. A câmara de gotejamento é visualmente o que um medidor de vazão faz por sinal elétrico: contar unidades de volume por tempo.</div>
+    </div>
+    <div class="everyday-card everyday-y">
+      <div class="everyday-icon">🍺</div>
+      <div class="everyday-title">Torneira de chope</div>
+      <div class="everyday-body">A torneira usa pressão de CO₂ para empurrar o chope — controlando a pressão, controla-se a vazão. Se a pressão cair, a vazão cai. Se o tubo estiver entupido (seção reduzida), a velocidade aumenta mas com espuma. É Bernoulli + Continuidade num copo de chope.</div>
+    </div>
+  </div>
+  <div class="alert aw" style="margin-top:4px"><strong>Erro comum de prova:</strong> usar Qv para gases em condições variáveis. Para gases, use sempre Qm (vazão mássica), pois ela não muda com temperatura e pressão — Qv de gás a 20°C ≠ Qv a 200°C para o mesmo Qm.</div>
 </div>
 
 <!-- ════ TEMPERATURA ════ -->
@@ -718,6 +864,27 @@
     <p>Tubo de proteção que isola o sensor do fluido. Permite troca sem parar a linha. <strong style="color:var(--r)">Desvantagem:</strong> aumenta significativamente a constante de tempo τ.</p>
   </div>
   <div style="text-align:center;margin-top:10px"><button class="btn btn-pu" onclick="S('calibracao')" style="padding:6px 16px;font-size:12px">Ver Módulo Calibração completo →</button></div>
+
+  <!-- Você já viu isso -->
+  <div class="sec">Você já viu isso</div>
+  <div class="grid g3">
+    <div class="everyday-card everyday-pu">
+      <div class="everyday-icon">❄️</div>
+      <div class="everyday-title">Geladeira</div>
+      <div class="everyday-body">O termostato da geladeira é um controlador on/off com dois set points: liga o compressor quando T > SP_alto (ex: 8°C) e desliga quando T < SP_baixo (ex: 4°C). A diferença entre os dois pontos é a histerese intencional — evita que o compressor ligue e desligue milhares de vezes por dia.</div>
+    </div>
+    <div class="everyday-card everyday-pu">
+      <div class="everyday-icon">🍕</div>
+      <div class="everyday-title">Forno de pizza</div>
+      <div class="everyday-body">O termopar tipo K no forno mede até ~400°C e envia mV para o controlador. O controlador PID ajusta a potência da resistência (MV) para manter 300°C (SP). A pizza é a carga — quando entra fria, a T cai (PV &lt; SP) e o controlador aumenta a potência para compensar.</div>
+    </div>
+    <div class="everyday-card everyday-pu">
+      <div class="everyday-icon">🌡️</div>
+      <div class="everyday-title">Termômetro clínico digital</div>
+      <div class="everyday-body">Usa um termistor NTC (resistência cai com temperatura) para medir 35–42°C com precisão de ±0,1°C. O circuito converte a variação de resistência em temperatura — é a mesma operação de um transmissor de temperatura PT100, só que calibrado para a faixa do corpo humano.</div>
+    </div>
+  </div>
+  <div class="alert aw" style="margin-top:4px"><strong>Erro comum de prova:</strong> inverter termopar e PT100. Termopar gera tensão (mV) — é ativo. PT100 varia resistência (Ω) — é passivo, precisa de corrente de excitação. Termopar aguenta temperaturas muito maiores; PT100 é mais preciso em faixas médias.</div>
 </div>
 
 <!-- ════ RELAÇÕES P·N·Q ════ -->
@@ -961,7 +1128,7 @@
     </div>
   </div>
 
-  <!-- Simulador 2 — Bernoulli (tempo real) -->
+  <!-- Simulador 2 — Bernoulli (tempo real, variável desconhecida selecionável) -->
   <div class="sim-card sim-card-g">
     <div class="sim-hdr">
       <div class="sim-badge sim-badge-g">2</div>
@@ -971,31 +1138,38 @@
       </div>
     </div>
 
+    <!-- Seletor de variável desconhecida -->
+    <div class="bern-solve-for">
+      <div class="bern-sf-lbl">Calcular:</div>
+      <div class="bern-sf-btns">
+        <button class="bern-sf-btn" id="bsf-p2" onclick="setBernTarget('p2')">P₂ <span class="bern-sf-sub">pressão saída</span></button>
+        <button class="bern-sf-btn" id="bsf-v2" onclick="setBernTarget('v2')">V₂ <span class="bern-sf-sub">velocidade saída</span></button>
+        <button class="bern-sf-btn" id="bsf-p1" onclick="setBernTarget('p1')">P₁ <span class="bern-sf-sub">pressão entrada</span></button>
+        <button class="bern-sf-btn" id="bsf-v1" onclick="setBernTarget('v1')">V₁ <span class="bern-sf-sub">velocidade entrada</span></button>
+      </div>
+    </div>
+
     <!-- Diagrama SVG animado de Bernoulli -->
     <div class="sim-svg-wrap">
       <svg id="svg-bern" viewBox="0 0 460 130" xmlns="http://www.w3.org/2000/svg" width="100%">
-        <!-- Tubo com estreitamento e desnível -->
         <path d="M0,50 L140,50 L200,72 L460,72" fill="none" stroke="#2a3545" stroke-width="2"/>
         <path d="M0,90 L140,90 L200,78 L460,78" fill="none" stroke="#2a3545" stroke-width="2"/>
         <rect x="0" y="50" width="140" height="40" fill="rgba(0,100,200,0.12)"/>
         <polygon points="140,50 200,72 200,78 140,90" fill="rgba(0,100,200,0.12)"/>
         <rect x="200" y="72" width="260" height="6" fill="rgba(0,100,200,0.12)"/>
-        <!-- Seta P1 (pressão) vertical -->
         <line id="bp1-arrow" x1="70" y1="24" x2="70" y2="48" stroke="var(--p)" stroke-width="2.5" marker-end="url(#arrowBp)" stroke-dasharray="4,2"/>
         <text id="bp1-lbl" x="70" y="18" text-anchor="middle" fill="var(--p)" font-size="11" font-family="IBM Plex Mono" font-weight="700">P₁</text>
         <text id="bp1-val" x="70" y="8" text-anchor="middle" fill="var(--p)" font-size="9" font-family="IBM Plex Mono">2,20 bar</text>
-        <!-- Seta V1 -->
         <line id="bv1-line" x1="18" y1="70" x2="95" y2="70" stroke="var(--p)" stroke-width="3" marker-end="url(#arrowBp)"/>
         <text id="bv1-lbl" x="50" y="108" fill="var(--p)" font-size="10" font-family="IBM Plex Mono">V₁=2 m/s</text>
-        <!-- Seta P2 (pressão saída) -->
         <line id="bp2-arrow" x1="330" y1="50" x2="330" y2="70" stroke="var(--g)" stroke-width="2.5" marker-end="url(#arrowBg)" stroke-dasharray="4,2"/>
         <text id="bp2-lbl" x="330" y="44" text-anchor="middle" fill="var(--g)" font-size="11" font-family="IBM Plex Mono" font-weight="700">P₂</text>
         <text id="bp2-val" x="330" y="34" text-anchor="middle" fill="var(--g)" font-size="9" font-family="IBM Plex Mono">? bar</text>
-        <!-- Seta V2 -->
         <line id="bv2-line" x1="225" y1="75" x2="400" y2="75" stroke="var(--g)" stroke-width="3" marker-end="url(#arrowBg)"/>
         <text id="bv2-lbl" x="320" y="108" fill="var(--g)" font-size="10" font-family="IBM Plex Mono">V₂=8 m/s</text>
-        <!-- ΔP -->
         <text id="bdp-lbl" x="230" y="20" text-anchor="middle" fill="var(--y)" font-size="11" font-family="IBM Plex Mono" font-weight="600">ΔP = ?</text>
+        <!-- Label da variável desconhecida no SVG -->
+        <text id="bunk-lbl" x="230" y="125" text-anchor="middle" fill="var(--y)" font-size="10" font-family="IBM Plex Mono" font-weight="600" opacity="0">?</text>
         <defs>
           <marker id="arrowBp" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--p)"/></marker>
           <marker id="arrowBg" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--g)"/></marker>
@@ -1018,9 +1192,9 @@
     <div class="sim-grid">
       <div class="sim-col">
         <div class="sim-col-lbl sim-col-lbl-p">S1 — Entrada</div>
-        <label class="lbl">V₁ (m/s)</label>
+        <label class="lbl" id="lbl-b-v1">V₁ (m/s)</label>
         <input id="b-v1" type="number" value="2" step="0.1" min="0" class="sim-input sim-input-p" oninput="bernCalcRT()" style="margin-bottom:8px">
-        <label class="lbl">P₁ (Pa)</label>
+        <label class="lbl" id="lbl-b-p1">P₁ (Pa)</label>
         <input id="b-p1" type="number" value="220000" step="1000" class="sim-input sim-input-p" oninput="bernCalcRT()" style="margin-bottom:3px">
         <div id="b-p1-hint" class="sim-hint">220.000 Pa ≈ 2,2 bar</div>
         <label class="lbl" style="margin-top:8px">h₁ (m)</label>
@@ -1028,12 +1202,14 @@
       </div>
       <div class="sim-col">
         <div class="sim-col-lbl sim-col-lbl-g">S2 — Saída</div>
-        <label class="lbl">V₂ (m/s)</label>
+        <label class="lbl" id="lbl-b-v2">V₂ (m/s)</label>
         <div style="display:flex;gap:5px;margin-bottom:3px">
           <input id="b-v2" type="number" value="8" step="0.1" min="0" class="sim-input sim-input-g" style="flex:1" oninput="bernCalcRT()">
           <button onclick="importV2()" class="btn btn-p" style="padding:6px 8px;font-size:11px;white-space:nowrap">↑ Sim.1</button>
         </div>
-        <div class="sim-hint">Digite ou importe do Sim. 1</div>
+        <div class="sim-hint" id="b-v2-hint">Digite ou importe do Sim. 1</div>
+        <label class="lbl" id="lbl-b-p2" style="margin-top:8px">P₂ (Pa) — <span style="color:var(--y)">calculado</span></label>
+        <input id="b-p2-input" type="number" value="190000" step="1000" class="sim-input sim-input-g" oninput="bernCalcRT()" style="margin-bottom:3px" disabled>
         <label class="lbl" style="margin-top:8px">h₂ (m)</label>
         <input id="b-z2" type="number" value="0" step="0.1" class="sim-input sim-input-n" oninput="bernCalcRT()" style="margin-bottom:8px">
         <div class="sim-result-box" id="b-result-box">
@@ -1046,7 +1222,6 @@
     <div id="b-err" class="sim-err" style="display:none"></div>
     <div id="b-alert" class="sim-alert-ctx" style="display:none"></div>
 
-    <!-- Resolução colapsável -->
     <button class="sim-solve-btn sim-solve-btn-g" id="btn-bsolve" onclick="toggleSimSolve('b')">▶ Passo a passo</button>
     <div class="sim-solve" id="solve-b" style="display:none">
       <div id="solve-b-body"></div>
@@ -1088,66 +1263,87 @@
 ════════════════════════════════════════════════════ -->
 <div class="screen" id="screen-changelog">
   <div class="h1">Atualizações</div>
-  <div class="sub">Histórico de mudanças e melhorias do SENAI · MVF v5</div>
+  <div class="sub">O que mudou em cada versão do SENAI · MVF</div>
 
-  <!-- Fase 2 -->
-  <div class="cl-entry">
-    <div class="cl-dot cl-dot-g"></div>
-    <div class="cl-body">
-      <div class="cl-header">
-        <span class="cl-tag cl-tag-g">Fase 2</span>
-        <span class="cl-title">Visual & Simuladores</span>
-        <span class="cl-date">Mar 2026</span>
-      </div>
-      <div class="cl-section">Fórmulas Visuais</div>
-      <ul class="cl-list">
-        <li>SVGs responsivos com <code>viewBox</code> maior e <code>width:100%</code> — sem limite fixo de 180 px</li>
-        <li>Highlight sincronizado diagrama ↔ legenda: hover/touch em qualquer variável acende todos os elementos correspondentes com glow</li>
-        <li>Botão <strong>▶ Ver resolução</strong> em cada card — passo a passo numérico (substituição → operação → resultado) sem depender de MathJax</li>
-        <li>Stevin: animação CSS do nível da água subindo e descendo em loop</li>
-        <li>Setas mais grossas, valores de exemplo embutidos nos diagramas SVG</li>
-      </ul>
-      <div class="cl-section">Simuladores de Escoamento</div>
-      <ul class="cl-list">
-        <li>Cálculo em tempo real — resultado atualiza a cada tecla, sem botão "Calcular"</li>
-        <li>Diagrama SVG animado: setas de V₁/V₂ escalam proporcionalmente à velocidade; labels P₁/P₂ atualizam dinamicamente</li>
-        <li>Alertas contextuais automáticos: cavitação (P₂ negativo), V₂ alta (&gt;15 m/s), escoamento laminar, ΔP negativo</li>
-        <li>Passo a passo colapsável em cards — formato limpo sem MathJax</li>
-        <li>MathJax completamente removido — carregamento instantâneo</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- Fase 1 -->
+  <!-- v5.4 -->
   <div class="cl-entry">
     <div class="cl-dot cl-dot-p"></div>
     <div class="cl-body">
       <div class="cl-header">
-        <span class="cl-tag cl-tag-p">Fase 1</span>
-        <span class="cl-title">Fundação & Arquitetura</span>
+        <span class="cl-tag cl-tag-p">v5.4</span>
+        <span class="cl-title">Polimento & Usabilidade</span>
         <span class="cl-date">Mar 2026</span>
       </div>
-      <div class="cl-section">Separação de arquivos</div>
       <ul class="cl-list">
-        <li>Monólito de ~1500 linhas dividido em 4 arquivos com responsabilidade clara: <code>index.html</code>, <code>style.css</code>, <code>data.js</code>, <code>script.js</code></li>
-        <li><code>data.js</code> — 54 flashcards (8 categorias) e 38 questões de quiz isolados em arrays</li>
-        <li><code>script.js</code> — toda lógica: navegação, tema, flashcards, quiz, 9 calculadoras, simuladores</li>
-      </ul>
-      <div class="cl-section">Tipografia fluida</div>
-      <ul class="cl-list">
-        <li><code>font-size: clamp(13px, 1.2vw + 10px, 15px)</code> no <code>html</code> — escala suave entre mobile e desktop</li>
-        <li><code>.h1</code> e <code>.sub</code> com <code>clamp()</code> — sem media queries por elemento</li>
-      </ul>
-      <div class="cl-section">Tema claro/escuro</div>
-      <ul class="cl-list">
-        <li>Botão ☀/☾ no topbar alterna a classe <code>.light</code> no <code>&lt;html&gt;</code></li>
-        <li>Preferência salva em <code>localStorage</code> — persiste entre sessões</li>
-        <li>Transições suaves em 0,2 s com lista explícita de propriedades (sem <code>* { transition }</code> global)</li>
+        <li>Dashboard reorganizado em 4 colunas — sem espaço vazio; todos os módulos, flashcards, quiz e calculadora acessíveis direto da tela inicial</li>
+        <li>Acesso rápido à prática no topo do dashboard (Flashcards, Quiz, Calculadora, Bernoulli, Fórmulas)</li>
+        <li>Simulador Bernoulli agora permite escolher <strong>qual variável calcular</strong> — P₂, V₂, P₁ ou V₁. Informe as 3 conhecidas e o resultado da desconhecida aparece automaticamente</li>
+        <li>Histórico de versões reescrito com linguagem do estudante — o que mudou na prática, não nos bastidores</li>
       </ul>
     </div>
   </div>
 
-  <!-- v5 original -->
+  <!-- v5.3 -->
+  <div class="cl-entry">
+    <div class="cl-dot cl-dot-g"></div>
+    <div class="cl-body">
+      <div class="cl-header">
+        <span class="cl-tag cl-tag-g">v5.3</span>
+        <span class="cl-title">Novos Conteúdos</span>
+        <span class="cl-date">Mar 2026</span>
+      </div>
+      <ul class="cl-list">
+        <li>Módulo Fundamentos expandido: analogias do dia a dia para PV, SP e MV (chuveiro, geladeira, registro de água) e mapa das 4 variáveis num processo de fábrica</li>
+        <li>Seção <strong>"Você já viu isso"</strong> adicionada em Pressão, Nível, Vazão e Temperatura — conecta cada conceito industrial a exemplos do cotidiano (pneu, caixa d'água, torneira, geladeira…)</li>
+        <li>Alertas de erros comuns de prova distribuídos ao longo dos módulos</li>
+        <li>+12 flashcards cobrindo Reynolds, Bernoulli, Venturi e calibração prática</li>
+        <li>+8 questões de quiz com cálculos numéricos reais: Stevin, Bernoulli, PT100, diagnóstico de falha 3,5 mA</li>
+        <li>Total: 66 flashcards · 46 questões</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- v5.2 -->
+  <div class="cl-entry">
+    <div class="cl-dot cl-dot-y"></div>
+    <div class="cl-body">
+      <div class="cl-header">
+        <span class="cl-tag cl-tag-y">v5.2</span>
+        <span class="cl-title">Fórmulas e Simuladores</span>
+        <span class="cl-date">Mar 2026</span>
+      </div>
+      <ul class="cl-list">
+        <li>Diagramas das fórmulas maiores e responsivos — funcionam bem em celular e desktop</li>
+        <li>Ao passar o mouse (ou tocar) em qualquer variável da fórmula, ela acende no diagrama e na tabela ao mesmo tempo</li>
+        <li>Botão <strong>"Ver resolução"</strong> em cada fórmula — mostra a conta passo a passo com valores numéricos reais</li>
+        <li>Tanque de Stevin com animação do nível da água subindo e descendo</li>
+        <li>Simuladores de Continuidade e Bernoulli calculam em tempo real enquanto você digita — sem precisar clicar em "Calcular"</li>
+        <li>Diagrama do tubo atualiza as setas de velocidade proporcionalmente ao que você digitou</li>
+        <li>Alertas automáticos: cavitação, velocidade muito alta, escoamento laminar</li>
+        <li>Passo a passo do cálculo expansível abaixo de cada simulador</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- v5.1 -->
+  <div class="cl-entry">
+    <div class="cl-dot cl-dot-p"></div>
+    <div class="cl-body">
+      <div class="cl-header">
+        <span class="cl-tag cl-tag-p">v5.1</span>
+        <span class="cl-title">Tema e Layout</span>
+        <span class="cl-date">Mar 2026</span>
+      </div>
+      <ul class="cl-list">
+        <li>Botão ☀/☾ no topo alterna entre tema escuro e claro — preferência salva entre sessões</li>
+        <li>Tipografia ajusta automaticamente o tamanho conforme o tamanho da tela (celular, tablet, desktop)</li>
+        <li>Menu lateral (drawer) no celular para navegar entre módulos sem perder espaço</li>
+        <li>Setas de rolagem no menu do desktop para acessar todos os itens sem sobreposição</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- v5.0 -->
   <div class="cl-entry cl-entry-last">
     <div class="cl-dot cl-dot-y"></div>
     <div class="cl-body">
@@ -1157,17 +1353,15 @@
         <span class="cl-date">2025</span>
       </div>
       <ul class="cl-list">
-        <li>17 telas cobrindo Fundamentos, Pressão, Nível, Vazão, Temperatura, Relações P·N·Q, Cenários Reais, Calibração</li>
-        <li>54 flashcards com flip 3D em 8 categorias</li>
-        <li>38 questões de quiz com feedback e pontuação</li>
-        <li>9 calculadoras interativas (Stevin, Reynolds, Torricelli, Lei dos Gases, Conversão de Temperatura…)</li>
+        <li>11 módulos: Fundamentos, Malha de Controle, Instrumentação, Erros, Pressão, Nível, Vazão, Temperatura, Relações P·N·Q, Cenários Reais, Calibração</li>
+        <li>54 flashcards com animação de virar a carta, filtro por categoria</li>
+        <li>38 questões de quiz com feedback imediato e explicação da resposta</li>
+        <li>9 calculadoras: Stevin, Nível por pressão, Reynolds, Torricelli, Erro absoluto, Erro %FS, Acurácia, Conversor de temperatura, Lei dos Gases</li>
         <li>Simuladores de Continuidade e Bernoulli</li>
-        <li>Fórmulas visuais com SVG e tabela de variáveis</li>
+        <li>Fórmulas visuais com diagramas SVG e tabela de variáveis</li>
       </ul>
     </div>
   </div>
-
-  <div class="alert ai" style="margin-top:8px">Todas as fases mantêm o conteúdo teórico original intacto — apenas a apresentação e a interatividade evoluem.</div>
 </div>
 
 </div><!-- /content -->
