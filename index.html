@@ -865,39 +865,219 @@
 <!-- ════ TEMPERATURA ════ -->
 <div class="screen" id="screen-temperatura">
   <div class="h1">Temperatura</div>
-  <div class="sub">Módulo 08 · Variável de Processo · Fonte: PPT SENAI MVFI · Slides 159–234</div>
+  <div class="sub">Módulo 08 · Variável de Processo · SENAI MVFI Slides 159–234</div>
+
+  <!-- Definição -->
   <div class="blk"><h3>O que é Temperatura?</h3>
-    <p>Temperatura representa o <strong style="color:var(--pu)">grau de agitação das moléculas</strong> de uma substância — sua energia cinética interna.</p>
+    <p>Temperatura é o grau de <strong style="color:var(--pu)">agitação térmica das moléculas</strong> de uma substância. Toda medição de temperatura é <strong>indireta</strong> — baseada na alteração de uma propriedade física (comprimento, volume, resistência elétrica, tensão).</p>
     <div class="grid g3" style="margin-top:12px">
-      <div class="hl hl-pu"><div class="hl-hdr">Importância na Qualidade</div><p>Temperatura incorreta altera viscosidade, reatividade, cristalização, pasteurização.</p></div>
-      <div class="hl hl-p"><div class="hl-hdr">Importância na Segurança</div><p>Superaquecimento em reatores exotérmicos pode causar runaway.</p></div>
-      <div class="hl hl-g"><div class="hl-hdr">Importância no Processo</div><p>Controla taxas de reação, ponto de ebulição/condensação, eficiência de transferência de calor.</p></div>
+      <div class="hl hl-pu"><div class="hl-hdr">Qualidade</div><p>Temperatura incorreta altera viscosidade, reatividade, cristalização, pasteurização.</p></div>
+      <div class="hl hl-p"><div class="hl-hdr">Segurança</div><p>Superaquecimento em reatores exotérmicos pode causar runaway (reação descontrolada).</p></div>
+      <div class="hl hl-g"><div class="hl-hdr">Processo</div><p>Controla taxas de reação, ponto de ebulição/condensação, eficiência de transferência de calor.</p></div>
     </div>
   </div>
-  <div class="blk"><h3>Unidades e Conversões</h3>
-    <div class="grid g3" style="margin-top:8px">
-      <div style="background:var(--bg);border:1px solid rgba(192,132,255,0.25);border-radius:8px;padding:14px"><div style="font-size:13px;font-weight:600;color:var(--pu);margin-bottom:6px">°C — Celsius</div><p style="font-size:12px;color:var(--t2)">Padrão no Brasil. 0°C = fusão do gelo. 100°C = ebulição (1 atm).</p></div>
-      <div style="background:var(--bg);border:1px solid rgba(0,212,255,0.25);border-radius:8px;padding:14px"><div style="font-size:13px;font-weight:600;color:var(--p);margin-bottom:6px">K — Kelvin</div><p style="font-size:12px;color:var(--t2)">Escala absoluta. K = °C + 273,15. Usada em cálculos termodinâmicos.</p></div>
-      <div style="background:var(--bg);border:1px solid rgba(255,192,64,0.25);border-radius:8px;padding:14px"><div style="font-size:13px;font-weight:600;color:var(--y);margin-bottom:6px">°F — Fahrenheit</div><p style="font-size:12px;color:var(--t2)">EUA. °F = (°C × 9/5) + 32. Presente em instrumentos importados.</p></div>
-    </div>
-  </div>
-  <div class="blk"><h3>Tipos de Sensores de Temperatura</h3>
-    <table class="tbl"><thead><tr><th>Sensor</th><th>Princípio</th><th>Faixa</th><th>Características</th></tr></thead>
+
+  <!-- Escalas com pontos fixos e fórmulas -->
+  <div class="blk"><h3>Escalas Termométricas</h3>
+    <table class="tbl"><thead><tr><th>Escala</th><th>Zero absoluto</th><th>Fusão do gelo</th><th>Ebulição da água</th><th>Uso</th></tr></thead>
     <tbody>
-      <tr><td style="color:var(--r)">Termopar Tipo K</td><td>Efeito Seebeck — tensão mV</td><td>−270°C a +1260°C</td><td>Mais usado no mundo. Robusto, econômico.</td></tr>
-      <tr><td style="color:var(--r)">Termopar Tipo J</td><td>Efeito Seebeck</td><td>−210°C a +760°C</td><td>Plásticos, polímeros.</td></tr>
-      <tr><td style="color:var(--pu)">PT100 (RTD)</td><td>Resistência da platina varia com T</td><td>−200°C a +850°C</td><td>Alta precisão. α=0,00385Ω/°C. R=100Ω a 0°C.</td></tr>
-      <tr><td style="color:var(--pu)">PT1000</td><td>Resistência platina</td><td>−200°C a +850°C</td><td>R=1000Ω a 0°C. Mais sensível.</td></tr>
-      <tr><td>Termistor NTC</td><td>Resistência cerâmica cai com T</td><td>−50°C a +150°C</td><td>Muito sensível. HVAC, eletrônicos.</td></tr>
+      <tr><td style="color:var(--pu)"><strong>Celsius (°C)</strong></td><td>−273,15°C</td><td>0°C</td><td>100°C</td><td>Padrão internacional / Brasil</td></tr>
+      <tr><td style="color:var(--p)"><strong>Kelvin (K)</strong></td><td>0 K</td><td>273,15 K</td><td>373,15 K</td><td>Cálculos termodinâmicos e Lei dos Gases</td></tr>
+      <tr><td style="color:var(--y)"><strong>Fahrenheit (°F)</strong></td><td>−459°F</td><td>32°F</td><td>212°F</td><td>EUA · instrumentos importados</td></tr>
     </tbody></table>
-    <div class="alert ay">O termopar gera sinal em mV — muito sensível a ruídos. Use cabo de compensação do mesmo tipo (ex: cabo K para termopar K).</div>
+    <div class="grid g3" style="margin-top:12px">
+      <div style="background:var(--bg4);border:1px solid var(--bd);border-radius:8px;padding:12px;text-align:center">
+        <div style="font-size:11px;color:var(--t3);margin-bottom:6px">°C → °F</div>
+        <div style="font-family:var(--fm);font-size:15px;font-weight:600;color:var(--y)">°F = (°C × 9/5) + 32</div>
+      </div>
+      <div style="background:var(--bg4);border:1px solid var(--bd);border-radius:8px;padding:12px;text-align:center">
+        <div style="font-size:11px;color:var(--t3);margin-bottom:6px">°F → °C</div>
+        <div style="font-family:var(--fm);font-size:15px;font-weight:600;color:var(--pu)">°C = 5/9 × (°F − 32)</div>
+      </div>
+      <div style="background:var(--bg4);border:1px solid var(--bd);border-radius:8px;padding:12px;text-align:center">
+        <div style="font-size:11px;color:var(--t3);margin-bottom:6px">°C ↔ K</div>
+        <div style="font-family:var(--fm);font-size:15px;font-weight:600;color:var(--p)">K = °C + 273,15</div>
+      </div>
+    </div>
+    <div class="alert aw" style="margin-top:8px"><strong>Erro comum de prova:</strong> usar °C em vez de K na Lei dos Gases. Sempre converta para Kelvin antes de aplicar P₁V₁/T₁ = P₂V₂/T₂. A 0 K cessa toda agitação molecular — é o zero absoluto.</div>
   </div>
+
+  <!-- Tabela geral de sensores -->
+  <div class="blk"><h3>Comparação dos Sensores de Temperatura</h3>
+    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Sensor</th><th>Princípio</th><th>Faixa</th><th>Sinal</th><th>Destaque</th></tr></thead>
+    <tbody>
+      <tr><td style="color:var(--t2)">Bimetálico</td><td>Dilatação diferencial de 2 metais</td><td>−50°C a +500°C</td><td>Mecânico</td><td>Só indicação local; base dos termostatos</td></tr>
+      <tr><td style="color:var(--t2)">Vidro (haste)</td><td>Dilatação de líquido</td><td>−150°C a +350°C</td><td>Visual</td><td>Bulbo protegido por poço; ±0,5%</td></tr>
+      <tr><td style="color:var(--t2)">Bulbo-capilar</td><td>Pressão do fluido no bulbo</td><td>variável</td><td>Mecânico</td><td>Aciona termostatos industriais</td></tr>
+      <tr><td style="color:var(--t2)">Termistor NTC</td><td>Resistência cerâmica cai com T</td><td>−100°C a +300°C</td><td>Ω</td><td>Alta sensibilidade; curva não linear</td></tr>
+      <tr><td style="color:var(--t2)">Termistor PTC</td><td>Resistência sobe abruptamente</td><td>estreita</td><td>Ω</td><td>Proteção de motores; ponto de transição</td></tr>
+      <tr><td style="color:var(--pu)"><strong>PT100 (RTD)</strong></td><td>Resistência da platina varia com T</td><td>−200°C a +850°C</td><td>Ω</td><td>Alta precisão; α=0,00385; 100Ω a 0°C</td></tr>
+      <tr><td style="color:var(--r)"><strong>Termopar K</strong></td><td>Efeito Seebeck — tensão mV</td><td>0°C a +1260°C</td><td>mV</td><td>Mais usado no mundo; Cromel/Alumel</td></tr>
+      <tr><td style="color:var(--r)"><strong>Termopar J</strong></td><td>Efeito Seebeck</td><td>0°C a +760°C</td><td>mV</td><td>Ferro/Constantan; baixo custo</td></tr>
+      <tr><td style="color:var(--r)">Termopar E</td><td>Efeito Seebeck</td><td>0°C a +870°C</td><td>mV</td><td>Maior FEM de todos; Cromel/Constantan</td></tr>
+      <tr><td style="color:var(--r)">Termopar T</td><td>Efeito Seebeck</td><td>−184°C a +370°C</td><td>mV</td><td>Cobre/Constantan; criogenia</td></tr>
+      <tr><td style="color:var(--r)">Termopar S/R</td><td>Efeito Seebeck (nobre)</td><td>0°C a +1480°C</td><td>mV</td><td>Platina/Ródio; padrão de calibração</td></tr>
+      <tr><td style="color:var(--r)">Termopar B</td><td>Efeito Seebeck (nobre)</td><td>+870°C a +1705°C</td><td>mV</td><td>Mais estável em altas T; Pt/Rh</td></tr>
+    </tbody></table></div>
+  </div>
+
+  <!-- PT100 expandido -->
+  <div class="blk"><h3>PT100 — Termoresistor (RTD)</h3>
+    <p>O PT100 é o termoresistor mais utilizado no mundo. É chamado assim por ser de <strong>platina (Pt)</strong> com resistência de <strong>100 Ω a 0°C</strong> (norma IEC 751 / ITS-90).</p>
+    <div style="background:var(--bg);border:1px solid rgba(192,132,255,0.25);border-radius:8px;padding:12px 16px;font-family:var(--fm);font-size:17px;font-weight:600;margin:12px 0">
+      <span style="color:var(--pu)">R(T)</span> = <span style="color:var(--t3)">R₀</span> × [ 1 + <span style="color:var(--g)">A</span>×T + <span style="color:var(--p)">B</span>×T² ] &nbsp;<span style="font-size:12px;color:var(--t3)">(0°C a 850°C — Callendar-Van Dusen)</span>
+    </div>
+    <p style="font-size:13px;color:var(--t2);margin-bottom:10px">Constantes para PT100: A = 3,908×10⁻³ · B = −5,775×10⁻⁷. A fórmula simplificada R=R₀×(1+α×T) com α=0,00385 é uma aproximação linear suficiente para a maioria das aplicações industriais.</p>
+
+    <div class="sec" style="margin-top:14px">Valores de referência PT100</div>
+    <table class="tbl"><thead><tr><th>T (°C)</th><th>−100</th><th>0</th><th>100</th><th>200</th><th>400</th><th>600</th><th>850</th></tr></thead>
+    <tbody><tr><td style="color:var(--pu)">R (Ω)</td><td>60,26</td><td>100,00</td><td>138,51</td><td>175,86</td><td>247,09</td><td>313,71</td><td>390,48</td></tr></tbody></table>
+
+    <div class="sec" style="margin-top:14px">Classe de tolerância (IEC 751)</div>
+    <table class="tbl"><thead><tr><th>Classe</th><th>Fórmula do erro máximo</th><th>Exemplo a 200°C</th><th>Aplicação</th></tr></thead>
+    <tbody>
+      <tr><td style="color:var(--g)"><strong>Classe AA</strong></td><td>±[0,1 + 0,0017×T] °C</td><td>±0,44°C</td><td>Laboratório, farmacêutico</td></tr>
+      <tr><td style="color:var(--p)"><strong>Classe A</strong></td><td>±[0,15 + 0,002×T] °C</td><td>±0,55°C</td><td>Alta precisão industrial</td></tr>
+      <tr><td style="color:var(--y)"><strong>Classe B</strong></td><td>±[0,3 + 0,005×T] °C</td><td>±1,30°C</td><td>Uso industrial geral</td></tr>
+    </tbody></table>
+
+    <div class="sec" style="margin-top:14px">Ligações PT100 — 2, 3 e 4 fios</div>
+    <div class="grid g3" style="margin-top:8px">
+      <div class="hl hl-y">
+        <div class="hl-hdr">2 Fios — Simples</div>
+        <p>R_lida = R_sensor + R_cabo₁ + R_cabo₂. O transmissor não diferencia cabo de sensor.</p>
+        <p style="margin-top:6px;font-size:12px;color:var(--t3)">Uso: curtas distâncias, baixa precisão. Erro depende do comprimento e temperatura do cabo.</p>
+      </div>
+      <div class="hl hl-p">
+        <div class="hl-hdr">3 Fios — Padrão Industrial ★</div>
+        <p>Terceiro fio permite ao transmissor subtrair a resistência do cabo. Como R_C1 = R_C2 = R_C3, elas se cancelam: R_lida ≈ R_sensor.</p>
+        <p style="margin-top:6px;font-size:12px;color:var(--t3)">Uso: padrão na indústria. Pequeno erro residual apenas por desigualdade dos condutores.</p>
+      </div>
+      <div class="hl hl-g">
+        <div class="hl-hdr">4 Fios — Máxima Precisão</div>
+        <p>2 fios conduzem corrente constante; outros 2 medem a tensão. Alta impedância → sem corrente → sem erro de cabo.</p>
+        <p style="margin-top:6px;font-size:12px;color:var(--t3)">Uso: laboratório, farmacêutico, metrologia. Medição totalmente independente do cabo.</p>
+      </div>
+    </div>
+    <div class="alert aw" style="margin-top:8px"><strong>Erro comum de prova:</strong> dizer que a ligação a 4 fios "tem mais fios conduzindo corrente". Errado — apenas 2 fios conduzem corrente de excitação; os outros 2 apenas medem tensão. A alta impedância de leitura torna a resistência do cabo desprezível.</div>
+    <div class="alert ay" style="margin-top:6px"><strong>Atenção — autoaquecimento:</strong> a corrente de excitação aquece o sensor. Para minimizar, use a menor corrente possível (tipicamente 1 mA). Autoaquecimento excessivo → leitura de temperatura maior que a real.</div>
+  </div>
+
+  <!-- Termistor NTC/PTC -->
+  <div class="blk"><h3>Termistor — NTC e PTC</h3>
+    <div class="grid g2" style="margin-top:8px">
+      <div class="hl hl-p">
+        <div class="hl-hdr">NTC — Negative Thermal Coefficient</div>
+        <p>Resistência <strong>diminui</strong> quando a temperatura aumenta. Material semicondutor cerâmico. Curva não linear — especificado pela resistência a 25°C (ex: 10 kΩ@25°C).</p>
+        <p style="margin-top:6px;font-size:12px;color:var(--t3)">Alta sensibilidade. Faixa estreita (−100°C a +300°C). Medições a 2 fios sem grande erro pois R é elevada. Sem normalização → reposição difícil.</p>
+        <p style="margin-top:6px;font-size:12px;color:var(--t2)">Aplicações: termômetro clínico, HVAC, proteção de motores, medição de temperatura corporal.</p>
+      </div>
+      <div class="hl hl-y">
+        <div class="hl-hdr">PTC — Positive Thermal Coefficient</div>
+        <p>Resistência <strong>aumenta</strong> com a temperatura. Possui um <strong>ponto de transição</strong> a partir do qual a resistência sobe abruptamente.</p>
+        <p style="margin-top:6px;font-size:12px;color:var(--t3)">Faixa de medição estreita. Não linear. Usado mais como dispositivo de proteção do que de medição.</p>
+        <p style="margin-top:6px;font-size:12px;color:var(--t2)">Aplicações: proteção de motores elétricos, controle de temperatura em painéis (ventilação, aquecimento), limitação de corrente.</p>
+      </div>
+    </div>
+    <div class="alert ai" style="margin-top:8px">Termistores NTC e PTC não são normalizados — cada fabricante tem sua própria curva. A relação R×T é obtida das tabelas do fabricante. Isso dificulta a substituição e impossibilita transmissores universais.</div>
+  </div>
+
+  <!-- Termopar expandido -->
+  <div class="blk"><h3>Termopar — Efeito Seebeck</h3>
+    <p>Descoberto em 1821 por T. J. Seebeck: em um circuito fechado com dois metais diferentes, surge uma <strong>força eletromotriz (FEM)</strong> proporcional à diferença de temperatura entre as duas junções.</p>
+    <div style="background:var(--bg);border:1px solid rgba(255,85,102,0.2);border-radius:8px;padding:12px 16px;font-family:var(--fm);font-size:18px;font-weight:600;margin:12px 0">
+      <span style="color:var(--r)">V</span> = <span style="color:var(--pu)">α</span> × ( <span style="color:var(--y)">T_quente</span> − <span style="color:var(--p)">T_fria</span> )
+    </div>
+    <div class="grid g2" style="margin-top:10px">
+      <div style="background:var(--bg4);border:1px solid rgba(255,192,64,0.25);border-radius:8px;padding:12px">
+        <div style="font-size:12px;font-weight:600;color:var(--y);margin-bottom:6px">Junta Quente (Medição)</div>
+        <p style="font-size:12px;color:var(--t2)">Ponta imersa no processo. É a junção que mede a temperatura real.</p>
+      </div>
+      <div style="background:var(--bg4);border:1px solid rgba(0,212,255,0.25);border-radius:8px;padding:12px">
+        <div style="font-size:12px;font-weight:600;color:var(--p);margin-bottom:6px">Junta Fria (Referência)</div>
+        <p style="font-size:12px;color:var(--t2)">Extremidade no transmissor. Precisa ter temperatura conhecida — transmissor faz compensação eletrônica.</p>
+      </div>
+    </div>
+
+    <div class="sec" style="margin-top:16px">Grupos de termopares</div>
+    <div class="grid g2" style="margin-bottom:10px">
+      <div class="hl hl-y"><div class="hl-hdr">Básicos — T, J, E, K</div><p>Fios de metais comuns. Baixo custo. Maior limite de erro. Uso industrial geral.</p></div>
+      <div class="hl hl-pu"><div class="hl-hdr">Nobres — S, R, B</div><p>Fios de platina/ródio. Custo elevado. Altíssima exatidão e homogeneidade. Alta temperatura.</p></div>
+    </div>
+
+    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Tipo</th><th>Materiais (+/−)</th><th>Faixa (°C)</th><th>FEM (mV)</th><th>Sensib. média</th><th>Destaque</th></tr></thead>
+    <tbody>
+      <tr><td style="color:var(--r)"><strong>K</strong></td><td>Cromel / Alumel</td><td>0 a 1260</td><td>0 a 50,99</td><td>4,05 mV/100°C</td><td>Mais usado no mundo. Robusto.</td></tr>
+      <tr><td style="color:var(--r)"><strong>J</strong></td><td>Ferro / Constantan</td><td>0 a 760</td><td>0 a 42,92</td><td>5,65 mV/100°C</td><td>Baixo custo. Tubo protetor acima de 480°C.</td></tr>
+      <tr><td style="color:var(--r)"><strong>E</strong></td><td>Cromel / Constantan</td><td>0 a 870</td><td>0 a 66,47</td><td>7,64 mV/100°C</td><td>Maior FEM entre todos. Alta estabilidade.</td></tr>
+      <tr><td style="color:var(--r)"><strong>T</strong></td><td>Cobre / Constantan</td><td>−184 a 370</td><td>−5,33 a 19,03</td><td>5,14 mV/100°C</td><td>Criogenia. Cobre oxida acima de 310°C.</td></tr>
+      <tr><td style="color:var(--pu)"><strong>S</strong></td><td>Pt90%Rh10% / Pt100%</td><td>0 a 1480</td><td>0 a 15,34</td><td>1,04 mV/100°C</td><td>Padrão de calibração. Recalibrar acima de 1480°C.</td></tr>
+      <tr><td style="color:var(--pu)"><strong>R</strong></td><td>Pt87%Rh13% / Pt100%</td><td>0 a 1480</td><td>0 a 17,16</td><td>1,16 mV/100°C</td><td>Similar ao S. Mais recente.</td></tr>
+      <tr><td style="color:var(--pu)"><strong>B</strong></td><td>Pt70%Rh30% / Pt94%Rh6%</td><td>870 a 1705</td><td>3,71 a 12,49</td><td>1,05 mV/100°C</td><td>Temperaturas extremas. Mais estável que S e R.</td></tr>
+    </tbody></table></div>
+
+    <div class="sec" style="margin-top:16px">Cabo de extensão vs Cabo de compensação</div>
+    <div class="grid g2" style="margin-top:8px">
+      <div class="hl hl-r">
+        <div class="hl-hdr">Cabo de Extensão</div>
+        <p>Fabricado com os <strong>mesmos metais</strong> do termopar. Mantém as propriedades termoelétricas exatas até o transmissor. Mais caro.</p>
+        <p style="margin-top:6px;font-size:12px;color:var(--t3)">Uso: quando há variação de temperatura ao longo do cabo ou quando se exige maior precisão.</p>
+      </div>
+      <div class="hl hl-g">
+        <div class="hl-hdr">Cabo de Compensação</div>
+        <p>Fabricado com <strong>ligas diferentes</strong> mas com FEM equivalente ao termopar em uma faixa limitada (geralmente 0°C a 200°C). Mais barato.</p>
+        <p style="margin-top:6px;font-size:12px;color:var(--t3)">Uso: maioria das aplicações industriais onde a temperatura do cabo não varia muito.</p>
+      </div>
+    </div>
+    <div class="alert aw" style="margin-top:8px"><strong>Regra crítica:</strong> sempre use o cabo do <strong>mesmo tipo</strong> que o termopar (ex: cabo K com termopar K). Um cabo errado cria uma segunda junção termoelétrica parasita que introduz erro proporcional à temperatura ambiente — erro sistemático que não aparece durante a calibração mas aparece em campo.</div>
+    <div class="alert ay" style="margin-top:6px"><strong>Lei do Circuito Homogêneo:</strong> uma terceira temperatura T3 em um ponto intermediário do condutor não altera a FEM gerada pelas junções T1 e T2. Isso é a base do uso de cabos de extensão/compensação.</div>
+  </div>
+
+  <!-- Transmissores -->
   <div class="blk"><h3>Transmissores de Temperatura</h3>
-    <p>Convertem o sinal elétrico fraco (mV ou Ω) em 4–20 mA / HART / PROFIBUS. Realizam linearização automática e compensação de junção fria.</p>
+    <p>Convertem o sinal fraco do sensor (mV do termopar ou Ω do PT100) em sinal padronizado 4–20 mA / HART / PROFIBUS para o sistema de controle.</p>
+    <div class="grid g2" style="margin-top:10px">
+      <div style="background:var(--bg4);border:1px solid var(--bd);border-radius:8px;padding:12px">
+        <div style="font-size:12px;font-weight:600;color:var(--pu);margin-bottom:6px">Para PT100</div>
+        <ul class="lst" style="font-size:12px;color:var(--t2)">
+          <li>↳ Fornece corrente de excitação constante</li>
+          <li>↳ Mede a tensão resultante (Lei de Ohm: R = V/I)</li>
+          <li>↳ Lineariza a curva R×T</li>
+          <li>↳ Converte para 4–20 mA</li>
+        </ul>
+      </div>
+      <div style="background:var(--bg4);border:1px solid var(--bd);border-radius:8px;padding:12px">
+        <div style="font-size:12px;font-weight:600;color:var(--r);margin-bottom:6px">Para Termopar</div>
+        <ul class="lst" style="font-size:12px;color:var(--t2)">
+          <li>↳ Amplifica o sinal mV (muito baixo)</li>
+          <li>↳ Realiza <strong>compensação de junção fria</strong> (mede a T do terminal e corrige)</li>
+          <li>↳ Lineariza a curva FEM×T via tabela ITS-90</li>
+          <li>↳ Converte para 4–20 mA</li>
+        </ul>
+      </div>
+    </div>
+    <div class="alert ay" style="margin-top:8px"><strong>Por que compensar a junção fria?</strong> O termopar mede a <em>diferença</em> entre a junta quente e a junta fria. Se a junta fria (terminal do transmissor) estiver a 35°C e não for compensada, a leitura terá um erro de +35°C (ou proporcional). Transmissores modernos medem a temperatura do próprio terminal e somam automaticamente.</div>
   </div>
-  <div class="blk"><h3>Poço Termopar (Thermowell)</h3>
-    <p>Tubo de proteção que isola o sensor do fluido. Permite troca sem parar a linha. <strong style="color:var(--r)">Desvantagem:</strong> aumenta significativamente a constante de tempo τ.</p>
+
+  <!-- Thermowell e resposta dinâmica -->
+  <div class="blk"><h3>Poço Termopar (Thermowell) e Resposta Dinâmica</h3>
+    <div class="grid g2" style="margin-top:8px">
+      <div>
+        <p>Tubo de proteção metálico que isola o sensor do fluido do processo. Permite troca do sensor sem parar a linha (sem corte de processo).</p>
+        <div class="alert ag" style="margin-top:8px">✓ Proteção mecânica e química · Troca sem parada · Reutilizável</div>
+        <div class="alert aw" style="margin-top:6px">✗ Aumenta significativamente a constante de tempo τ — resposta mais lenta ao processo</div>
+      </div>
+      <div>
+        <div style="background:var(--bg4);border:1px solid rgba(192,132,255,0.25);border-radius:8px;padding:14px">
+          <div style="font-size:12px;font-weight:600;color:var(--pu);margin-bottom:8px">Constante de Tempo τ</div>
+          <p style="font-size:12px;color:var(--t2)">Tempo para o sensor atingir 63,2% de uma variação degrau de temperatura.</p>
+          <p style="font-size:12px;color:var(--t3);margin-top:6px">Sensor nu (sem poço): τ ≈ 1–5 s<br>Sensor com poço: τ ≈ 20–120 s<br>Para resposta completa: ~5×τ</p>
+          <p style="font-size:12px;color:var(--t2);margin-top:6px">Processos com variações rápidas exigem sensores de baixo τ — ou o controlador reagirá com atraso.</p>
+        </div>
+      </div>
+    </div>
   </div>
+
   <div style="text-align:center;margin-top:10px"><button class="btn btn-pu" onclick="S('calibracao')" style="padding:6px 16px;font-size:12px">Ver Módulo Calibração completo →</button></div>
 
   <!-- Você já viu isso -->
@@ -906,20 +1086,20 @@
     <div class="everyday-card everyday-pu">
       <div class="everyday-icon">❄️</div>
       <div class="everyday-title">Geladeira</div>
-      <div class="everyday-body">O termostato da geladeira é um controlador on/off com dois set points: liga o compressor quando T > SP_alto (ex: 8°C) e desliga quando T < SP_baixo (ex: 4°C). A diferença entre os dois pontos é a histerese intencional — evita que o compressor ligue e desligue milhares de vezes por dia.</div>
+      <div class="everyday-body">O termostato usa um bimetálico ou NTC: ao atingir T_alta (ex: 8°C) liga o compressor; ao atingir T_baixa (ex: 4°C) desliga. A diferença entre os dois pontos é a histerese intencional — evita liga/desliga excessivo. É um controle on/off com 2 set points, igual ao usado industrialmente.</div>
     </div>
     <div class="everyday-card everyday-pu">
       <div class="everyday-icon">🍕</div>
       <div class="everyday-title">Forno de pizza</div>
-      <div class="everyday-body">O termopar tipo K no forno mede até ~400°C e envia mV para o controlador. O controlador PID ajusta a potência da resistência (MV) para manter 300°C (SP). A pizza é a carga — quando entra fria, a T cai (PV &lt; SP) e o controlador aumenta a potência para compensar.</div>
+      <div class="everyday-body">O termopar tipo K no forno mede até ~400°C e envia mV ao controlador. O PID ajusta a potência da resistência (MV) para manter 300°C (SP). Quando você abre a porta (perturbação), T cai — o controlador detecta PV &lt; SP e aumenta a potência. A constante de tempo τ do forno determina o quanto o PID precisa ser "agressivo".</div>
     </div>
     <div class="everyday-card everyday-pu">
       <div class="everyday-icon">🌡️</div>
       <div class="everyday-title">Termômetro clínico digital</div>
-      <div class="everyday-body">Usa um termistor NTC (resistência cai com temperatura) para medir 35–42°C com precisão de ±0,1°C. O circuito converte a variação de resistência em temperatura — é a mesma operação de um transmissor de temperatura PT100, só que calibrado para a faixa do corpo humano.</div>
+      <div class="everyday-body">Usa termistor NTC (resistência cai com T) para medir 35–42°C com ±0,1°C. O NTC tem alta sensibilidade nessa faixa estreita — vantagem sobre o PT100 que seria superdimensionado para 7°C de span. O circuito converte R em T pela tabela do fabricante, pois a curva NTC não é linear.</div>
     </div>
   </div>
-  <div class="alert aw" style="margin-top:4px"><strong>Erro comum de prova:</strong> inverter termopar e PT100. Termopar gera tensão (mV) — é ativo. PT100 varia resistência (Ω) — é passivo, precisa de corrente de excitação. Termopar aguenta temperaturas muito maiores; PT100 é mais preciso em faixas médias.</div>
+  <div class="alert aw" style="margin-top:4px"><strong>Erro comum de prova:</strong> inverter termopar e PT100. Termopar gera tensão (mV) — é ativo, não precisa de excitação. PT100 varia resistência (Ω) — é passivo, precisa de corrente de excitação. Termopar aguenta temperaturas muito maiores; PT100 é mais preciso em faixas médias.</div>
 </div>
 
 <!-- ════ RELAÇÕES P·N·Q ════ -->
@@ -1301,6 +1481,29 @@
 <div class="screen" id="screen-changelog">
   <div class="h1">Atualizações</div>
   <div class="sub">O que mudou em cada versão do SENAI · MVF</div>
+
+  <!-- v5.5 -->
+  <div class="cl-entry">
+    <div class="cl-dot cl-dot-pu"></div>
+    <div class="cl-body">
+      <div class="cl-header">
+        <span class="cl-tag" style="background:rgba(192,132,255,0.12);color:var(--pu);border:1px solid rgba(192,132,255,0.3)">v5.5</span>
+        <span class="cl-title">Temperatura — Conteúdo Completo</span>
+        <span class="cl-date">Mar 2026</span>
+      </div>
+      <ul class="cl-list">
+        <li>Módulo Temperatura expandido com base nos slides 159–234 do material oficial SENAI</li>
+        <li>Escalas: tabela comparativa com pontos fixos (zero absoluto, fusão do gelo, ebulição) e todas as fórmulas de conversão</li>
+        <li>Tabela geral de 12 sensores — bimetálico, vidro, bulbo-capilar, NTC, PTC, PT100, PT1000, termopares T/J/E/K/S/R/B</li>
+        <li>PT100 expandido: fórmula completa de Callendar-Van Dusen, tabela de valores de referência (−100°C a +850°C), classes de tolerância A/B/AA com fórmulas, ligações a 2/3/4 fios com diferença prática</li>
+        <li>Termistor: diferença entre NTC e PTC, por que NTC não tem transmissor universal</li>
+        <li>Termopar expandido: Efeito Seebeck, grupos básicos vs nobres, tabela completa dos 7 tipos (T, J, E, K, S, R, B) com materiais, faixas e FEM, cabo de extensão vs cabo de compensação, Lei do Circuito Homogêneo, compensação de junção fria</li>
+        <li>Transmissores: diferença no circuito para PT100 vs termopar</li>
+        <li>Thermowell: constante de tempo τ com valores típicos (sensor nu vs com poço)</li>
+        <li>+12 flashcards de temperatura · +7 questões de quiz (totais: 78 cards · 53 questões)</li>
+      </ul>
+    </div>
+  </div>
 
   <!-- v5.4 -->
   <div class="cl-entry">
