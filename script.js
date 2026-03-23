@@ -405,8 +405,15 @@ function setBernTarget(target){
   const map=lblMap[target]||{};
   Object.keys(map).forEach(function(id){const el=document.getElementById(id);if(el)el.innerHTML=map[id];});
   const resLbls={'p2':'P₂ — Pressão saída','v2':'V₂ — Velocidade saída','p1':'P₁ — Pressão entrada','v1':'V₁ — Velocidade entrada'};
-  const rl=document.querySelector('#b-result-box .sim-result-lbl');
+  const rl=document.getElementById('b-result-box-lbl');
   if(rl) rl.textContent=resLbls[target]||'Resultado';
+  // Cor do resultado conforme variável
+  const rv=document.getElementById('b-p2-prev');
+  const colMap={'p2':'var(--g)','v2':'var(--g)','p1':'var(--p)','v1':'var(--p)'};
+  if(rv) rv.style.color=colMap[target]||'var(--g)';
+  // Cor da barra: S1 (p1,v1) = ciano, S2 (p2,v2) = verde
+  const rb=document.getElementById('b-result-box');
+  if(rb) rb.classList.toggle('target-s1', target==='p1'||target==='v1');
   bernCalcRT();
 }
 
